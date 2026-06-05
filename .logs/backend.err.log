@@ -1,0 +1,1464 @@
+❌ Redis connection retries exhausted. Disabling Redis.
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Comma❌ Redis connection retries exhausted. Disabling Redis.
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+❌ Redis connection retries exhausted. Disabling Redis.
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+❌ Redis connection retries exhausted. Disabling Redis.
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+ntVersion: '5.22.0',
+  errorCode: undefined
+}
+[Announcement-Scheduler] CRITICAL ERROR: 
+Invalid `any).findMany()` invocation in
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\utils\announcementScheduler.ts:12:69
+
+   9 const now = new Date();
+  10 
+  11 // 1. Find all announcements that are due
+→ 12 const dueAnnouncements = await (prisma.announcement as any).findMany(
+Authentication failed against database server at `localhost`, the provided database credentials for `course_user` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `localhost`.
+❌ Redis connection retries exhausted. Disabling Redis.
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+[Scheduler] Failed to auto-complete sessions: PrismaClientInitializationError: 
+Invalid `prisma.session.updateMany()` invocation in
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\utils\sessionScheduler.ts:9:45
+
+  6 async function autoCompleteSessions() {
+  7     try {
+  8         const now = new Date();
+→ 9         const result = await prisma.session.updateMany(
+Authentication failed against database server at `localhost`, the provided database credentials for `course_user` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `localhost`.
+    at $n.handleRequestError (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:7615)
+    at $n.handleAndLogRequestError (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at async l (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async autoCompleteSessions (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\utils\sessionScheduler.ts:9:24) {
+  clientVersion: '5.22.0',
+  errorCode: undefined
+}
+[Scheduler] Failed to auto-complete courses: PrismaClientInitializationError: 
+Invalid `prisma.course.updateMany()` invocation in
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\utils\sessionScheduler.ts:31:44
+
+  28 async function autoCompleteCourses() {
+  29     try {
+  30         const now = new Date();
+→ 31         const result = await prisma.course.updateMany(
+Authentication failed against database server at `localhost`, the provided database credentials for `course_user` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `localhost`.
+    at $n.handleRequestError (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:7615)
+    at $n.handleAndLogRequestError (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at async l (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async autoCompleteCourses (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\utils\sessionScheduler.ts:31:24) {
+  clientVersion: '5.22.0',
+  errorCode: undefined
+}
+[Scheduler] Failed to auto-complete enrollments: PrismaClientInitializationError: 
+Invalid `prisma.enrollment.updateMany()` invocation in
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\utils\sessionScheduler.ts:54:48
+
+  51 async function autoCompleteEnrollments() {
+  52     try {
+  53         const now = new Date();
+→ 54         const result = await prisma.enrollment.updateMany(
+Authentication failed against database server at `localhost`, the provided database credentials for `course_user` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `localhost`.
+    at $n.handleRequestError (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:7615)
+    at $n.handleAndLogRequestError (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at async l (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async autoCompleteEnrollments (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\utils\sessionScheduler.ts:54:24) {
+  clientVersion: '5.22.0',
+  errorCode: undefined
+}
+[Announcement-Scheduler] CRITICAL ERROR: 
+Invalid `any).findMany()` invocation in
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\utils\announcementScheduler.ts:12:69
+
+   9 const now = new Date();
+  10 
+  11 // 1. Find all announcements that are due
+→ 12 const dueAnnouncements = await (prisma.announcement as any).findMany(
+Authentication failed against database server at `localhost`, the provided database credentials for `course_user` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `localhost`.
+❌ Redis connection retries exhausted. Disabling Redis.
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+52:16.504Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 13:00:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T12:52:16.610Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 13:30:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T12:52:16.687Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 14:00:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T12:52:16.709Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 14:30:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T12:52:17.239Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 15:00:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T12:52:17.258Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 15:30:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+[2026-05-30T15:39:43.808Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 18:30:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+[2026-05-30T19:24:23.865Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 20:00:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T19:24:23.905Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 20:30:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T19:24:23.924Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 21:00:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T19:24:23.958Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 21:30:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+[2026-05-30T19:24:23.977Z] [PID: 19172] [32m[NODE-CRON][32m [33m[WARN][0m missed execution at Sat May 30 2026 22:00:00 GMT+0300 (غرينتش+٠٣:٠٠)! Possible blocking IO or high CPU user at the same process used by node-cron.
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+[Mailer] SMTP credentials not configured, skipping email
+Redis error during logout (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:418:25)
+    at async logout (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:122:17)
+Redis error during login (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:286:25)
+    at async login (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:70:28)
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+❌ Redis connection retries exhausted. Disabling Redis.
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+❌ Redis connection retries exhausted. Disabling Redis.
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+❌ Redis connection retries exhausted. Disabling Redis.
+❌ Redis connection retries exhausted. Disabling Redis.
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}
+Redis error during refresh check (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.get (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:342:41)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh cleanup (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.del (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:360:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Redis error during refresh storage (non-fatal): Error: Connection is closed.
+    at EventEmitter.sendCommand (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\Redis.js:333:28)
+    at EventEmitter.setex (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ioredis\built\utils\Commander.js:90:25)
+    at AuthService.refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\services\auth.service.ts:387:25)
+    at async refreshToken (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\controllers\auth.controller.ts:98:28)
+Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at Function.listen (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\express\lib\application.js:635:24)
+    at Object.<anonymous> (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\src\server.ts:99:5)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\auth-backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}

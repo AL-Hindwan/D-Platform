@@ -1,0 +1,435 @@
+
+> course-booking-platform@0.1.0 dev
+> next dev
+
+   ▲ Next.js 16.0.3 (Turbopack)
+   - Local:         http://localhost:3000
+   - Network:       http://192.168.1.102:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+Creating turbopack project {
+  dir: 'D:\\Course-Booking-Platform-final\\Course-Booking-Platform-final',
+  testMode: true
+}
+ ✓ Ready in 2.3s
+ ○ Compiling /auth/login ...
+ GET /auth/login 200 in 9.3s (compile: 8.8s, render: 567ms)
+ GET /auth/register 200 in 1269ms (compile: 1218ms, render: 51ms)
+ GET /auth/login 200 in 28ms (compile: 5ms, render: 23ms)
+ GET /auth/register 200 in 19ms (compile: 3ms, render: 16ms)
+ ✓ Compiled in 596ms
+ ✓ Compiled in 535ms
+ GET /auth/register 200 in 694ms (compile: 303ms, render: 391ms)
+ GET /auth/login 200 in 35ms (compile: 8ms, render: 27ms)
+ GET /auth/register 200 in 22ms (compile: 4ms, render: 18ms)
+ ✓ Compiled in 437ms
+ GET /auth/register 200 in 272ms (compile: 213ms, render: 59ms)
+ ✓ Compiled in 1101ms
+ ✓ Compiled in 528ms
+ ✓ Compiled in 881ms
+ ✓ Compiled in 443ms
+ ✓ Compiled in 426ms
+ ✓ Compiled in 718ms
+ ✓ Compiled in 391ms
+ ✓ Compiled in 347ms
+ GET /auth/register 200 in 523ms (compile: 182ms, render: 341ms)
+ ✓ Compiled in 376ms
+ GET /auth/login 200 in 33ms (compile: 8ms, render: 25ms)
+ ✓ Compiled in 357ms
+ ✓ Compiled in 335ms
+ GET /auth/login 200 in 433ms (compile: 157ms, render: 276ms)
+ GET /institute/dashboard 200 in 1472ms (compile: 1448ms, render: 24ms)
+ GET /institute/courses 200 in 1604ms (compile: 1587ms, render: 17ms)
+ GET /institute/schedule 200 in 593ms (compile: 567ms, render: 26ms)
+ GET /institute/students 200 in 415ms (compile: 395ms, render: 20ms)
+ GET /institute/enrollments 200 in 409ms (compile: 382ms, render: 27ms)
+ GET /institute/staff 200 in 406ms (compile: 390ms, render: 16ms)
+ ✓ Compiled in 352ms
+ GET /institute/staff 200 in 485ms (compile: 164ms, render: 321ms)
+ ✓ Compiled in 432ms
+ GET /institute/staff 500 in 1862ms (compile: 1667ms, render: 195ms)
+ ✓ Compiled in 442ms
+ GET /institute/staff 200 in 513ms (compile: 216ms, render: 297ms)
+ ✓ Compiled in 502ms
+ GET /institute/staff 200 in 638ms (compile: 238ms, render: 401ms)
+ ✓ Compiled in 547ms
+ GET /institute/courses 200 in 100ms (compile: 56ms, render: 44ms)
+ GET /institute/courses/create 200 in 1825ms (compile: 1792ms, render: 33ms)
+ ✓ Compiled in 603ms
+ ✓ Compiled in 411ms
+ ✓ Compiled in 423ms
+ ✓ Compiled in 451ms
+ ✓ Compiled in 594ms
+ ✓ Compiled in 421ms
+ ✓ Compiled in 600ms
+ ✓ Compiled in 492ms
+ ✓ Compiled in 559ms
+ ✓ Compiled in 428ms
+ GET /institute/courses 200 in 496ms (compile: 338ms, render: 158ms)
+ GET /institute/schedule 200 in 176ms (compile: 119ms, render: 57ms)
+ GET /institute/courses 200 in 285ms (compile: 22ms, render: 263ms)
+ ○ Compiling /institute/halls ...
+ GET /institute/halls 200 in 3.4s (compile: 3.4s, render: 42ms)
+ GET /institute/profile 200 in 597ms (compile: 563ms, render: 33ms)
+ GET /institute/dashboard 200 in 526ms (compile: 181ms, render: 345ms)
+ GET /institute/courses 200 in 56ms (compile: 22ms, render: 35ms)
+ ○ Compiling /institute/courses/[id] ...
+ GET /institute/courses/2aaaffcb-f291-45e2-a94f-8c00f1c485f1 200 in 5.1s (compile: 5.1s, render: 53ms)
+ ✓ Compiled in 853ms
+ ✓ Compiled in 378ms
+ ✓ Compiled in 786ms
+ ✓ Compiled in 519ms
+ ✓ Compiled in 449ms
+ ✓ Compiled in 622ms
+ ✓ Compiled in 477ms
+ ✓ Compiled in 372ms
+ ✓ Compiled in 625ms
+ ✓ Compiled in 395ms
+ GET /institute/courses/2aaaffcb-f291-45e2-a94f-8c00f1c485f1 200 in 1530ms (compile: 916ms, render: 614ms)
+ ✓ Compiled in 438ms
+ GET /institute/courses/2aaaffcb-f291-45e2-a94f-8c00f1c485f1 200 in 658ms (compile: 272ms, render: 386ms)
+ ✓ Compiled in 367ms
+ ✓ Compiled in 389ms
+ GET /institute/courses/2aaaffcb-f291-45e2-a94f-8c00f1c485f1 200 in 621ms (compile: 213ms, render: 407ms)
+ ✓ Compiled in 726ms
+ ✓ Compiled in 534ms
+ ✓ Compiled in 438ms
+ GET /institute/profile 200 in 351ms (compile: 185ms, render: 166ms)
+ ✓ Compiled in 2.1s
+ GET /institute/profile 404 in 2.0s (compile: 1803ms, render: 232ms)
+ GET /institute/profile 404 in 114ms (compile: 10ms, render: 104ms)
+ GET /institute/profile 404 in 105ms (compile: 5ms, render: 100ms)
+ GET /institute/profile 404 in 39ms (compile: 6ms, render: 33ms)
+ GET /institute/profile 404 in 157ms (compile: 6ms, render: 151ms)
+ GET /institute/profile 404 in 370ms (compile: 6ms, render: 363ms)
+ GET /institute/profile 404 in 184ms (compile: 49ms, render: 135ms)
+ GET /institute/profile 404 in 107ms (compile: 14ms, render: 93ms)
+ GET /institute/profile 404 in 46ms (compile: 5ms, render: 41ms)
+ GET /institute/profile 404 in 55ms (compile: 5ms, render: 49ms)
+ GET /institute/profile 404 in 50ms (compile: 4ms, render: 45ms)
+ GET /institute/profile 404 in 51ms (compile: 6ms, render: 45ms)
+ GET /institute/profile 404 in 55ms (compile: 6ms, render: 49ms)
+ GET /institute/profile 404 in 48ms (compile: 7ms, render: 41ms)
+ GET /institute/profile 404 in 50ms (compile: 4ms, render: 46ms)
+ GET /institute/profile 404 in 50ms (compile: 5ms, render: 44ms)
+ GET /institute/profile 404 in 50ms (compile: 5ms, render: 45ms)
+ GET /institute/profile 404 in 30ms (compile: 8ms, render: 22ms)
+ GET /institute/profile 404 in 384ms (compile: 309ms, render: 75ms)
+ GET /institute/profile 404 in 66ms (compile: 9ms, render: 57ms)
+ GET /institute/profile 404 in 64ms (compile: 5ms, render: 59ms)
+ GET /institute/profile 404 in 37ms (compile: 4ms, render: 32ms)
+ GET /institute/profile 404 in 348ms (compile: 301ms, render: 47ms)
+ GET /institute/profile 404 in 59ms (compile: 5ms, render: 54ms)
+ GET /institute/profile 404 in 49ms (compile: 6ms, render: 44ms)
+ GET /institute/profile 404 in 54ms (compile: 5ms, render: 49ms)
+ GET /institute/profile 404 in 51ms (compile: 6ms, render: 46ms)
+ GET /institute/profile 404 in 60ms (compile: 7ms, render: 53ms)
+ GET /institute/profile 404 in 55ms (compile: 5ms, render: 50ms)
+ GET /institute/profile 404 in 53ms (compile: 6ms, render: 47ms)
+ GET /institute/profile 404 in 62ms (compile: 5ms, render: 56ms)
+ GET /institute/profile 404 in 79ms (compile: 5ms, render: 74ms)
+ GET /institute/profile 404 in 90ms (compile: 7ms, render: 83ms)
+ GET /institute/profile 404 in 73ms (compile: 12ms, render: 61ms)
+ GET /institute/profile 404 in 60ms (compile: 6ms, render: 54ms)
+ GET /institute/profile 404 in 62ms (compile: 5ms, render: 57ms)
+ GET /institute/profile 404 in 81ms (compile: 7ms, render: 75ms)
+ GET /institute/profile 404 in 84ms (compile: 7ms, render: 77ms)
+ GET /institute/profile 404 in 73ms (compile: 11ms, render: 62ms)
+ GET /institute/profile 404 in 66ms (compile: 8ms, render: 58ms)
+ GET /institute/profile 404 in 79ms (compile: 9ms, render: 70ms)
+ GET /institute/profile 404 in 83ms (compile: 9ms, render: 74ms)
+ GET /institute/profile 404 in 70ms (compile: 9ms, render: 61ms)
+ GET /institute/profile 404 in 60ms (compile: 7ms, render: 53ms)
+ GET /institute/profile 404 in 58ms (compile: 6ms, render: 52ms)
+ GET /institute/profile 404 in 82ms (compile: 7ms, render: 75ms)
+ GET /institute/profile 404 in 84ms (compile: 14ms, render: 71ms)
+ GET /institute/profile 404 in 66ms (compile: 6ms, render: 61ms)
+ GET /institute/profile 404 in 83ms (compile: 8ms, render: 75ms)
+ GET /institute/profile 404 in 90ms (compile: 7ms, render: 83ms)
+ GET /institute/profile 404 in 79ms (compile: 12ms, render: 66ms)
+ GET /institute/profile 404 in 61ms (compile: 10ms, render: 51ms)
+ GET /institute/profile 404 in 61ms (compile: 9ms, render: 52ms)
+ GET /institute/profile 404 in 64ms (compile: 5ms, render: 59ms)
+ GET /institute/profile 404 in 59ms (compile: 7ms, render: 52ms)
+ GET /institute/profile 404 in 56ms (compile: 6ms, render: 50ms)
+ GET /institute/profile 404 in 60ms (compile: 5ms, render: 54ms)
+ GET /institute/profile 404 in 56ms (compile: 6ms, render: 49ms)
+ GET /institute/profile 404 in 67ms (compile: 7ms, render: 60ms)
+ GET /institute/profile 404 in 61ms (compile: 6ms, render: 55ms)
+ GET /institute/profile 404 in 67ms (compile: 5ms, render: 62ms)
+ GET /institute/profile 404 in 68ms (compile: 9ms, render: 59ms)
+ GET /institute/profile 404 in 71ms (compile: 8ms, render: 63ms)
+ GET /institute/profile 404 in 76ms (compile: 8ms, render: 68ms)
+ GET /institute/profile 404 in 65ms (compile: 6ms, render: 59ms)
+ GET /institute/profile 404 in 54ms (compile: 6ms, render: 48ms)
+ GET /institute/profile 404 in 61ms (compile: 7ms, render: 54ms)
+ GET /institute/profile 404 in 60ms (compile: 6ms, render: 54ms)
+ GET /institute/profile 404 in 37ms (compile: 14ms, render: 23ms)
+ GET /institute/profile 404 in 49ms (compile: 5ms, render: 43ms)
+ GET /institute/profile 404 in 52ms (compile: 4ms, render: 47ms)
+ GET /institute/profile 404 in 55ms (compile: 5ms, render: 50ms)
+ GET /institute/profile 404 in 50ms (compile: 11ms, render: 39ms)
+ GET /institute/profile 404 in 51ms (compile: 5ms, render: 46ms)
+ GET /institute/profile 404 in 33ms (compile: 5ms, render: 27ms)
+ GET /institute/profile 404 in 57ms (compile: 9ms, render: 48ms)
+ GET /institute/profile 404 in 84ms (compile: 5ms, render: 78ms)
+ GET /institute/profile 404 in 54ms (compile: 6ms, render: 48ms)
+ GET /institute/profile 404 in 120ms (compile: 19ms, render: 101ms)
+ GET /institute/profile 404 in 33ms (compile: 7ms, render: 26ms)
+ GET /institute/profile 404 in 52ms (compile: 6ms, render: 45ms)
+ GET /institute/profile 404 in 51ms (compile: 5ms, render: 47ms)
+ GET /institute/profile 404 in 51ms (compile: 6ms, render: 45ms)
+ GET /institute/profile 404 in 60ms (compile: 6ms, render: 54ms)
+ GET /institute/profile 404 in 62ms (compile: 7ms, render: 55ms)
+ GET /institute/profile 404 in 54ms (compile: 7ms, render: 48ms)
+ GET /institute/profile 404 in 50ms (compile: 6ms, render: 45ms)
+ GET /institute/profile 404 in 55ms (compile: 5ms, render: 50ms)
+ GET /institute/profile 404 in 54ms (compile: 4ms, render: 50ms)
+ GET /institute/profile 404 in 51ms (compile: 5ms, render: 46ms)
+ GET /institute/profile 404 in 54ms (compile: 7ms, render: 47ms)
+ GET /institute/profile 404 in 50ms (compile: 5ms, render: 44ms)
+ GET /institute/profile 404 in 26ms (compile: 4ms, render: 22ms)
+ GET /institute/profile 404 in 67ms (compile: 8ms, render: 59ms)
+ GET /institute/profile 404 in 60ms (compile: 9ms, render: 51ms)
+ GET /institute/profile 404 in 49ms (compile: 5ms, render: 44ms)
+ GET /institute/profile 404 in 56ms (compile: 5ms, render: 51ms)
+ GET /institute/profile 404 in 59ms (compile: 7ms, render: 52ms)
+ GET /institute/profile 404 in 47ms (compile: 4ms, render: 44ms)
+ GET /institute/profile 404 in 51ms (compile: 4ms, render: 47ms)
+ GET /institute/profile 404 in 55ms (compile: 6ms, render: 49ms)
+ GET /institute/profile 404 in 63ms (compile: 6ms, render: 58ms)
+ GET /institute/profile 404 in 69ms (compile: 13ms, render: 57ms)
+ GET /institute/profile 404 in 41ms (compile: 7ms, render: 34ms)
+ GET /institute/profile 404 in 51ms (compile: 9ms, render: 42ms)
+ GET /institute/profile 404 in 56ms (compile: 4ms, render: 52ms)
+ GET /institute/profile 404 in 57ms (compile: 5ms, render: 52ms)
+ GET /institute/profile 404 in 45ms (compile: 5ms, render: 40ms)
+ GET /institute/profile 404 in 50ms (compile: 4ms, render: 45ms)
+ GET /institute/profile 404 in 67ms (compile: 5ms, render: 63ms)
+ GET /institute/profile 404 in 68ms (compile: 6ms, render: 62ms)
+ GET /institute/profile 404 in 66ms (compile: 16ms, render: 50ms)
+ GET /institute/profile 404 in 56ms (compile: 5ms, render: 51ms)
+ GET /institute/profile 404 in 55ms (compile: 8ms, render: 47ms)
+ GET /institute/profile 404 in 57ms (compile: 7ms, render: 50ms)
+ GET /institute/profile 404 in 57ms (compile: 5ms, render: 52ms)
+ GET /institute/profile 404 in 54ms (compile: 5ms, render: 49ms)
+ GET /institute/profile 404 in 35ms (compile: 5ms, render: 30ms)
+ GET /institute/profile 404 in 63ms (compile: 9ms, render: 54ms)
+ GET /institute/profile 404 in 81ms (compile: 7ms, render: 75ms)
+ GET /institute/profile 404 in 80ms (compile: 19ms, render: 61ms)
+ GET /institute/profile 404 in 62ms (compile: 8ms, render: 54ms)
+ GET /institute/profile 404 in 56ms (compile: 8ms, render: 48ms)
+ GET /institute/profile 404 in 57ms (compile: 5ms, render: 52ms)
+ GET /institute/profile 404 in 68ms (compile: 5ms, render: 63ms)
+ GET /institute/profile 404 in 62ms (compile: 9ms, render: 54ms)
+ GET /institute/profile 404 in 73ms (compile: 7ms, render: 66ms)
+ GET /institute/profile 404 in 73ms (compile: 7ms, render: 66ms)
+ GET /institute/profile 404 in 70ms (compile: 7ms, render: 64ms)
+ GET /institute/profile 404 in 73ms (compile: 14ms, render: 59ms)
+ GET /institute/profile 404 in 98ms (compile: 7ms, render: 91ms)
+ GET /institute/profile 404 in 34ms (compile: 8ms, render: 26ms)
+ GET /institute/profile 404 in 262ms (compile: 7ms, render: 255ms)
+ ✓ Compiled in 1167ms
+ GET /institute/profile 200 in 781ms (compile: 728ms, render: 54ms)
+ GET /institute/profile 200 in 31ms (compile: 4ms, render: 27ms)
+ GET /institute/profile 200 in 29ms (compile: 5ms, render: 25ms)
+ GET /institute/profile 200 in 23ms (compile: 3ms, render: 20ms)
+ GET /institute/profile 200 in 33ms (compile: 5ms, render: 28ms)
+ GET /institute/profile 200 in 24ms (compile: 3ms, render: 21ms)
+ GET /institute/profile 200 in 33ms (compile: 4ms, render: 29ms)
+ GET /institute/profile 200 in 29ms (compile: 4ms, render: 25ms)
+ GET /institute/profile 200 in 29ms (compile: 4ms, render: 25ms)
+ GET /institute/profile 200 in 70ms (compile: 5ms, render: 65ms)
+ GET /institute/profile 200 in 33ms (compile: 6ms, render: 28ms)
+ GET /institute/profile 200 in 28ms (compile: 4ms, render: 25ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 28ms (compile: 3ms, render: 25ms)
+ GET /institute/profile 200 in 21ms (compile: 3ms, render: 19ms)
+ GET /institute/profile 200 in 25ms (compile: 3ms, render: 22ms)
+ GET /institute/profile 200 in 21ms (compile: 3ms, render: 18ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 31ms (compile: 4ms, render: 28ms)
+ GET /institute/profile 200 in 33ms (compile: 4ms, render: 29ms)
+ GET /institute/profile 200 in 24ms (compile: 5ms, render: 19ms)
+ GET /institute/profile 200 in 21ms (compile: 3ms, render: 18ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 21ms (compile: 3ms, render: 18ms)
+ GET /institute/profile 200 in 28ms (compile: 4ms, render: 24ms)
+ GET /institute/profile 200 in 22ms (compile: 3ms, render: 18ms)
+ GET /institute/profile 200 in 22ms (compile: 2ms, render: 19ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 29ms (compile: 3ms, render: 26ms)
+ GET /institute/profile 200 in 23ms (compile: 3ms, render: 20ms)
+ GET /institute/profile 200 in 21ms (compile: 4ms, render: 17ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 28ms (compile: 4ms, render: 24ms)
+ GET /institute/profile 200 in 27ms (compile: 3ms, render: 24ms)
+ GET /institute/profile 200 in 23ms (compile: 4ms, render: 19ms)
+ GET /institute/profile 200 in 20ms (compile: 2ms, render: 18ms)
+ GET /institute/profile 200 in 21ms (compile: 3ms, render: 18ms)
+ GET /institute/profile 200 in 26ms (compile: 3ms, render: 23ms)
+ GET /institute/profile 200 in 46ms (compile: 5ms, render: 41ms)
+ GET /institute/profile 200 in 30ms (compile: 4ms, render: 26ms)
+ GET /institute/profile 200 in 21ms (compile: 3ms, render: 18ms)
+ GET /institute/profile 200 in 29ms (compile: 3ms, render: 26ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 26ms (compile: 3ms, render: 23ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 16ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 24ms (compile: 3ms, render: 21ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 16ms)
+ GET /institute/profile 200 in 21ms (compile: 2ms, render: 18ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 22ms (compile: 2ms, render: 19ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 17ms (compile: 3ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 15ms)
+ GET /institute/profile 200 in 22ms (compile: 6ms, render: 16ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 15ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 19ms (compile: 2ms, render: 17ms)
+ GET /institute/profile 200 in 24ms (compile: 2ms, render: 22ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 16ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 15ms)
+ GET /institute/profile 200 in 24ms (compile: 2ms, render: 22ms)
+ GET /institute/profile 200 in 22ms (compile: 3ms, render: 19ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 16ms)
+ GET /institute/profile 200 in 23ms (compile: 2ms, render: 20ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 23ms (compile: 3ms, render: 20ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 16ms)
+ GET /institute/profile 200 in 25ms (compile: 4ms, render: 21ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 21ms (compile: 2ms, render: 18ms)
+ GET /institute/profile 200 in 19ms (compile: 2ms, render: 17ms)
+ GET /institute/profile 200 in 22ms (compile: 3ms, render: 19ms)
+ GET /institute/profile 200 in 19ms (compile: 2ms, render: 17ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 16ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 27ms (compile: 3ms, render: 25ms)
+ GET /institute/profile 200 in 30ms (compile: 3ms, render: 27ms)
+ GET /institute/profile 200 in 21ms (compile: 4ms, render: 17ms)
+ GET /institute/profile 200 in 22ms (compile: 3ms, render: 18ms)
+ GET /institute/profile 200 in 27ms (compile: 2ms, render: 24ms)
+ GET /institute/profile 200 in 39ms (compile: 5ms, render: 35ms)
+ GET /institute/profile 200 in 118ms (compile: 5ms, render: 113ms)
+ GET /institute/profile 200 in 33ms (compile: 5ms, render: 27ms)
+ GET /institute/profile 200 in 31ms (compile: 3ms, render: 27ms)
+ GET /institute/profile 200 in 22ms (compile: 4ms, render: 19ms)
+ GET /institute/profile 200 in 24ms (compile: 3ms, render: 21ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 30ms (compile: 3ms, render: 27ms)
+ GET /institute/profile 200 in 19ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 26ms (compile: 3ms, render: 23ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 23ms (compile: 2ms, render: 20ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 16ms (compile: 2ms, render: 14ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 21ms (compile: 2ms, render: 19ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 14ms)
+ GET /institute/profile 200 in 19ms (compile: 2ms, render: 17ms)
+ GET /institute/profile 200 in 18ms (compile: 3ms, render: 16ms)
+ GET /institute/profile 200 in 23ms (compile: 2ms, render: 21ms)
+ GET /institute/profile 200 in 21ms (compile: 2ms, render: 19ms)
+ GET /institute/profile 200 in 17ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 15ms)
+ GET /institute/profile 200 in 18ms (compile: 2ms, render: 16ms)
+ GET /institute/profile 200 in 26ms (compile: 3ms, render: 23ms)
+ GET /institute/profile 200 in 27ms (compile: 5ms, render: 22ms)
+ GET /institute/profile 200 in 33ms (compile: 3ms, render: 30ms)
+ GET /institute/profile 200 in 23ms (compile: 3ms, render: 20ms)
+ GET /institute/profile 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /institute/profile 200 in 35ms (compile: 4ms, render: 31ms)
+ GET /institute/profile 200 in 27ms (compile: 2ms, render: 24ms)
+ ✓ Compiled in 368ms
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 1750ms (compile: 1718ms, render: 32ms)
+ ✓ Compiled in 565ms
+ ✓ Compiled in 399ms
+ ✓ Compiled in 422ms
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 123ms (compile: 50ms, render: 73ms)
+ ✓ Compiled in 806ms
+ ✓ Compiled in 437ms
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 265ms (compile: 170ms, render: 94ms)
+ ✓ Compiled in 929ms
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 1161ms (compile: 392ms, render: 768ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 85ms (compile: 14ms, render: 70ms)
+ GET /institute/profile 200 in 169ms (compile: 136ms, render: 34ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 37ms (compile: 11ms, render: 26ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 71ms (compile: 11ms, render: 60ms)
+ GET /institute/profile 200 in 31ms (compile: 5ms, render: 26ms)
+ ✓ Compiled in 457ms
+ ✓ Compiled in 463ms
+ ✓ Compiled in 479ms
+ ✓ Compiled in 538ms
+ ✓ Compiled in 394ms
+ ✓ Compiled in 376ms
+ ✓ Compiled in 357ms
+ GET /trainer/room-bookings 200 in 4.0s (compile: 2.6s, render: 1337ms)
+ ✓ Compiled in 685ms
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 312ms (compile: 110ms, render: 201ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 199ms (compile: 28ms, render: 170ms)
+ GET /institute/profile 200 in 296ms (compile: 246ms, render: 50ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 39ms (compile: 13ms, render: 27ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 90ms (compile: 12ms, render: 79ms)
+ GET /institute/profile 200 in 32ms (compile: 10ms, render: 22ms)
+ GET /institute/profile 200 in 1526ms (compile: 124ms, render: 1401ms)
+ GET /institute/profile 200 in 46ms (compile: 22ms, render: 25ms)
+ GET /institute/profile 200 in 124ms (compile: 10ms, render: 114ms)
+ GET /institute/profile 200 in 78ms (compile: 4ms, render: 74ms)
+ ✓ Compiled in 655ms
+ ✓ Compiled in 1324ms
+ GET /institute/profile 200 in 1384ms (compile: 955ms, render: 429ms)
+ GET /trainer/room-bookings 200 in 1312ms (compile: 1178ms, render: 134ms)
+ ✓ Compiled in 416ms
+ ✓ Compiled in 373ms
+ ✓ Compiled in 552ms
+ GET /auth/login 200 in 9.7s (compile: 7.2s, render: 2.5s)
+ GET /institute/dashboard 200 in 667ms (compile: 314ms, render: 353ms)
+ GET /auth/login 200 in 2.0s (compile: 474ms, render: 1536ms)
+ GET /institute/dashboard 200 in 225ms (compile: 53ms, render: 173ms)
+ GET /institute/dashboard 200 in 1676ms (compile: 104ms, render: 1571ms)
+ GET /institute/staff 200 in 1355ms (compile: 1307ms, render: 47ms)
+ GET /institute/announcements 200 in 2.9s (compile: 2.9s, render: 41ms)
+ GET /institute/dashboard 200 in 40ms (compile: 11ms, render: 30ms)
+ GET /institute/courses 200 in 231ms (compile: 174ms, render: 57ms)
+ GET /institute/schedule 200 in 202ms (compile: 165ms, render: 37ms)
+ GET /institute/courses 200 in 40ms (compile: 7ms, render: 33ms)
+ GET /institute/courses/2aaaffcb-f291-45e2-a94f-8c00f1c485f1/edit 200 in 2.2s (compile: 2.1s, render: 38ms)
+ GET /institute/courses/2aaaffcb-f291-45e2-a94f-8c00f1c485f1 200 in 228ms (compile: 179ms, render: 49ms)
+ GET /institute/profile 200 in 214ms (compile: 171ms, render: 42ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 124ms (compile: 35ms, render: 88ms)
+ GET / 200 in 808ms (compile: 746ms, render: 62ms)
+ GET /auth/register 200 in 235ms (compile: 197ms, render: 38ms)
+ GET /auth/login 200 in 62ms (compile: 22ms, render: 40ms)
+ GET /institute/dashboard 200 in 69ms (compile: 8ms, render: 61ms)
+ GET /institute/profile 200 in 78ms (compile: 12ms, render: 67ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 60ms (compile: 11ms, render: 49ms)
+ ✓ Compiled in 1796ms
+ ✓ Compiled in 540ms
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 812ms (compile: 564ms, render: 248ms)
+ ✓ Compiled in 546ms
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 211ms (compile: 163ms, render: 49ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 72ms (compile: 16ms, render: 56ms)
+ GET /institutes/2fda19f5-56ac-433a-9156-d065fd6a3a44 200 in 949ms (compile: 31ms, render: 918ms)

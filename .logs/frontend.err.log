@@ -1,0 +1,89 @@
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ ReferenceError: normalized is not defined
+    at TrainerExploreCourseDetailsPage (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js:801:16) {
+  digest: '452598387'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ ReferenceError: normalized is not defined
+    at TrainerExploreCourseDetailsPage (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js:813:16) {
+  digest: '452598387'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ ReferenceError: normalized is not defined
+    at TrainerExploreCourseDetailsPage (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js:813:16) {
+  digest: '452598387'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ ReferenceError: normalized is not defined
+    at TrainerExploreCourseDetailsPage (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js:813:16) {
+  digest: '452598387'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ ReferenceError: normalized is not defined
+    at TrainerExploreCourseDetailsPage (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js:813:16) {
+  digest: '452598387'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ ReferenceError: normalized is not defined
+    at TrainerExploreCourseDetailsPage (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js:813:16) {
+  digest: '452598387'
+}
+D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+ ⨯ ReferenceError: normalized is not defined
+    at TrainerExploreCourseDetailsPage (D:\Course-Booking-Platform-final\Course-Booking-Platform-final\.next\dev\server\chunks\ssr\src_bdb7ecef._.js:813:16) {
+  digest: '452598387'
+}
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ./src/app/institute/students/page.tsx:348:84
+Parsing ecmascript source code failed
+[0m [90m 346 |[39m     [36mif[39m (status [33m===[39m [32m"SUSPENDED"[39m [33m||[39m status [33m===[39m [32m"INACTIVE"[39m) [36mreturn[39m [32m"�.�^�,�^ف"[39m
+ [90m 347 |[39m     [36mif[39m (student[33m.[39mactiveEnrollmentsCount [33m>[39m [35m0[39m) [36mreturn[39m [32m"�?شط"[39m
+[31m[1m>[22m[39m[90m 348 |[39m     [36mif[39m (student[33m.[39mtotalCourses [33m>[39m [35m0[39m [33m&&[39m student[33m.[39mactiveEnrollmentsCount [33m===[39m [35m0[39m) [36mreturn[39m [32m"�"[39mا �S�[33m^[39mجد تسج�S�[32m" �?شط"[39m
+ [90m     |[39m                                                                                    [31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 349 |[39m     [36mreturn[39m [32m"با�?تظار إجراء"[39m
+ [90m 350 |[39m   }[33m,[39m [localSuspendedIds])
+ [90m 351 |[39m[0m
+
+Expected ';', got 'ا'
+
+Import traces:
+  Client Component Browser:
+    ./src/app/institute/students/page.tsx [Client Component Browser]
+    ./src/app/institute/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/institute/students/page.tsx [Client Component SSR]
+    ./src/app/institute/students/page.tsx [Server Component]
+
+
+ ⨯ ./src/app/institute/students/page.tsx:354:43
+Parsing ecmascript source code failed
+[0m [90m 352 |[39m   [36mconst[39m sendAnnouncement [33m=[39m [36masync[39m () [33m=>[39m {
+ [90m 353 |[39m     [36mif[39m ([33m![39mannouncementTitle[33m.[39mtrim() [33m||[39m [33m![39mannouncementMessage[33m.[39mtrim()) {
+[31m[1m>[22m[39m[90m 354 |[39m       toast[33m.[39merror([32m"�Sرج�? إدخا�"[39m ع�[33m?[39m�[33m^[39mا�[33m?[39m �[33m^[39m�[33m.[39mحت�[33m^[39m�[33m?[39m ا�[32m"إع�"[39mا�[33m?[39m[32m")[39m
+ [90m     |[39m                                           [31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 355 |[39m       [36mreturn[39m
+ [90m 356 |[39m     }
+ [90m 357 |[39m     [36mtry[39m {[0m
+
+Expected ',', got 'ع'
+
+Import traces:
+  Client Component Browser:
+    ./src/app/institute/students/page.tsx [Client Component Browser]
+    ./src/app/institute/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/institute/students/page.tsx [Client Component SSR]
+    ./src/app/institute/students/page.tsx [Server Component]
+
+
