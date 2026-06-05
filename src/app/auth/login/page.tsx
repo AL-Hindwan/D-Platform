@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState, useEffect, Suspense } from "react"
 export const dynamic = "force-dynamic"
@@ -96,7 +96,7 @@ function LoginPageContent() {
       console.log("Login successful")
       // Redirect will be handled by useEffect when user state updates
     } catch (err: unknown) {
-      console.error("Login error:", err)
+      console.error("Login error:", (err as Error)?.message || "Login failed")
       const message =
         typeof err === "object" &&
         err !== null &&

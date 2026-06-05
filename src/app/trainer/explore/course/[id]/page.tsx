@@ -569,6 +569,8 @@ export default function TrainerExploreCourseDetailsPage() {
         email: instituteEmail,
         logo: instituteLogo,
       },
+      courseStatus: course.courseStatus || (course as any).status,
+      minStudents: Number(course.minStudents || 0),
     }
   }, [course])
 
@@ -668,7 +670,18 @@ export default function TrainerExploreCourseDetailsPage() {
               </div>
 
               <div className="space-y-2">
-                <h1 className="text-2xl font-extrabold leading-tight text-white md:text-4xl">{view.title}</h1>
+                <div className="flex flex-wrap items-center gap-3">
+                  <h1 className="text-2xl font-extrabold leading-tight text-white md:text-4xl">{view.title}</h1>
+                  {view.courseStatus === "PENDING_MINIMUM" ? (
+                    <Badge className="h-7 rounded-[6.5px] border-amber-300/30 bg-amber-500 text-white hover:bg-amber-600">
+                      بانتظار اكتمال العدد
+                    </Badge>
+                  ) : view.courseStatus === "ACTIVE" ? (
+                    <Badge className="h-7 rounded-[6.5px] border-emerald-300/30 bg-emerald-500 text-white hover:bg-emerald-600">
+                      مؤكدة الانعقاد
+                    </Badge>
+                  ) : null}
+                </div>
                 <div className="flex items-center gap-x-1 text-[13px] leading-6 text-white/90">
                   {heroMetaItems.map((item, index) => {
                     const Icon = item.icon
@@ -791,6 +804,27 @@ export default function TrainerExploreCourseDetailsPage() {
                     <div className="rounded-[6.5px] border border-white/15 bg-white/12 px-3 py-2 text-sm text-white/90">
                       المقاعد: {seatSummaryParts[0]}
                       {seatSummaryParts[1] ? ` · ${seatSummaryParts[1]}` : ""}
+                    </div>
+                  ) : null}
+                  {view.courseStatus === "PENDING_MINIMUM" && view.minStudents > 0 ? (
+                    <div className="space-y-2 rounded-[6.5px] border border-amber-400/20 bg-amber-500/10 p-3 text-right">
+                      <div className="flex justify-between text-xs font-semibold text-amber-100">
+                        <span>بانتظار تأكيد الانعقاد</span>
+                        <span>{view.enrolled} / {view.minStudents} مقعد كحد أدنى</span>
+                      </div>
+                      <div className="h-2 w-full overflow-hidden rounded-full bg-slate-900/40">
+                        <div 
+                          className="h-full bg-amber-400 transition-all duration-500"
+                          style={{ width: `${Math.min(100, Math.max(0, (view.enrolled / view.minStudents) * 100))}%` }}
+                        />
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-amber-200/90">
+                        سجل الآن لتساعد في اكتمال العدد. لن يتم مطالبتك بالدفع حتى يتم تأكيد انعقاد الدورة.
+                      </p>
+                    </div>
+                  ) : view.courseStatus === "ACTIVE" ? (
+                    <div className="rounded-[6.5px] border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 text-sm font-medium text-emerald-300">
+                      ✓ الدورة مؤكدة الانعقاد
                     </div>
                   ) : null}
                   <Button

@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import Image from "next/image"
 import Link from "next/link"
@@ -48,6 +48,7 @@ export interface CourseCardProps {
     secondaryActionPosition?: "before" | "after"
     categoryImagePosition?: "top-right" | "bottom-right"
     hideInstructorSection?: boolean
+    courseStatus?: string
 }
 
 export function CourseCard({
@@ -80,8 +81,9 @@ export function CourseCard({
     imageLeftBadge,
     cardClassName = "",
     secondaryActionPosition = "before",
-    categoryImagePosition = "top-right",
+    categoryImagePosition = "bottom-right",
     hideInstructorSection = false,
+    courseStatus,
 }: CourseCardProps) {
     const { user } = useAuth() ?? {}
     const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
@@ -150,6 +152,24 @@ export function CourseCard({
                         </Badge>
                     </div>
                 )}
+
+                {/* Course Status Badge */}
+                <div className="absolute top-10 right-3 z-50 bg-black text-white text-[10px] px-1 rounded">
+                    DEBUG: {String(courseStatus)}
+                </div>
+                {courseStatus === "PENDING_MINIMUM" ? (
+                    <div className="absolute top-3 right-3 z-10">
+                        <Badge className="bg-amber-500/95 text-white hover:bg-amber-600 backdrop-blur-sm shadow-sm border border-amber-300/30">
+                            بانتظار اكتمال العدد
+                        </Badge>
+                    </div>
+                ) : courseStatus === "ACTIVE" ? (
+                    <div className="absolute top-3 right-3 z-10">
+                        <Badge className="bg-emerald-500/95 text-white hover:bg-emerald-600 backdrop-blur-sm shadow-sm border border-emerald-300/30">
+                            مؤكدة الانعقاد
+                        </Badge>
+                    </div>
+                ) : null}
 
                 {imageLeftBadge && (
                     <div className="absolute top-3 left-3 z-10">

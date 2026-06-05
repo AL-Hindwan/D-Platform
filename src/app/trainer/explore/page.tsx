@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 export const dynamic = "force-dynamic"
 
@@ -200,6 +200,18 @@ function TrainerExplorePageContent() {
               <div className="relative h-[188px] overflow-hidden bg-slate-100 md:h-[196px]">
                 <CourseImage src={resolveCourseImage(course.image)} alt={course.title} />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/25 via-slate-900/10 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
+
+                <div className="absolute left-3 top-3 z-10 flex flex-col gap-2">
+                  {course.courseStatus === "PENDING_MINIMUM" || (course as any).status === "PENDING_MINIMUM" ? (
+                    <span className="rounded-full border border-amber-200/50 bg-amber-500/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm backdrop-blur-[2px]">
+                      بانتظار اكتمال العدد
+                    </span>
+                  ) : course.courseStatus === "ACTIVE" || (course as any).status === "ACTIVE" ? (
+                    <span className="rounded-full border border-emerald-200/50 bg-emerald-500/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm backdrop-blur-[2px]">
+                      مؤكدة الانعقاد
+                    </span>
+                  ) : null}
+                </div>
 
                 <span className="absolute bottom-3 right-3 rounded-full bg-white/86 px-2.5 py-1 text-[11px] font-semibold text-slate-700 backdrop-blur-[2px]">
                   {course.category || "الفئة"}

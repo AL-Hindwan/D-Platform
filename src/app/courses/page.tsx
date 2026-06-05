@@ -279,6 +279,7 @@ export default function CoursesPage({ basePath = "/courses" }: CoursesPageProps)
                   duration={String(course.duration)}
                   image={resolveImage(course.image)}
                   category={course.category}
+                  courseStatus={course.courseStatus || (course as any).status}
                   instructor={{
                     name: course.trainer.name,
                     avatar: resolveImage(course.trainer.avatar)

@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(response.user)
             return true
         } catch (error: any) {
-            console.error('Login error:', error)
+            console.error('Login error:', error?.message || 'Login failed')
             setUser(null)
 
             // Re-throw error with proper message for UI display
@@ -92,7 +92,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             // Don't auto-login - redirect to login page instead
             return true
         } catch (error) {
-            console.error('Register error:', error)
+            console.error('Register error:', (error as Error)?.message || 'Registration failed')
             return false
         } finally {
             setIsLoading(false)
