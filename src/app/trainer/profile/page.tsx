@@ -15,6 +15,7 @@ import { User, Mail, Phone, Eye, EyeOff, Loader2, Camera, X, Plus, ShieldCheck, 
 import { toast } from "sonner"
 import { trainerService } from "@/lib/trainer-service"
 import { useAuth } from "@/contexts/auth-context"
+import { isValidEmail } from "@/lib/utils"
 
 type ProfileData = {
     id: string
@@ -225,6 +226,10 @@ export default function TrainerProfilePage() {
 
     const handleSave = async () => {
         if (!form.name.trim()) { toast.error("الاسم مطلوب"); return }
+        if (form.email && !isValidEmail(form.email)) {
+            toast.error("صيغة البريد الإلكتروني غير صحيحة")
+            return
+        }
         try {
             setIsSaving(true)
             const updated = await trainerService.updateProfile({

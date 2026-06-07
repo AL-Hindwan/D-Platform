@@ -14,6 +14,7 @@ import { authService } from "@/lib/auth-service"
 import { toast } from "sonner"
 import { useEffect, useRef } from "react"
 import { Camera } from "lucide-react"
+import { isValidEmail } from "@/lib/utils"
 
 export default function AdminProfilePage() {
     const { user, updateUser } = useAuth()
@@ -67,6 +68,10 @@ export default function AdminProfilePage() {
 
     const handleProfileUpdate = async (e: React.FormEvent) => {
         e.preventDefault()
+        if (profileForm.email && !isValidEmail(profileForm.email)) {
+            toast.error("صيغة البريد الإلكتروني غير صحيحة")
+            return
+        }
         setIsLoading(true)
         try {
             const formData = new FormData()

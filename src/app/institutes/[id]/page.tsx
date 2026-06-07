@@ -258,16 +258,30 @@ export default function InstituteDetailsPage({ params }: { params: Promise<{ id:
                                     )}
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-600">
-                                    <Mail className="h-5 w-5 text-gray-400" />
+                                    <Mail className="h-5 w-5 text-gray-400 shrink-0" />
                                     {instituteData.email ? (
-                                        <a href={`mailto:${instituteData.email}`} className="hover:text-primary transition-colors">{instituteData.email}</a>
+                                        <a href={`mailto:${instituteData.email}`} className="hover:text-primary transition-colors break-all">
+                                            {instituteData.email}
+                                        </a>
                                     ) : (
                                         <span>لم يتم توفير بريد إلكتروني</span>
                                     )}
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-600">
-                                    <Phone className="h-5 w-5 text-gray-400" />
-                                    {instituteData.phone ? <span dir="ltr">{instituteData.phone}</span> : <span>لم يتم توفير رقم هاتف</span>}
+                                    <Phone className="h-5 w-5 text-gray-400 shrink-0" />
+                                    {instituteData.phone ? (
+                                        <a
+                                            href={`https://wa.me/${instituteData.phone.replace(/[^\d+]/g, "")}`}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="hover:text-primary transition-colors break-all"
+                                            dir="ltr"
+                                        >
+                                            {instituteData.phone}
+                                        </a>
+                                    ) : (
+                                        <span>لم يتم توفير رقم هاتف</span>
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>

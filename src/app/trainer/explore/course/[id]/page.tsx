@@ -676,7 +676,7 @@ export default function TrainerExploreCourseDetailsPage() {
 
   let backLink = "/courses"
   let backText = "العودة للاستكشاف"
-  
+
   if (from === "my-courses") {
     if (pathname.startsWith("/student")) {
       backLink = tab ? `/student/my-courses?tab=${tab}` : "/student/my-courses"

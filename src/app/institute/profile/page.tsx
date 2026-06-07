@@ -34,7 +34,7 @@ import {
 import { toast } from "sonner"
 import { instituteService } from "@/lib/institute-service"
 import { authService } from "@/lib/auth-service"
-import { getFileUrl } from "@/lib/utils"
+import { getFileUrl, isValidEmail } from "@/lib/utils"
 import { useAuth } from "@/contexts/auth-context"
 
 type BankAccount = {
@@ -358,6 +358,19 @@ export default function InstituteProfilePage() {
   }
 
   const handleSave = async () => {
+    if (user.email && !isValidEmail(user.email)) {
+      toast.error("صيغة البريد الإلكتروني (الأساسي) غير صحيحة")
+      return
+    }
+    if (user.publicEmail && !isValidEmail(user.publicEmail)) {
+      toast.error("صيغة البريد الإلكتروني (للتواصل) غير صحيحة")
+      return
+    }
+    if (user.adminEmail && !isValidEmail(user.adminEmail)) {
+      toast.error("صيغة البريد الإلكتروني (للمسؤول) غير صحيحة")
+      return
+    }
+
     try {
       setIsSaving(true)
       const formData = new FormData()

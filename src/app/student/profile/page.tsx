@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { User as UserIcon, Mail, Phone, Eye, EyeOff, Loader2, Camera, Edit3, Lock, ShieldCheck, UserCircle2 } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
-import { getFileUrl } from "@/lib/utils"
+import { getFileUrl, isValidEmail } from "@/lib/utils"
 import { authService } from "@/lib/auth-service"
 import { toast } from "sonner"
 
@@ -58,6 +58,11 @@ export default function StudentProfilePage() {
   }
 
   const handleSave = async () => {
+    if (user.email && !isValidEmail(user.email)) {
+      toast.error("صيغة البريد الإلكتروني غير صحيحة")
+      return
+    }
+
     try {
       setIsSaving(true)
       const formData = new FormData()
