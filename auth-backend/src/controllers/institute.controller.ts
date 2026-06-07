@@ -53,12 +53,7 @@ class InstituteController {
             } else if (req.file) {
                 payload.avatar = `/uploads/${req.file.filename}`;
             }
-            if (payload.instituteLocationUrl && !payload.instituteWebsite) {
-                payload.instituteWebsite = payload.instituteLocationUrl;
-            }
-            if (payload.locationUrl && !payload.instituteWebsite) {
-                payload.instituteWebsite = payload.locationUrl;
-            }
+
 
             const data = await instituteService.updateInstituteProfile(req.user.userId, payload);
             return sendSuccess(res, 'تم تحديث الملف الشخصي بنجاح', data);

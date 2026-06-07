@@ -81,8 +81,10 @@ model Institute {
   address            String?
   logo               String?
   website            String?
+  locationUrl        String?            @map("location_url")
   licenseNumber      String?            @map("license_number")
   licenseDocumentUrl String?            @map("license_document_url")
+  features           String[]           @default([])
   verificationStatus VerificationStatus @default(PENDING) @map("verification_status")
   rejectionReason    String?            @map("rejection_reason")
   deletedAt          DateTime?          @map("deleted_at")

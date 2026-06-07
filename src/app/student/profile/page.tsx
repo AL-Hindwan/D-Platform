@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -27,6 +27,8 @@ export default function StudentProfilePage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [pwForm, setPwForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" })
+  const [isChangingPw, setIsChangingPw] = useState(false)
   const [activeTab, setActiveTab] = useState("personal")
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
@@ -77,6 +79,31 @@ export default function StudentProfilePage() {
       console.error(error)
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  const handlePasswordChange = async () => {
+    if (!pwForm.currentPassword || !pwForm.newPassword || !pwForm.confirmPassword) {
+      toast.error("يرجى ملء جميع الحقول")
+      return
+    }
+    if (pwForm.newPassword !== pwForm.confirmPassword) {
+      toast.error("كلمة المرور الجديدة وتأكيدها غير متطابقين")
+      return
+    }
+    if (pwForm.newPassword.length < 8) {
+      toast.error("كلمة المرور الجديدة يجب أن تكون 8 أحرف على الأقل")
+      return
+    }
+    try {
+      setIsChangingPw(true)
+      await authService.changePassword({ currentPassword: pwForm.currentPassword, newPassword: pwForm.newPassword })
+      toast.success("تم تغيير كلمة المرور بنجاح")
+      setPwForm({ currentPassword: "", newPassword: "", confirmPassword: "" })
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "فشل في تغيير كلمة المرور")
+    } finally {
+      setIsChangingPw(false)
     }
   }
 
@@ -300,7 +327,7 @@ export default function StudentProfilePage() {
             كلمة المرور الحالية
           </Label>
           <div className="relative">
-            <Input id="current-password" type={showPassword ? "text" : "password"} className="h-11 rounded-[6.5px] border-slate-200 pl-10 text-right" dir="ltr" />
+            <Input id="current-password" type={showPassword ? "text" : "password"} value={pwForm.currentPassword} onChange={e => setPwForm(p => ({ ...p, currentPassword: e.target.value }))} className="h-11 rounded-[6.5px] border-slate-200 pl-10 text-right" dir="ltr" />
             <Button
               type="button"
               variant="ghost"
@@ -318,7 +345,7 @@ export default function StudentProfilePage() {
             كلمة المرور الجديدة
           </Label>
           <div className="relative">
-            <Input id="new-password" type={showNewPassword ? "text" : "password"} className="h-11 rounded-[6.5px] border-slate-200 pl-10 text-right" dir="ltr" />
+            <Input id="new-password" type={showNewPassword ? "text" : "password"} value={pwForm.newPassword} onChange={e => setPwForm(p => ({ ...p, newPassword: e.target.value }))} className="h-11 rounded-[6.5px] border-slate-200 pl-10 text-right" dir="ltr" />
             <Button
               type="button"
               variant="ghost"
@@ -336,7 +363,7 @@ export default function StudentProfilePage() {
             تأكيد كلمة المرور الجديدة
           </Label>
           <div className="relative">
-            <Input id="confirm-password" type={showConfirmPassword ? "text" : "password"} className="h-11 rounded-[6.5px] border-slate-200 pl-10 text-right" dir="ltr" />
+            <Input id="confirm-password" type={showConfirmPassword ? "text" : "password"} value={pwForm.confirmPassword} onChange={e => setPwForm(p => ({ ...p, confirmPassword: e.target.value }))} className="h-11 rounded-[6.5px] border-slate-200 pl-10 text-right" dir="ltr" />
             <Button
               type="button"
               variant="ghost"
@@ -350,7 +377,9 @@ export default function StudentProfilePage() {
         </div>
 
         <div className="pt-2">
-          <Button className="h-10 rounded-[6.5px] bg-blue-600 px-6 text-white hover:bg-blue-700">تحديث كلمة المرور</Button>
+          <Button onClick={handlePasswordChange} disabled={isChangingPw} className="h-10 rounded-[6.5px] bg-blue-600 px-6 text-white hover:bg-blue-700">
+            {isChangingPw ? <><Loader2 className="ml-2 h-4 w-4 animate-spin" />جاري التحديث...</> : "تحديث كلمة المرور"}
+          </Button>
         </div>
       </CardContent>
     </Card>

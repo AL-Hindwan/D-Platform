@@ -66,7 +66,7 @@ export default function InstituteDetailsPage({ params }: { params: Promise<{ id:
     const locationText = instituteData.location || instituteData.instituteAddress || "Address not provided"
     const websiteUrl = normalizeExternalUrl(instituteData.website || instituteData.instituteWebsite || "")
     const locationUrl = normalizeExternalUrl(
-        instituteData.locationUrl || instituteData.instituteLocationUrl || instituteData.mapUrl || websiteUrl || ""
+        instituteData.locationUrl || instituteData.instituteLocationUrl || instituteData.mapUrl || ""
     )
 
     return (
@@ -149,9 +149,9 @@ export default function InstituteDetailsPage({ params }: { params: Promise<{ id:
                                 </p>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                                    {instituteData.features.map((feature: string, index: number) => (
+                                    {instituteData.features?.map((feature: string, index: number) => (
                                         <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
-                                            <CheckCircle2 className="h-5 w-5 text-green-500" />
+                                            <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />
                                             {feature}
                                         </div>
                                     ))}
@@ -214,7 +214,7 @@ export default function InstituteDetailsPage({ params }: { params: Promise<{ id:
                                         <Card key={trainer.id}>
                                             <CardContent className="p-4 flex items-center gap-4">
                                                 <Avatar className="h-14 w-14 border border-gray-100">
-                                                    <AvatarImage src={trainer.avatar || undefined} />
+                                                    <AvatarImage src={trainer.avatar ? getFileUrl(trainer.avatar) : undefined} />
                                                     <AvatarFallback>{trainer.name.charAt(0)}</AvatarFallback>
                                                 </Avatar>
                                                 <div>
@@ -238,13 +238,13 @@ export default function InstituteDetailsPage({ params }: { params: Promise<{ id:
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="flex items-center gap-3 text-gray-600">
-                                    <Globe className="h-5 w-5 text-gray-400" />
+                                    <MapPin className="h-5 w-5 text-gray-400" />
                                     {locationUrl ? (
                                         <a href={locationUrl} target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">
                                             {locationText}
                                         </a>
                                     ) : (
-                                        <span>No location link provided</span>
+                                        <span>لم يتم توفير رابط للموقع (خرائط جوجل)</span>
                                     )}
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-600">
@@ -254,7 +254,7 @@ export default function InstituteDetailsPage({ params }: { params: Promise<{ id:
                                             {instituteData.website || instituteData.instituteWebsite}
                                         </a>
                                     ) : (
-                                        <span>Not provided</span>
+                                        <span>لم يتم توفير الموقع الإلكتروني</span>
                                     )}
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-600">
@@ -262,12 +262,12 @@ export default function InstituteDetailsPage({ params }: { params: Promise<{ id:
                                     {instituteData.email ? (
                                         <a href={`mailto:${instituteData.email}`} className="hover:text-primary transition-colors">{instituteData.email}</a>
                                     ) : (
-                                        <span>Not provided</span>
+                                        <span>لم يتم توفير بريد إلكتروني</span>
                                     )}
                                 </div>
                                 <div className="flex items-center gap-3 text-gray-600">
                                     <Phone className="h-5 w-5 text-gray-400" />
-                                    {instituteData.phone ? <span dir="ltr">{instituteData.phone}</span> : <span>No phone number provided</span>}
+                                    {instituteData.phone ? <span dir="ltr">{instituteData.phone}</span> : <span>لم يتم توفير رقم هاتف</span>}
                                 </div>
                             </CardContent>
                         </Card>

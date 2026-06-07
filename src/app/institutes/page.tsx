@@ -80,20 +80,20 @@ export default function InstitutesPage() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredInstitutes.length > 0 ? (
-                        filteredInstitutes.map((institute) => (
-                            <Card key={institute.id} className="group overflow-hidden border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
-                                {/* Cover Image */}
-                                <div className="h-32 bg-gray-100 relative overflow-hidden">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={institute.logo ? getFileUrl(institute.logo) : institute.coverImage}
-                                        alt={institute.name}
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                </div>
+                            filteredInstitutes.map((institute) => (
+                                <Card key={institute.id} className="group overflow-hidden border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+                                    {/* Cover Image */}
+                                    <div className="h-32 bg-gray-100 relative overflow-hidden">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={institute.logo ? getFileUrl(institute.logo) : institute.coverImage}
+                                            alt={institute.name}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                    </div>
 
-                                <CardHeader className="relative pt-6 pb-4 px-6">
+                                    <CardHeader className="relative pt-6 pb-4 px-6">
                                         <div className="flex justify-between items-start mb-2">
                                             <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">
                                                 {institute.name}
@@ -103,55 +103,55 @@ export default function InstitutesPage() {
                                             <MapPin className="h-3.5 w-3.5" />
                                             {institute.location}
                                         </div>
-                                </CardHeader>
+                                    </CardHeader>
 
-                                <CardContent className="px-6 flex-1">
-                                    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">
-                                        {institute.description}
-                                    </p>
+                                    <CardContent className="px-6 flex-1">
+                                        <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">
+                                            {institute.description}
+                                        </p>
 
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {institute.categories.slice(0, 3).map((cat: string) => (
-                                            <Badge key={cat} variant="secondary" className="bg-gray-100 text-gray-600 hover:bg-gray-200 font-normal">
-                                                {cat}
-                                            </Badge>
-                                        ))}
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4 py-3 border-t border-gray-50">
-                                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                                            <Users className="h-4 w-4 text-primary/70" />
-                                            <span>{institute.studentsCount} طالب</span>
+                                        <div className="flex flex-wrap gap-2 mb-4">
+                                            {institute.categories.slice(0, 3).map((cat: string) => (
+                                                <Badge key={cat} variant="secondary" className="bg-gray-100 text-gray-600 hover:bg-gray-200 font-normal">
+                                                    {cat}
+                                                </Badge>
+                                            ))}
                                         </div>
-                                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                                            <BookOpen className="h-4 w-4 text-primary/70" />
-                                            <span>{institute.coursesCount} دورة</span>
-                                        </div>
-                                    </div>
-                                </CardContent>
 
-                                <CardFooter className="px-6 pb-6 pt-0">
-                                    <Button className="w-full bg-gray-900 hover:bg-primary text-white transition-colors" asChild>
-                                        <Link href={`/institutes/${institute.id}`}>
-                                            عرض التفاصيل
-                                            <ArrowLeft className="mr-2 h-4 w-4" />
-                                        </Link>
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        ))
-                    ) : (
-                        <div className="col-span-full text-center py-12">
-                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Search className="h-8 w-8 text-gray-400" />
+                                        <div className="grid grid-cols-2 gap-4 py-3 border-t border-gray-50">
+                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                <Users className="h-4 w-4 text-primary/70" />
+                                                <span>{institute.studentsCount} طالب</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                                <BookOpen className="h-4 w-4 text-primary/70" />
+                                                <span>{institute.coursesCount} دورة</span>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+
+                                    <CardFooter className="px-6 pb-6 pt-0">
+                                        <Button className="w-full bg-gray-900 hover:bg-primary text-white transition-colors" asChild>
+                                            <Link href={`/institutes/${institute.id}`}>
+                                                عرض التفاصيل
+                                                <ArrowLeft className="mr-2 h-4 w-4" />
+                                            </Link>
+                                        </Button>
+                                    </CardFooter>
+                                </Card>
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-12">
+                                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <Search className="h-8 w-8 text-gray-400" />
+                                </div>
+                                <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد نتائج</h3>
+                                <p className="text-gray-500">
+                                    {searchQuery ? "جرب البحث بكلمات مختلفة" : "لا توجد معاهد مقبولة حالياً."}
+                                </p>
                             </div>
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">لا توجد نتائج</h3>
-                            <p className="text-gray-500">
-                                {searchQuery ? "جرب البحث بكلمات مختلفة" : "لا توجد معاهد مقبولة حالياً."}
-                            </p>
-                        </div>
-                    )}
-                </div>
+                        )}
+                    </div>
                 )}
             </main>
         </div>

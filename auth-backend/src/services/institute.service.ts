@@ -177,11 +177,15 @@ class InstituteService {
             instituteLogo: institute.logo,
             instituteAddress: institute.address,
             instituteWebsite: institute.website,
+            instituteLocationUrl: institute.locationUrl,
             instituteDescription: institute.description,
             licenseNumber: institute.licenseNumber,
             licenseDocument: institute.licenseDocumentUrl,
             licenseDocumentUrl: institute.licenseDocumentUrl,
             verificationStatus: institute.verificationStatus,
+            features: institute.features,
+            publicEmail: institute.email,
+            publicPhone: institute.phone,
         };
     }
 
@@ -199,11 +203,13 @@ class InstituteService {
             instituteName?: string;
             instituteAddress?: string;
             instituteWebsite?: string;
+            instituteLocationUrl?: string;
             instituteDescription?: string;
             licenseNumber?: string;
             licenseDocumentUrl?: string;
             avatar?: string;
             logo?: string;
+            features?: string[] | string;
         }
     ) {
         const institute = await prisma.institute.findUnique({
@@ -245,12 +251,14 @@ class InstituteService {
                 name: data.instituteName !== undefined ? data.instituteName : undefined,
                 address: data.instituteAddress !== undefined ? data.instituteAddress : undefined,
                 website: data.instituteWebsite !== undefined ? data.instituteWebsite : undefined,
+                locationUrl: data.instituteLocationUrl !== undefined ? data.instituteLocationUrl : undefined,
                 description: data.instituteDescription !== undefined ? data.instituteDescription : undefined,
                 licenseNumber: data.licenseNumber !== undefined ? data.licenseNumber : undefined,
                 licenseDocumentUrl: data.licenseDocumentUrl !== undefined ? data.licenseDocumentUrl : undefined,
                 logo: data.logo !== undefined ? data.logo : undefined,
                 phone: data.publicPhone !== undefined ? data.publicPhone : (data.phone !== undefined ? data.phone : undefined),
                 email: data.publicEmail !== undefined ? data.publicEmail : (data.email !== undefined ? data.email : undefined),
+                features: data.features !== undefined ? (typeof data.features === 'string' ? JSON.parse(data.features) : data.features) : undefined,
             },
         });
 
@@ -262,9 +270,12 @@ class InstituteService {
             avatar: updatedUser.avatar,
             role: "institute_admin",
             instituteName: updatedInstitute.name,
+            publicEmail: updatedInstitute.email,
+            publicPhone: updatedInstitute.phone,
             instituteLogo: updatedInstitute.logo,
             instituteAddress: updatedInstitute.address,
             instituteWebsite: updatedInstitute.website,
+            instituteLocationUrl: updatedInstitute.locationUrl,
             instituteDescription: updatedInstitute.description,
             licenseNumber: updatedInstitute.licenseNumber,
             licenseDocument: updatedInstitute.licenseDocumentUrl,
@@ -294,7 +305,7 @@ class InstituteService {
         const count = await prisma.bankAccount.count({
             where: { instituteId: institute.id }
         });
-        
+
         const shouldBeActive = count === 0 ? true : (data.isActive ?? false);
 
         if (shouldBeActive) {
@@ -1481,7 +1492,7 @@ class InstituteService {
                     where: { id: booking.courseId },
                     select: { status: true }
                 });
-                
+
                 // Always set course to ACTIVE when booking is approved
                 await prisma.course.update({
                     where: { id: booking.courseId },
@@ -1714,11 +1725,11 @@ class InstituteService {
         }
 
         const staffTrainerIds = (course as any).staffTrainerIds as string[] || [];
-        const staffTrainers = staffTrainerIds.length > 0 
+        const staffTrainers = staffTrainerIds.length > 0
             ? await prisma.instituteStaff.findMany({
                 where: { id: { in: staffTrainerIds } },
                 select: { id: true, name: true, avatar: true }
-              })
+            })
             : [];
 
         return {
@@ -1742,7 +1753,7 @@ class InstituteService {
             category: course.category?.name || "-",
             deliveryType: (course as any).sessions?.[0]?.type === 'ONLINE' ? 'online'
                 : (course as any).sessions?.[0]?.type === 'IN_PERSON' ? 'in_person'
-                : (course as any).sessions?.length > 0 ? 'hybrid' : 'online',
+                    : (course as any).sessions?.length > 0 ? 'hybrid' : 'online',
             hallId: (course as any).sessions?.[0]?.roomId ?? null,
             prerequisites: course.prerequisites ? course.prerequisites.split('\n') : [],
             sessions: ((course as any).sessions ?? []).map((s: any) => ({
@@ -2780,6 +2791,8 @@ class InstituteService {
                 email: true,
                 phone: true,
                 website: true,
+                locationUrl: true,
+                features: true,
                 courses: {
                     where: { status: 'ACTIVE' },
                     select: {
@@ -2798,7 +2811,8 @@ class InstituteService {
                         id: true,
                         name: true,
                         specialties: true,
-                        instituteId: true
+                        instituteId: true,
+                        avatar: true
                     }
                 },
                 _count: {
@@ -2828,6 +2842,7 @@ class InstituteService {
             email: institute.email,
             phone: institute.phone,
             website: institute.website,
+            locationUrl: institute.locationUrl,
             location: institute.address || 'غير محدد',
             rating: 5.0, // Default rating for now
             reviewCount: 0, // Mock for now
@@ -2847,14 +2862,9 @@ class InstituteService {
                 id: s.id,
                 name: s.name,
                 role: s.specialties[0] || 'مدرب',
-                avatar: null // Default null for now since avatar isn't in staff model
+                avatar: s.avatar
             })),
-            features: [
-                "شهادات معتمدة محلياً ودولياً",
-                "مدربين خبراء من كبرى الشركات",
-                "معامل حاسوب مجهزة بأحدث التقنيات",
-                "دعم وظيفي بعد التخرج"
-            ],
+            features: institute.features || [],
             coverImage: `https://placehold.co/1200x300/2563eb/ffffff?text=${encodeURIComponent(institute.name)}`
         };
     }

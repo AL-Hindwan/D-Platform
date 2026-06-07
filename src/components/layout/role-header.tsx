@@ -76,7 +76,7 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
     userWithMedia?.institute?.logo ||
     userWithMedia?.institute?.instituteLogo
   const avatarSrc = getFileUrl(avatarCandidate)
-  const finalAvatarSrc = profileAvatarSrc || avatarSrc
+  const finalAvatarSrc = (userWithMedia?.avatar ? getFileUrl(userWithMedia.avatar) : undefined) || profileAvatarSrc || avatarSrc
 
   useEffect(() => {
     let cancelled = false
@@ -89,11 +89,11 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
         const profile = await instituteService.getProfile()
         if (cancelled) return
         const candidate =
+          profile?.avatar ||
+          profile?.profileImage ||
           profile?.instituteLogo ||
           profile?.logo ||
-          profile?.image ||
-          profile?.avatar ||
-          profile?.profileImage
+          profile?.image
         setProfileAvatarSrc(getFileUrl(candidate))
       } catch {
         if (!cancelled) setProfileAvatarSrc(undefined)
@@ -181,7 +181,7 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button type="button" className="flex items-center gap-2 rounded-md px-1 py-1 transition-colors hover:bg-slate-100">
+              <button suppressHydrationWarning type="button" className="flex items-center gap-2 rounded-md px-1 py-1 transition-colors hover:bg-slate-100">
                 <Avatar className="h-10 w-10 border border-slate-200">
                   <AvatarImage src={finalAvatarSrc} alt={user?.name ?? "user"} />
                   <AvatarFallback className="bg-blue-50 font-bold text-[#2563EB]">{(user?.name || "?").charAt(0)}</AvatarFallback>

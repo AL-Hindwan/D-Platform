@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -23,6 +24,7 @@ import {
   CreditCard,
   Hash,
   X,
+  Plus,
   Globe,
   MapPin,
   Phone,
@@ -31,6 +33,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { instituteService } from "@/lib/institute-service"
+import { authService } from "@/lib/auth-service"
 import { getFileUrl } from "@/lib/utils"
 import { useAuth } from "@/contexts/auth-context"
 
@@ -91,11 +94,17 @@ function Field({
 
 export default function InstituteProfilePage() {
   const { updateUser } = useAuth()
-  const [activeTab, setActiveTab] = useState("institute-data")
+  const [activeTab, setActiveTab] = useState("personal")
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  
+  // Password state
   const [showPassword, setShowPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [pwForm, setPwForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" })
+  const [isChangingPw, setIsChangingPw] = useState(false)
 
   const [user, setUser] = useState({
     id: "",
@@ -130,9 +139,13 @@ export default function InstituteProfilePage() {
     accreditationCertificate: "",
     additionalDocuments: [] as string[],
     publishedCoursesCount: 0,
+    features: [] as string[],
   })
 
+  const [newFeature, setNewFeature] = useState("")
+
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [savedInstituteLogo, setSavedInstituteLogo] = useState("")
   const [logoError, setLogoError] = useState("")
@@ -271,6 +284,7 @@ export default function InstituteProfilePage() {
             commercialRegisterDocument: data.commercialRegisterDocument || "",
             accreditationCertificate: data.accreditationCertificate || "",
             additionalDocuments: Array.isArray(data.additionalDocuments) ? data.additionalDocuments : [],
+            features: Array.isArray(data.features) ? data.features : [],
             publishedCoursesCount: Number(data.publishedCoursesCount || data.activeCourses || 0),
           }))
           setSavedInstituteLogo(data.instituteLogo || data.logo || "")
@@ -305,6 +319,44 @@ export default function InstituteProfilePage() {
     setIsEditing(true)
   }
 
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setAvatarFile(file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+      setIsEditing(true)
+    }
+  }
+
+  const handlePasswordChange = async () => {
+    if (!pwForm.currentPassword || !pwForm.newPassword || !pwForm.confirmPassword) {
+      toast.error("يرجى ملء جميع الحقول")
+      return
+    }
+    if (pwForm.newPassword !== pwForm.confirmPassword) {
+      toast.error("كلمة المرور الجديدة وتأكيدها غير متطابقين")
+      return
+    }
+    if (pwForm.newPassword.length < 8) {
+      toast.error("كلمة المرور الجديدة يجب أن تكون 8 أحرف على الأقل")
+      return
+    }
+    try {
+      setIsChangingPw(true)
+      await authService.changePassword({ currentPassword: pwForm.currentPassword, newPassword: pwForm.newPassword })
+      toast.success("تم تغيير كلمة المرور بنجاح")
+      setPwForm({ currentPassword: "", newPassword: "", confirmPassword: "" })
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "فشل في تغيير كلمة المرور")
+    } finally {
+      setIsChangingPw(false)
+    }
+  }
+
   const handleSave = async () => {
     try {
       setIsSaving(true)
@@ -314,11 +366,10 @@ export default function InstituteProfilePage() {
       formData.append("email", user.email)
       formData.append("instituteName", user.instituteName)
       formData.append("instituteAddress", user.instituteAddress)
-      const websiteValue = user.instituteWebsite || user.instituteLocationUrl
-      formData.append("instituteWebsite", websiteValue)
-      formData.append("website", websiteValue)
-      formData.append("instituteLocationUrl", websiteValue)
-      formData.append("locationUrl", websiteValue)
+      formData.append("instituteWebsite", user.instituteWebsite || "")
+      formData.append("website", user.instituteWebsite || "")
+      formData.append("instituteLocationUrl", user.instituteLocationUrl || "")
+      formData.append("locationUrl", user.instituteLocationUrl || "")
       formData.append("instituteDescription", user.instituteDescription)
       formData.append("city", user.city)
       formData.append("publicPhone", user.publicPhone)
@@ -336,6 +387,10 @@ export default function InstituteProfilePage() {
       if (avatarFile) formData.append("avatar", avatarFile)
       if (logoFile) formData.append("logo", logoFile)
       if (docFiles.licenseDocument) formData.append("licenseDocument", docFiles.licenseDocument)
+      
+      const finalFeatures = newFeature.trim() ? [...user.features, newFeature.trim()] : user.features
+      formData.append("features", JSON.stringify(finalFeatures))
+      
       const data = await instituteService.updateProfile(formData)
       const newLogo = data?.instituteLogo || data?.logo || user.instituteLogo
       const newLicenseDocument =
@@ -372,6 +427,8 @@ export default function InstituteProfilePage() {
   const handleCancelEdit = () => {
     setIsEditing(false)
     setLogoFile(null)
+    setAvatarFile(null)
+    setAvatarPreview(null)
     setDocFiles({})
     setLogoError("")
     setUser((prev) => ({ ...prev, instituteLogo: savedInstituteLogo }))
@@ -394,11 +451,61 @@ export default function InstituteProfilePage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} dir="rtl" className="space-y-4">
-          <TabsList className="grid h-auto w-full grid-cols-3 rounded-[6.5px] bg-slate-100 p-1">
-            <TabsTrigger value="institute-data" className="rounded-[6.5px]">بيانات المعهد</TabsTrigger>
-            <TabsTrigger value="banks" className="rounded-[6.5px]">الحسابات البنكية</TabsTrigger>
-            <TabsTrigger value="security" className="rounded-[6.5px]">الأمان وكلمة المرور</TabsTrigger>
+          <TabsList className="flex flex-wrap h-auto w-full rounded-[6.5px] bg-slate-100 p-1 justify-start overflow-x-auto">
+            <TabsTrigger value="personal" className="flex-1 min-w-[150px] rounded-[6.5px]">المعلومات الشخصية</TabsTrigger>
+            <TabsTrigger value="institute-data" className="flex-1 min-w-[150px] rounded-[6.5px]">بيانات المعهد</TabsTrigger>
+            <TabsTrigger value="banks" className="flex-1 min-w-[150px] rounded-[6.5px]">الحسابات البنكية</TabsTrigger>
+            <TabsTrigger value="security" className="flex-1 min-w-[150px] rounded-[6.5px]">الأمان وكلمة المرور</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="personal" className="mt-0 space-y-4">
+            <Card className="rounded-[6.5px] border border-slate-200 bg-white shadow-sm">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Badge className="rounded-[6.5px] bg-slate-200 text-slate-700 hover:bg-slate-200">لا تظهر للطلاب</Badge>
+                  <CardTitle className="text-right">المعلومات الشخصية (مدير الحساب)</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-5">
+                <div className="mb-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-start">
+                  <div className="relative">
+                    <Avatar className="h-20 w-20 border-2 border-white shadow-md">
+                      <AvatarImage src={avatarPreview || getFileUrl(user.avatar)} />
+                      <AvatarFallback className="bg-blue-50 text-xl font-bold text-blue-700">
+                        {user.name?.charAt(0) || "؟"}
+                      </AvatarFallback>
+                    </Avatar>
+                    {isEditing && (
+                      <Label htmlFor="avatar-upload" className="absolute bottom-0 right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition-colors hover:bg-blue-700">
+                        <Camera className="h-3 w-3" />
+                      </Label>
+                    )}
+                    <input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} disabled={!isEditing} />
+                  </div>
+                  <div className="text-right">
+                    <h3 className="font-semibold text-slate-900">صورة مدير الحساب</h3>
+                    <p className="text-sm text-slate-500">اختر صورة شخصية تظهر لك فقط</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <Field label="اسم مدير الحساب" icon={<User className="h-4 w-4" />} value={user.name} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, name: v }))} placeholder="أدخل اسم مدير الحساب" />
+                  <Field label="البريد الإلكتروني للإدارة" icon={<Mail className="h-4 w-4" />} value={user.email} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, email: v }))} placeholder="أدخل البريد الإلكتروني الخاص بتسجيل الدخول" />
+                  <Field label="رقم التواصل للإدارة" icon={<Phone className="h-4 w-4" />} value={user.phone} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, phone: v }))} placeholder="أدخل رقم التواصل الخاص بالإدارة" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex flex-col gap-2 sm:flex-row sm:justify-start">
+              {isEditing ? (
+                <>
+                  <Button onClick={handleSave} disabled={isSaving} className="h-10 rounded-[6.5px] bg-blue-600 hover:bg-blue-700">{isSaving ? "جاري الحفظ..." : "حفظ التغييرات"}</Button>
+                  <Button variant="outline" onClick={handleCancelEdit} disabled={isSaving} className="h-10 rounded-[6.5px]">إلغاء</Button>
+                </>
+              ) : (
+                <Button onClick={() => setIsEditing(true)} className="h-10 rounded-[6.5px] bg-blue-600 hover:bg-blue-700">تعديل البيانات</Button>
+              )}
+            </div>
+          </TabsContent>
 
           <TabsContent value="institute-data" className="mt-0 space-y-4">
             <Card className="rounded-[6.5px] border border-slate-200 bg-white shadow-sm">
@@ -452,13 +559,88 @@ export default function InstituteProfilePage() {
               <CardContent className="space-y-5">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <Field label="اسم المعهد الرسمي" icon={<Building className="h-4 w-4" />} value={user.instituteName} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, instituteName: v }))} placeholder="أدخل اسم المعهد الرسمي" />
-                  <Field label="البريد الإلكتروني" icon={<Mail className="h-4 w-4" />} value={user.email} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, email: v, publicEmail: v }))} placeholder="أدخل البريد الإلكتروني" />
-                  <Field label="رقم الهاتف" icon={<Phone className="h-4 w-4" />} value={user.phone} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, phone: v, publicPhone: v }))} placeholder="أدخل رقم الهاتف" />
+                  <Field label="البريد الإلكتروني العام" icon={<Mail className="h-4 w-4" />} value={user.publicEmail} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, publicEmail: v }))} placeholder="أدخل البريد الإلكتروني (يظهر للطلاب)" />
+                  <Field label="رقم الهاتف العام" icon={<Phone className="h-4 w-4" />} value={user.publicPhone} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, publicPhone: v }))} placeholder="أدخل رقم الهاتف (يظهر للطلاب)" />
                   <Field label="العنوان النصي" icon={<MapPin className="h-4 w-4" />} value={user.instituteAddress} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, instituteAddress: v }))} placeholder="مثال: الرياض، حي النرجس، طريق الملك سلمان" emptyText="لم يتم إدخال العنوان" />
-                  <Field label="رابط الموقع" type="url" icon={<Globe className="h-4 w-4" />} value={user.instituteWebsite || user.instituteLocationUrl} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, instituteWebsite: v, instituteLocationUrl: v }))} placeholder="مثال: رابط Google Maps أو رابط موقع المعهد" emptyText="لم يتم إدخال رابط الموقع" />
+                  <Field label="رابط خرائط جوجل" type="url" icon={<MapPin className="h-4 w-4" />} value={user.instituteLocationUrl} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, instituteLocationUrl: v }))} placeholder="مثال: رابط موقع المعهد على خرائط جوجل" emptyText="لم يتم إدخال رابط خرائط جوجل" />
+                  <Field label="الموقع الإلكتروني الرسمي" type="url" icon={<Globe className="h-4 w-4" />} value={user.instituteWebsite} editable={isEditing} onChange={(v) => setUser((p) => ({ ...p, instituteWebsite: v }))} placeholder="مثال: https://www.example.com" emptyText="لم يتم إدخال موقع إلكتروني" />
+                </div>
+
+                <div className="space-y-2 mt-4 pt-4 border-t border-slate-100">
+                  <Label className="text-right flex items-center gap-2 text-gray-700 font-medium">نبذة عن المعهد</Label>
+                  {isEditing ? (
+                    <Textarea 
+                      value={user.instituteDescription} 
+                      onChange={(e) => setUser((p) => ({ ...p, instituteDescription: e.target.value }))} 
+                      placeholder="اكتب نبذة تعريفية عن المعهد هنا..." 
+                      className="text-right rounded-lg bg-gray-50/50 focus:bg-white min-h-[100px]" 
+                      dir="rtl" 
+                    />
+                  ) : (
+                    <div className="p-3 bg-gray-50 rounded-lg text-gray-800 text-right min-h-[44px]" dir="rtl">
+                      {user.instituteDescription || <span className="text-gray-400 italic text-sm">لم يتم إدخال نبذة عن المعهد</span>}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-3 pt-5 border-t border-slate-100">
+                  <Label className="text-right text-base font-semibold">مزايا المعهد التنافسية (تظهر في صفحة المعهد للطلاب)</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {user.features.map((feature, i) => (
+                      <div key={i} className="flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-700">
+                        <span>{feature}</span>
+                        {isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => setUser(p => ({ ...p, features: p.features.filter((_, index) => index !== i) }))}
+                            className="mr-1 rounded-full p-0.5 text-slate-400 hover:bg-red-100 hover:text-red-500 transition-colors"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    {user.features.length === 0 && !isEditing && (
+                      <p className="text-sm text-slate-500">لا توجد مزايا مضافة</p>
+                    )}
+                  </div>
+                  {isEditing && (
+                    <div className="flex gap-2 max-w-md">
+                      <Input
+                        placeholder="أضف ميزة (مثال: شهادات دولية معتمدة)"
+                        value={newFeature}
+                        onChange={e => setNewFeature(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            if (newFeature.trim()) {
+                              setUser(p => ({ ...p, features: [...p.features, newFeature.trim()] }));
+                              setNewFeature("");
+                            }
+                          }
+                        }}
+                        className="rounded-[6.5px] text-right flex-1"
+                      />
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          if (newFeature.trim()) {
+                            setUser(p => ({ ...p, features: [...p.features, newFeature.trim()] }));
+                            setNewFeature("");
+                          }
+                        }}
+                        className="rounded-[6.5px] px-3 shrink-0"
+                        variant="secondary"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
+
+
 
             <Card className="rounded-[6.5px] border border-slate-200 bg-white shadow-sm">
               <CardHeader>
@@ -589,7 +771,7 @@ export default function InstituteProfilePage() {
                 <div className="space-y-2">
                   <Label htmlFor="current-password" className="text-right">كلمة المرور الحالية</Label>
                   <div className="relative">
-                    <Input id="current-password" type={showPassword ? "text" : "password"} className="rounded-[6.5px] pr-10" />
+                    <Input id="current-password" type={showPassword ? "text" : "password"} value={pwForm.currentPassword} onChange={e => setPwForm(p => ({ ...p, currentPassword: e.target.value }))} className="rounded-[6.5px] pr-10" />
                     <Button type="button" variant="ghost" size="sm" className="absolute left-0 top-0 h-full px-3 hover:bg-transparent" onClick={() => setShowPassword(!showPassword)}>
                       {showPassword ? <EyeOff className="h-4 w-4 text-gray-400" /> : <Eye className="h-4 w-4 text-gray-400" />}
                     </Button>
@@ -597,13 +779,25 @@ export default function InstituteProfilePage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="new-password" className="text-right">كلمة المرور الجديدة</Label>
-                  <Input id="new-password" type="password" className="rounded-[6.5px]" />
+                  <div className="relative">
+                    <Input id="new-password" type={showNewPassword ? "text" : "password"} value={pwForm.newPassword} onChange={e => setPwForm(p => ({ ...p, newPassword: e.target.value }))} className="rounded-[6.5px] pr-10" />
+                    <Button type="button" variant="ghost" size="sm" className="absolute left-0 top-0 h-full px-3 hover:bg-transparent" onClick={() => setShowNewPassword(!showNewPassword)}>
+                      {showNewPassword ? <EyeOff className="h-4 w-4 text-gray-400" /> : <Eye className="h-4 w-4 text-gray-400" />}
+                    </Button>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="confirm-password" className="text-right">تأكيد كلمة المرور الجديدة</Label>
-                  <Input id="confirm-password" type="password" className="rounded-[6.5px]" />
+                  <div className="relative">
+                    <Input id="confirm-password" type={showConfirmPassword ? "text" : "password"} value={pwForm.confirmPassword} onChange={e => setPwForm(p => ({ ...p, confirmPassword: e.target.value }))} className="rounded-[6.5px] pr-10" />
+                    <Button type="button" variant="ghost" size="sm" className="absolute left-0 top-0 h-full px-3 hover:bg-transparent" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4 text-gray-400" /> : <Eye className="h-4 w-4 text-gray-400" />}
+                    </Button>
+                  </div>
                 </div>
-                <Button className="h-10 rounded-[6.5px] bg-blue-600 hover:bg-blue-700">تغيير كلمة المرور</Button>
+                <Button onClick={handlePasswordChange} disabled={isChangingPw} className="h-10 rounded-[6.5px] bg-blue-600 hover:bg-blue-700">
+                  {isChangingPw ? <><Loader2 className="ml-2 h-4 w-4 animate-spin" />جاري التغيير...</> : "تغيير كلمة المرور"}
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
