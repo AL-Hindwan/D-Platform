@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import {
   BarChart3,
@@ -17,6 +17,7 @@ import {
   Shield,
   UserCheck,
   Users,
+  MapPin,
   type LucideIcon,
 } from "lucide-react"
 import { UserRole } from "@/types"
@@ -52,10 +53,11 @@ export const ROLE_LAYOUT_CONFIG: Record<DashboardRole, RoleLayoutConfig> = {
     searchRoute: "/trainer/explore",
     navItems: [
       { href: "/trainer/dashboard", label: "الصفحة الرئيسية", icon: Home, match: "exact" },
-      { href: "/trainer/explore", label: "استعراض الدورات", icon: BookOpen, match: "prefix" },
+      // { href: "/trainer/explore", label: "استعراض الدورات", icon: BookOpen, match: "prefix" },
       { href: "/trainer/courses", label: "إدارة الدورات", icon: GraduationCap, match: "prefix" },
       { href: "/trainer/students", label: "إدارة الطلاب", icon: Users, match: "prefix" },
       { href: "/trainer/announcements", label: "الإعلانات", icon: Megaphone, match: "prefix" },
+      { href: "/trainer/room-bookings", label: "حجوزاتي", icon: MapPin, match: "prefix" },
       { href: "/trainer/halls", label: "القاعات", icon: Building, match: "prefix" },
       { href: "/trainer/schedule", label: "جدول المواعيد", icon: CalendarDays, match: "prefix" },
     ],

@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
@@ -14,6 +14,7 @@ import {
   GraduationCap,
   CalendarDays,
   LogOut,
+  MapPin,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { trainerService } from "@/lib/trainer-service"
@@ -24,6 +25,7 @@ const links = [
   { href: "/trainer/courses", label: "إدارة الدورات", icon: GraduationCap },
   { href: "/trainer/students", label: "إدارة الطلاب", icon: Users },
   { href: "/trainer/announcements", label: "الإعلانات", icon: Megaphone },
+  { href: "/trainer/room-bookings", label: "حجوزاتي", icon: MapPin },
   { href: "/trainer/halls", label: "القاعات", icon: Building },
   { href: "/trainer/schedule", label: "جدول المواعيد", icon: CalendarDays },
 ]
