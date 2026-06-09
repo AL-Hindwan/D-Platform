@@ -511,9 +511,8 @@ export default function InstituteSchedulePage() {
                   return (
                     <Card
                       key={session.id}
-                      className={`border-[#E5E7EB] bg-white transition-shadow hover:shadow-sm ${radiusClass} ${
-                        isNearest ? "border-blue-300 bg-blue-50/30" : ""
-                      }`}
+                      className={`border-[#E5E7EB] bg-white transition-shadow hover:shadow-sm ${radiusClass} ${isNearest ? "border-blue-300 bg-blue-50/30" : ""
+                        }`}
                     >
                       <CardContent className="p-4">
                         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[140px_1fr_220px] lg:items-center">
@@ -680,13 +679,12 @@ export default function InstituteSchedulePage() {
                           type="button"
                           disabled={day.isPast}
                           onClick={() => handleSelectDay(day.dateKey)}
-                          className={`h-9 text-sm transition-all ${radiusClass} ${
-                            selected
+                          className={`h-9 text-sm transition-all ${radiusClass} ${selected
                               ? "bg-blue-600 text-white"
                               : day.isPast
                                 ? "bg-gray-100 text-gray-300"
                                 : "border bg-white hover:bg-blue-50"
-                          }`}
+                            }`}
                         >
                           {day.day}
                         </button>
@@ -707,9 +705,8 @@ export default function InstituteSchedulePage() {
                               key={slot}
                               type="button"
                               onClick={() => setSelectedSlot(slot)}
-                              className={`border p-2 text-sm transition-colors ${radiusClass} ${
-                                selectedSlot === slot ? "border-blue-600 bg-blue-600 text-white" : "bg-white hover:border-blue-300 hover:bg-blue-50"
-                              }`}
+                              className={`border p-2 text-sm transition-colors ${radiusClass} ${selectedSlot === slot ? "border-blue-600 bg-blue-600 text-white" : "bg-white hover:border-blue-300 hover:bg-blue-50"
+                                }`}
                             >
                               {slot}
                             </button>

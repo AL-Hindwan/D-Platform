@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
@@ -197,27 +197,27 @@ export default function StudentDashboard() {
             ) : (
               <div className="flex-1 space-y-2">
                 {upcomingSessions.slice(0, 2).map((session) => (
-	                  <div key={session.id} className="rounded-xl border border-slate-200/80 bg-white p-3">
-	                    <div dir="ltr" className="flex items-center justify-between gap-4">
-	                      <div className="flex shrink-0 flex-col items-start gap-2 self-start">
-	                        <span className="text-[11px] text-slate-400">{relativeTime(session.startTime)}</span>
-	                        <Button asChild size="sm" variant="outline" className="h-9 min-w-[84px] rounded-lg border-blue-200 px-3 text-sm font-semibold text-blue-700 hover:bg-blue-50">
-	                          <Link href="/student/schedule">التفاصيل</Link>
-	                        </Button>
-	                      </div>
-	                      <div dir="rtl" className="min-w-0 flex-1 space-y-1 text-right">
-	                        <p className="line-clamp-1 text-sm font-extrabold text-slate-900">{session.courseTitle || session.topic || "جلسة قادمة"}</p>
-	                        <Badge variant="outline" className="h-5 w-fit text-[11px]">
+                  <div key={session.id} className="rounded-xl border border-slate-200/80 bg-white p-3">
+                    <div dir="ltr" className="flex items-center justify-between gap-4">
+                      <div className="flex shrink-0 flex-col items-start gap-2 self-start">
+                        <span className="text-[11px] text-slate-400">{relativeTime(session.startTime)}</span>
+                        <Button asChild size="sm" variant="outline" className="h-9 min-w-[84px] rounded-lg border-blue-200 px-3 text-sm font-semibold text-blue-700 hover:bg-blue-50">
+                          <Link href="/student/schedule">التفاصيل</Link>
+                        </Button>
+                      </div>
+                      <div dir="rtl" className="min-w-0 flex-1 space-y-1 text-right">
+                        <p className="line-clamp-1 text-sm font-extrabold text-slate-900">{session.courseTitle || session.topic || "جلسة قادمة"}</p>
+                        <Badge variant="outline" className="h-5 w-fit text-[11px]">
                           {sessionTypeLabel(session.type)}
                         </Badge>
                         <p className="line-clamp-1 text-xs text-slate-500">
                           {formatDate(new Date(session.startTime))} • {formatTime(new Date(session.startTime))} - {formatTime(new Date(session.endTime))}
-	                        </p>
-	                      </div>
-	                    </div>
-	                  </div>
-	                ))}
-	              </div>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
             <Button asChild variant="outline" className="mt-3 h-9 w-full rounded-lg border-blue-200 text-blue-700 hover:bg-blue-50">
               <Link href="/student/schedule">عرض الجدول كامل</Link>

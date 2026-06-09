@@ -89,7 +89,8 @@ function CreateCoursePageInner() {
         hallId: "",
         objectives: [] as string[],
         prerequisites: [] as string[],
-        tags: [] as string[]
+        tags: [] as string[],
+        startDate: ""
     })
 
     // Schedule State
@@ -234,6 +235,7 @@ function CreateCoursePageInner() {
                         objectives: existing.objectives || [],
                         prerequisites: existing.prerequisites || [],
                         tags: existing.tags || [],
+                        startDate: existing.startDate ? new Date(existing.startDate).toISOString().split('T')[0] : "",
                     })
 
                     if (existing.trainers?.length > 0) {
@@ -473,8 +475,8 @@ function CreateCoursePageInner() {
             let sessionsPayload: any[] = [];
 
             if (status === 'DRAFT' || status === 'PENDING_MINIMUM') {
-                // المسودة ودورات انتظار اكتمال العدد لا تحتاج مواعيد — ترسل فارغة
-                startDate = '';
+                // المسودة ودورات انتظار اكتمال العدد لا تحتاج مواعيد (إلا الحجز المرن قد يحتوي على تاريخ بداية)
+                startDate = courseData.deliveryType === 'capacity_based' ? courseData.startDate : '';
                 endDate = '';
                 sessionsPayload = [];
             } else if (courseData.deliveryType === 'in_person') {
@@ -523,8 +525,15 @@ function CreateCoursePageInner() {
                         topic: s.topic || 'جلسة أونلاين'
                     };
                 });
+            } else if (courseData.deliveryType === 'capacity_based') {
+                if (status === 'ACTIVE' && !courseData.startDate) {
+                    throw new Error("يجب تحديد تاريخ بداية الدورة للحجز المرن");
+                }
+                startDate = courseData.startDate;
+                endDate = '';
+                sessionsPayload = [];
             } else {
-                // capacity_based أو غير محدد — لا تواريخ
+                // غير محدد
                 startDate = '';
                 endDate = '';
             }
@@ -632,7 +641,8 @@ function CreateCoursePageInner() {
     const isLocationValid = () => {
         if (courseData.deliveryType === 'in_person') return !!courseData.hallId && selectedSessions.length > 0;
         if (courseData.deliveryType === 'online') return onlineSessions.some(s => s.date && s.startTime);
-        return true; // capacity_based doesn't need location yet
+        if (courseData.deliveryType === 'capacity_based') return !!courseData.startDate;
+        return true; 
     }
     const shortDescriptionMax = 100
     const shortDescriptionCount = courseData.shortDescription.length
@@ -1668,6 +1678,25 @@ function CreateCoursePageInner() {
                                             </div>
                                         </div>
                                     ))}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
+
+                    {/* Capacity Based Flow */}
+                    {courseData.deliveryType === 'capacity_based' && (
+                        <div className="space-y-6">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2"><Calendar className="h-5 w-5 text-purple-600" />تاريخ بداية الدورة</CardTitle>
+                                    <CardDescription>في الحجز المرن، المعهد مسؤول عن توفير القاعات وتوزيع الطلاب لاحقاً. يكفي تحديد تاريخ البداية فقط ليتمكن الطلاب من الحجز.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="max-w-md">
+                                    <div className="space-y-2">
+                                        <Label>تاريخ البداية المتوقع <span className="text-red-500">*</span></Label>
+                                        <Input type="date" value={courseData.startDate} onChange={e => setCourseData({ ...courseData, startDate: e.target.value })} />
+                                        {!courseData.startDate && <p className="text-xs text-amber-600">يرجى تحديد تاريخ البداية لنشر الدورة وتفعيل التسجيل للطلاب.</p>}
+                                    </div>
                                 </CardContent>
                             </Card>
                         </div>

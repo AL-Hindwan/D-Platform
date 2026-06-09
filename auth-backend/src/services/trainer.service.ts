@@ -68,16 +68,16 @@ class TrainerService {
         const upcomingSessions = upcomingSessionsRaw
             .filter(s => s.course != null)
             .map(s => ({
-            id: s.id,
-            title: s.topic || 'جلسة تدريبية',
-            courseTitle: s.course!.title,
-            startTime: s.startTime,
-            endTime: s.endTime,
-            type: s.type.toLowerCase(),
-            room: s.room?.name ?? null,
-            meetingLink: s.meetingLink ?? null,
-            enrolledStudents: s.course!.enrollments.length,
-        }));
+                id: s.id,
+                title: s.topic || 'جلسة تدريبية',
+                courseTitle: s.course!.title,
+                startTime: s.startTime,
+                endTime: s.endTime,
+                type: s.type.toLowerCase(),
+                room: s.room?.name ?? null,
+                meetingLink: s.meetingLink ?? null,
+                enrolledStudents: s.course!.enrollments.length,
+            }));
 
         // Pending room bookings requested by this trainer
         const pendingBookingsRaw = await prisma.roomBooking.findMany({
@@ -202,12 +202,12 @@ class TrainerService {
             orderBy,
             include: {
                 trainer: { select: { name: true, avatar: true } },
-                institute: { 
-                    select: { 
-                        name: true, 
+                institute: {
+                    select: {
+                        name: true,
                         logo: true,
                         user: { select: { avatar: true } }
-                    } 
+                    }
                 },
                 category: { select: { name: true } },
                 enrollments: {
@@ -236,9 +236,9 @@ class TrainerService {
         return {
             courses: courses.map(c => {
                 const staffTrainerIds = (c as any).staffTrainerIds as string[] || [];
-                const staffTrainers = staffTrainerIds.map(id => ({ 
-                    name: staffMap.get(id)?.name ?? '—', 
-                    avatar: staffMap.get(id)?.avatar ?? null 
+                const staffTrainers = staffTrainerIds.map(id => ({
+                    name: staffMap.get(id)?.name ?? '—',
+                    avatar: staffMap.get(id)?.avatar ?? null
                 }));
 
                 return {
@@ -289,7 +289,7 @@ class TrainerService {
         const count = await prisma.bankAccount.count({
             where: { trainerId: userId }
         });
-        
+
         const shouldBeActive = count === 0 ? true : (data.isActive ?? false);
 
         if (shouldBeActive) {
@@ -395,7 +395,7 @@ class TrainerService {
         // Check if tag already exists
         const existing = await prisma.tag.findUnique({ where: { name } });
         if (existing) return existing;
-        
+
         return prisma.tag.create({
             data: { name, slug: slug || `tag-${Date.now()}` },
             select: { id: true, name: true, color: true }
@@ -500,7 +500,7 @@ class TrainerService {
             categoryId: course.categoryId ?? '',
             deliveryType: (course as any).sessions?.[0]?.type === 'ONLINE' ? 'online'
                 : (course as any).sessions?.[0]?.type === 'IN_PERSON' ? 'in_person'
-                : (course as any).sessions?.length > 0 ? 'hybrid' : 'online',
+                    : (course as any).sessions?.length > 0 ? 'hybrid' : 'online',
             hallId: (course as any).sessions?.[0]?.roomId ?? null,
             prerequisites: course.prerequisites ? course.prerequisites.split('\n').filter(Boolean) : [],
             objectives: course.objectives ?? [],
@@ -569,7 +569,7 @@ class TrainerService {
         // Create/update sessions whenever sessions payload is provided (including flexible flows)
         if (Array.isArray(data.sessions) && data.sessions.length > 0) {
             const sessionType = data.deliveryType === 'online' ? 'ONLINE' : 'IN_PERSON';
-            
+
             const mappedSessions = data.sessions.map((s: any) => {
                 // Ensure time format is HH:mm:ss for ISO parsing
                 const formatTime = (t: string) => (t && t.split(':').length === 2) ? `${t}:00` : t;
@@ -601,12 +601,12 @@ class TrainerService {
                         const diff = s.endTime.getTime() - s.startTime.getTime();
                         return acc + (isNaN(diff) || diff < 0 ? 0 : diff / 3600000);
                     }, 0);
-                    
+
                     const hourlyRate = Number(room.pricePerHour) || 0;
                     const totalPrice = totalHours * hourlyRate;
 
                     const sortedSessions = [...mappedSessions].sort((a: any, b: any) => a.startTime.getTime() - b.startTime.getTime());
-                    
+
                     // Helper to create a time-only date for Prisma @db.Time(6) compatibility
                     const toTimeOnly = (d: Date) => {
                         const t = new Date(1970, 0, 1);
@@ -759,9 +759,9 @@ class TrainerService {
         console.log(`[Announcement-Trainer] Trainer ${userId} initiating announcement to: ${data.recipientIds?.length ? data.recipientIds.length + ' students' : (data.courseId ?? 'ALL')}`);
 
         // STRICTLY INDEPENDENT TRAINER LOOKUP: Fetch only courses owned by this specific trainer User ID
-        const trainerCourses = await prisma.course.findMany({ 
-            where: { trainerId: userId }, 
-            select: { id: true } 
+        const trainerCourses = await prisma.course.findMany({
+            where: { trainerId: userId },
+            select: { id: true }
         });
         let courseIds = trainerCourses.map((c: any) => c.id);
 
@@ -779,9 +779,9 @@ class TrainerService {
             // Target specific students
             console.log(`[Announcement-Trainer] Verifying enrollment for target students`);
             const enrolledStudents = courseIds.length > 0
-                ? await prisma.enrollment.findMany({ 
-                    where: { 
-                        studentId: { in: data.recipientIds }, 
+                ? await prisma.enrollment.findMany({
+                    where: {
+                        studentId: { in: data.recipientIds },
                         courseId: { in: courseIds },
                         deletedAt: null
                     },
@@ -789,13 +789,13 @@ class TrainerService {
                     distinct: ['studentId']
                 })
                 : [];
-            
+
             if (enrolledStudents.length === 0) {
                 console.warn(`[Announcement-Trainer] TARGET_ERROR: None of the targeted students are enrolled in any of trainer ${userId}'s courses`);
                 throw new Error('الطلاب المحددين غير مسجلين في أي من دوراتك المستقلة');
             }
 
-            const trainer = await prisma.user.findUnique({ 
+            const trainer = await prisma.user.findUnique({
                 where: { id: userId },
                 select: { name: true, phone: true, email: true }
             });
@@ -856,11 +856,11 @@ class TrainerService {
                     console.error('[Announcement-Trainer] Background task failed:', e);
                 }
             });
-            
+
             return announcement;
         } else {
             // Target Audience (ALL students of this trainer)
-            const trainer = await prisma.user.findUnique({ 
+            const trainer = await prisma.user.findUnique({
                 where: { id: userId },
                 select: { name: true, phone: true, email: true }
             });
@@ -889,10 +889,10 @@ class TrainerService {
             }
 
             const activeStudents = await prisma.enrollment.findMany({
-                where: { 
-                    courseId: { in: courseIds }, 
-                    status: { in: ['ACTIVE', 'COMPLETED', 'PRELIMINARY', 'PENDING_PAYMENT'] }, 
-                    deletedAt: null 
+                where: {
+                    courseId: { in: courseIds },
+                    status: { in: ['ACTIVE', 'COMPLETED', 'PRELIMINARY', 'PENDING_PAYMENT'] },
+                    deletedAt: null
                 },
                 select: { student: { select: { id: true, name: true, email: true } } },
                 distinct: ['studentId']
@@ -905,12 +905,12 @@ class TrainerService {
                 setImmediate(async () => {
                     try {
                         await prisma.notification.createMany({
-                            data: activeStudents.map((s: any) => ({ 
-                                userId: s.student.id, 
-                                type: 'NEW_ANNOUNCEMENT' as any, 
-                                title: data.title, 
-                                message: fullMessage, 
-                                relatedEntityId: announcement.id 
+                            data: activeStudents.map((s: any) => ({
+                                userId: s.student.id,
+                                type: 'NEW_ANNOUNCEMENT' as any,
+                                title: data.title,
+                                message: fullMessage,
+                                relatedEntityId: announcement.id
                             })),
                             skipDuplicates: true
                         });
@@ -918,14 +918,14 @@ class TrainerService {
                         for (const { student } of activeStudents as any[]) {
                             if (student.email) {
                                 mailerService.sendAnnouncementEmail(
-                                    student.email, 
-                                    student.name, 
-                                    data.title, 
-                                    data.message, 
-                                    { 
-                                        name: trainer?.name || 'المدرب', 
-                                        phone: trainer?.phone, 
-                                        email: trainer?.email 
+                                    student.email,
+                                    student.name,
+                                    data.title,
+                                    data.message,
+                                    {
+                                        name: trainer?.name || 'المدرب',
+                                        phone: trainer?.phone,
+                                        email: trainer?.email
                                     }
                                 ).catch((e: any) => console.error(`[Announcement-Trainer] Bulk email error:`, e));
                             }
@@ -1238,9 +1238,9 @@ class TrainerService {
     /**
      * Parse room availability — supports both legacy array format and new object format
      */
-    private parseRoomAvailability(availability: any): { 
-        slots: { day: string; startTime: string; endTime: string }[]; 
-        blackoutPeriods: { id: string; label: string; startDate: string; endDate: string }[] 
+    private parseRoomAvailability(availability: any): {
+        slots: { day: string; startTime: string; endTime: string }[];
+        blackoutPeriods: { id: string; label: string; startDate: string; endDate: string }[]
     } {
         if (!availability) return { slots: [], blackoutPeriods: [] };
         if (Array.isArray(availability)) return { slots: availability, blackoutPeriods: [] };
@@ -2337,19 +2337,19 @@ class TrainerService {
         return sessions
             .filter(s => s.course != null)
             .map(s => ({
-            id: s.id,
-            title: s.topic || 'جلسة تدريبية',
-            courseId: s.courseId ?? null,
-            courseTitle: s.course!.title,
-            startTime: s.startTime,
-            endTime: s.endTime,
-            type: s.type.toLowerCase(),
-            status: s.status.toLowerCase(),
-            meetingLink: s.meetingLink,
-            location: s.room?.name || s.location || (s.type === 'ONLINE' ? 'أونلاين' : 'غير محدد'),
-            enrolledStudents: s.course!.enrollments.length,
-            roomId: s.roomId ?? null
-        }));
+                id: s.id,
+                title: s.topic || 'جلسة تدريبية',
+                courseId: s.courseId ?? null,
+                courseTitle: s.course!.title,
+                startTime: s.startTime,
+                endTime: s.endTime,
+                type: s.type.toLowerCase(),
+                status: s.status.toLowerCase(),
+                meetingLink: s.meetingLink,
+                location: s.room?.name || s.location || (s.type === 'ONLINE' ? 'أونلاين' : 'غير محدد'),
+                enrolledStudents: s.course!.enrollments.length,
+                roomId: s.roomId ?? null
+            }));
     }
 
     /**
@@ -2395,10 +2395,10 @@ class TrainerService {
                     endDate: { gte: newStart }
                 }
             });
-            
+
             if (bookingConflict) {
                 // Check if the times also overlap (approximated for simplicity)
-                if (bookingConflict.defaultStartTime.getHours() < newEnd.getHours() && 
+                if (bookingConflict.defaultStartTime.getHours() < newEnd.getHours() &&
                     bookingConflict.defaultEndTime.getHours() > newStart.getHours()) {
                     throw new Error('هذا الوقت محجوز بالفعل ضمن حجز قاعة كلي');
                 }
@@ -2411,7 +2411,7 @@ class TrainerService {
                 data: { meetingLink: data.meetingLink }
             });
         }
-        
+
         // If moved outside RoomBooking range, expand the range
         if (data.startTime && session.roomBookingId) {
             const booking = await prisma.roomBooking.findUnique({ where: { id: session.roomBookingId } });
@@ -2419,7 +2419,7 @@ class TrainerService {
                 const updates: any = {};
                 if (data.startTime < booking.startDate) updates.startDate = data.startTime;
                 if ((data.endTime ?? session.endTime) > booking.endDate) updates.endDate = data.endTime ?? session.endTime;
-                
+
                 if (Object.keys(updates).length > 0) {
                     await prisma.roomBooking.update({
                         where: { id: booking.id },

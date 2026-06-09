@@ -241,58 +241,58 @@ export default function CoursesPage({ basePath = "/courses" }: CoursesPageProps)
               </Select>
             </div>
             {loading && (
-            <div className="flex items-center justify-center py-20 text-gray-400 gap-3">
-              <Loader2 className="h-7 w-7 animate-spin" />
-              <span className="text-lg">جاري تحميل الدورات...</span>
-            </div>
-          )}
+              <div className="flex items-center justify-center py-20 text-gray-400 gap-3">
+                <Loader2 className="h-7 w-7 animate-spin" />
+                <span className="text-lg">جاري تحميل الدورات...</span>
+              </div>
+            )}
 
-          {!loading && error && (
-            <div className="flex flex-col items-center justify-center py-20 gap-4 text-red-500">
-              <AlertCircle className="h-10 w-10" />
-              <p>{error}</p>
-              <Button variant="outline" onClick={fetchData}>إعادة المحاولة</Button>
-            </div>
-          )}
+            {!loading && error && (
+              <div className="flex flex-col items-center justify-center py-20 gap-4 text-red-500">
+                <AlertCircle className="h-10 w-10" />
+                <p>{error}</p>
+                <Button variant="outline" onClick={fetchData}>إعادة المحاولة</Button>
+              </div>
+            )}
 
-          {!loading && !error && visibleCourses.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 gap-4 text-gray-400 text-center">
-              <p className="text-lg">
-                {searchQuery || selectedCategory !== "جميع الفئات"
-                  ? "لا توجد نتائج تطابق بحثك"
-                  : "لا توجد دورات نشطة حالياً"}
-              </p>
-            </div>
-          )}
+            {!loading && !error && visibleCourses.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-20 gap-4 text-gray-400 text-center">
+                <p className="text-lg">
+                  {searchQuery || selectedCategory !== "جميع الفئات"
+                    ? "لا توجد نتائج تطابق بحثك"
+                    : "لا توجد دورات نشطة حالياً"}
+                </p>
+              </div>
+            )}
 
-          {!loading && !error && visibleCourses.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {visibleCourses.map((course) => (
-                <CourseCard
-                  key={course.id}
-                  id={course.id}
-                  title={course.title}
-                  description={course.shortDescription || course.description}
-                  level="عام" // Using a generic fallback for visually completing the design card
-                  price={course.price}
-                  studentsCount={course.studentsCount}
-                  duration={String(course.duration)}
-                  image={resolveImage(course.image)}
-                  category={course.category}
-                  courseStatus={course.courseStatus || (course as any).status}
-                  instructor={{
-                    name: course.trainer.name,
-                    avatar: resolveImage(course.trainer.avatar)
-                  }}
-                  instructors={(course as any).staffTrainers?.length > 1
-                    ? (course as any).staffTrainers.map((t: any) => ({ name: t.name, avatar: resolveImage(t.avatar) }))
-                    : undefined
-                  }
-                  basePath={basePath}
-                  isFavorite={wishlistIds.includes(course.id)}
-                />
-              ))}
-            </div>
+            {!loading && !error && visibleCourses.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {visibleCourses.map((course) => (
+                  <CourseCard
+                    key={course.id}
+                    id={course.id}
+                    title={course.title}
+                    description={course.shortDescription || course.description}
+                    level="عام" // Using a generic fallback for visually completing the design card
+                    price={course.price}
+                    studentsCount={course.studentsCount}
+                    duration={String(course.duration)}
+                    image={resolveImage(course.image)}
+                    category={course.category}
+                    courseStatus={course.courseStatus || (course as any).status}
+                    instructor={{
+                      name: course.trainer.name,
+                      avatar: resolveImage(course.trainer.avatar)
+                    }}
+                    instructors={(course as any).staffTrainers?.length > 1
+                      ? (course as any).staffTrainers.map((t: any) => ({ name: t.name, avatar: resolveImage(t.avatar) }))
+                      : undefined
+                    }
+                    basePath={basePath}
+                    isFavorite={wishlistIds.includes(course.id)}
+                  />
+                ))}
+              </div>
             )}
           </div>
         </div>

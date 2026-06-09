@@ -237,16 +237,16 @@ function StudentEnrolledCoursePageContent() {
                 <div className="flex flex-wrap gap-2 pt-1">
                   {!isEnrollmentCancelled && (
                     <>
-                  {course.deliveryType === "online" && heroMeetingLink && (
-                    <Button asChild className="rounded-lg bg-blue-600 hover:bg-blue-700">
-                      <a href={heroMeetingLink} target="_blank" rel="noreferrer">دخول اللقاء</a>
-                    </Button>
-                  )}
-                  {course.deliveryType !== "online" && roomLocationUrl && (
-                    <Button asChild className="rounded-lg bg-blue-600 hover:bg-blue-700">
-                      <a href={roomLocationUrl} target="_blank" rel="noreferrer">عرض موقع القاعة</a>
-                    </Button>
-                  )}
+                      {course.deliveryType === "online" && heroMeetingLink && (
+                        <Button asChild className="rounded-lg bg-blue-600 hover:bg-blue-700">
+                          <a href={heroMeetingLink} target="_blank" rel="noreferrer">دخول اللقاء</a>
+                        </Button>
+                      )}
+                      {course.deliveryType !== "online" && roomLocationUrl && (
+                        <Button asChild className="rounded-lg bg-blue-600 hover:bg-blue-700">
+                          <a href={roomLocationUrl} target="_blank" rel="noreferrer">عرض موقع القاعة</a>
+                        </Button>
+                      )}
                     </>
                   )}
                 </div>
@@ -283,58 +283,58 @@ function StudentEnrolledCoursePageContent() {
               <Card className="rounded-[8px] border border-blue-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
                 <CardContent className="p-3 sm:p-4">
                   {nextSession ? (
-                  <div className="flex min-h-[112px] flex-col" dir="rtl">
-                    <div className="mb-3 text-right">
-                      <h3 className="text-lg font-bold text-slate-900">الجلسة القادمة</h3>
-                    </div>
-
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-center gap-3 text-right">
-                        <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[8px] bg-blue-100 text-blue-600">
-                          <Calendar className="h-5 w-5" />
-                        </span>
-                        <p className="text-base font-semibold text-slate-900">{nextSession.title || nextSession.topic || "جلسة أونلاين"}</p>
+                    <div className="flex min-h-[112px] flex-col" dir="rtl">
+                      <div className="mb-3 text-right">
+                        <h3 className="text-lg font-bold text-slate-900">الجلسة القادمة</h3>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-slate-700 sm:flex-1 sm:justify-center">
-                        <span className="inline-flex items-center gap-1 whitespace-nowrap">
-                          <Calendar className="h-4 w-4 text-blue-600" />
-                          {formatDate(new Date(nextSession.startTime || Date.now()))}
-                        </span>
-                        <span className="hidden h-5 w-px bg-slate-200 sm:inline-block" />
-                        <span className="inline-flex items-center gap-1 whitespace-nowrap">
-                          <Clock className="h-4 w-4 text-blue-600" />
-                          {formatTime(new Date(nextSession.startTime || Date.now()))}
-                        </span>
-                        <span className="hidden h-5 w-px bg-slate-200 sm:inline-block" />
-                        <span className="inline-flex items-center gap-1 whitespace-nowrap">
-                          <Timer className="h-4 w-4 text-slate-500" />
-                          {durationLabel(nextSession.startTime, nextSession.endTime)}
-                        </span>
-                        <span className="hidden h-5 w-px bg-slate-200 sm:inline-block" />
-                        <span className="inline-flex items-center gap-1 whitespace-nowrap">
-                          <Globe className="h-4 w-4 text-blue-600" />
-                          {deliveryLabel(nextSession.type) !== "-" ? deliveryLabel(nextSession.type) : deliveryLabel(course?.deliveryType)}
-                        </span>
-                      </div>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-3 text-right">
+                          <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[8px] bg-blue-100 text-blue-600">
+                            <Calendar className="h-5 w-5" />
+                          </span>
+                          <p className="text-base font-semibold text-slate-900">{nextSession.title || nextSession.topic || "جلسة أونلاين"}</p>
+                        </div>
 
-                      <div className="flex items-center gap-2">
-                        {joinSessionLink ? (
-                          <Button asChild className="h-9 rounded-[8px] bg-blue-600 px-3 text-xs font-semibold hover:bg-blue-700 sm:text-sm">
-                            <a href={joinSessionLink} target="_blank" rel="noreferrer">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-slate-700 sm:flex-1 sm:justify-center">
+                          <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                            <Calendar className="h-4 w-4 text-blue-600" />
+                            {formatDate(new Date(nextSession.startTime || Date.now()))}
+                          </span>
+                          <span className="hidden h-5 w-px bg-slate-200 sm:inline-block" />
+                          <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                            <Clock className="h-4 w-4 text-blue-600" />
+                            {formatTime(new Date(nextSession.startTime || Date.now()))}
+                          </span>
+                          <span className="hidden h-5 w-px bg-slate-200 sm:inline-block" />
+                          <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                            <Timer className="h-4 w-4 text-slate-500" />
+                            {durationLabel(nextSession.startTime, nextSession.endTime)}
+                          </span>
+                          <span className="hidden h-5 w-px bg-slate-200 sm:inline-block" />
+                          <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                            <Globe className="h-4 w-4 text-blue-600" />
+                            {deliveryLabel(nextSession.type) !== "-" ? deliveryLabel(nextSession.type) : deliveryLabel(course?.deliveryType)}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {joinSessionLink ? (
+                            <Button asChild className="h-9 rounded-[8px] bg-blue-600 px-3 text-xs font-semibold hover:bg-blue-700 sm:text-sm">
+                              <a href={joinSessionLink} target="_blank" rel="noreferrer">
+                                <Video className="ml-1.5 h-4 w-4" />
+                                الانضمام للدورة
+                              </a>
+                            </Button>
+                          ) : (
+                            <Button disabled className="h-9 rounded-[8px] bg-slate-300 px-3 text-xs font-semibold text-slate-600 hover:bg-slate-300 sm:text-sm">
                               <Video className="ml-1.5 h-4 w-4" />
-                              الانضمام للدورة
-                            </a>
-                          </Button>
-                        ) : (
-                          <Button disabled className="h-9 rounded-[8px] bg-slate-300 px-3 text-xs font-semibold text-slate-600 hover:bg-slate-300 sm:text-sm">
-                            <Video className="ml-1.5 h-4 w-4" />
-                            لا يوجد رابط
-                          </Button>
-                        )}
+                              لا يوجد رابط
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
                   ) : (
                     <EmptyBlock title="لا توجد جلسة قادمة" description="سيظهر هنا موعد الجلسة القادمة عند توفره." icon={Calendar} />
                   )}
@@ -414,16 +414,16 @@ function StudentEnrolledCoursePageContent() {
                           const parsed = parseAnnouncementText(a.content || a.message || "-")
                           return (
                             <>
-                        <div className="mb-1 flex items-center gap-2">
-                          <h4 className="font-semibold text-slate-900">{a.title || "إعلان"}</h4>
-                        </div>
-                        <p className="text-xs text-slate-500 mb-1">{a.createdAt ? formatDate(new Date(a.createdAt)) : ""}</p>
-                        <p className="text-sm text-slate-700">{parsed.main}</p>
-                        {parsed.meta ? (
-                          <div className="mt-2 border-t border-slate-200 pt-2 text-xs text-slate-500">
-                            {parsed.meta}
-                          </div>
-                        ) : null}
+                              <div className="mb-1 flex items-center gap-2">
+                                <h4 className="font-semibold text-slate-900">{a.title || "إعلان"}</h4>
+                              </div>
+                              <p className="text-xs text-slate-500 mb-1">{a.createdAt ? formatDate(new Date(a.createdAt)) : ""}</p>
+                              <p className="text-sm text-slate-700">{parsed.main}</p>
+                              {parsed.meta ? (
+                                <div className="mt-2 border-t border-slate-200 pt-2 text-xs text-slate-500">
+                                  {parsed.meta}
+                                </div>
+                              ) : null}
                             </>
                           )
                         })()}
@@ -489,7 +489,7 @@ function StudentEnrolledCoursePageContent() {
                       <p className="text-xs text-slate-500">{institute.description || ""}</p>
                     </div>
                   </div>
-                  
+
                   {institute.locationUrl ? (
                     <div className="flex items-center gap-2 py-1" dir="rtl">
                       <MapPin className="h-3.5 w-3.5 text-slate-500 shrink-0" />

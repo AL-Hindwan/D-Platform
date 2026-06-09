@@ -197,7 +197,7 @@ class StudentService {
             enrollments.flatMap(e => (e.course.staffTrainerIds as string[]) || [])
         ));
 
-        const staffDetailsMap = new Map<string, {name: string, avatar: string | null}>();
+        const staffDetailsMap = new Map<string, { name: string, avatar: string | null }>();
         if (allStaffIds.length > 0) {
             const staff = await prisma.instituteStaff.findMany({
                 where: { id: { in: allStaffIds } },
@@ -210,7 +210,7 @@ class StudentService {
             const staffIds = (e.course.staffTrainerIds as string[]) || [];
 
             // Detailed trainers list for flexible UI rendering
-            const trainersList = staffIds.length > 0 
+            const trainersList = staffIds.length > 0
                 ? staffIds.map(id => {
                     const details = staffDetailsMap.get(id);
                     return {
@@ -335,9 +335,9 @@ class StudentService {
         }
 
         const course = enrollment.course;
-        
+
         let trainerName = course.trainer?.name;
-        
+
         // Handle institute staff trainers
         const staffTrainerIds = (course as any).staffTrainerIds as string[] | undefined;
         if (staffTrainerIds && staffTrainerIds.length > 0) {
@@ -349,13 +349,13 @@ class StudentService {
                 trainerName = staffTrainers.map(t => t.name).join(' و ');
             }
         }
-        
+
         if (!trainerName) {
             trainerName = 'غير محدد';
         }
 
         const instituteName = course.institute?.name;
-        
+
         // Return standard data package
         return {
             studentName: enrollment.student.name,
