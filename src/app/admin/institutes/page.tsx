@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect, useMemo, Suspense } from "react"
 export const dynamic = "force-dynamic"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -10,18 +10,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Eye, CheckCircle, XCircle, Building, Clock, Trash2, Edit } from "lucide-react"
+import { Eye, CheckCircle, XCircle, Building, Clock, UserX, UserCheck, KeyRound } from "lucide-react"
 import { Institute } from "@/types"
 import { formatDate, getFileUrl } from "@/lib/utils"
-
-// ... (in component)
-
-
 import { AdminPageHeader } from "@/components/admin/page-header"
 import { adminService } from "@/lib/admin-service"
-
 import { useSearchParams } from "next/navigation"
+import { toast } from "sonner"
+
+type DialogType = 'view' | 'editCredentials' | 'suspend' | 'reactivate' | 'approve' | null
 
 function AdminInstitutesContent() {
   const searchParams = useSearchParams()
@@ -29,35 +26,26 @@ function AdminInstitutesContent() {
 
   const [institutes, setInstitutes] = useState<Institute[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
   const [selectedInstitute, setSelectedInstitute] = useState<Institute | null>(null)
-  const [actionDialog, setActionDialog] = useState<{ open: boolean; type: 'view' | 'approve' | 'suspend' | 'reactivate' | 'delete' | 'edit' | null }>({
-    open: false,
-    type: null
-  })
-  const [editForm, setEditForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    description: "",
-    address: "",
-    website: "",
-    logo: "",
-    status: "pending",
-    password: ""
-  })
-  const [suspendReason, setSuspendReason] = useState("")
+  const [dialogType, setDialogType] = useState<DialogType>(null)
 
-  useEffect(() => {
-    loadInstitutes()
-  }, [])
+  // Edit credentials
+  const [credForm, setCredForm] = useState({ email: "", password: "", confirmPassword: "" })
+  const [credError, setCredError] = useState("")
+  const [credLoading, setCredLoading] = useState(false)
+
+  // Suspend reason
+  const [suspendReason, setSuspendReason] = useState("")
+  const [actionLoading, setActionLoading] = useState(false)
+
+  useEffect(() => { loadInstitutes() }, [])
 
   useEffect(() => {
     if (!loading && viewId && institutes.length > 0) {
-      const institute = institutes.find(i => i.id === viewId)
-      if (institute) {
-        handleViewInstitute(institute)
-      }
+      const inst = institutes.find(i => i.id === viewId)
+      if (inst) openDialog(inst, 'view')
     }
   }, [loading, institutes, viewId])
 
@@ -67,103 +55,136 @@ function AdminInstitutesContent() {
       const data = await adminService.getAllInstitutes()
       setInstitutes(data)
     } catch (err: any) {
-      console.error(err)
-      setError("فشل تحميل قائمة المعاهد")
+      toast.error("فشل تحميل قائمة المعاهد")
     } finally {
       setLoading(false)
     }
   }
 
-  const handleViewInstitute = (institute: Institute) => {
+  const filteredInstitutes = useMemo(() =>
+    institutes.filter((inst) => {
+      const matchesStatus =
+        statusFilter === "all" ||
+        inst.status === statusFilter ||
+        inst.verificationStatus === statusFilter
+      const q = searchQuery.toLowerCase()
+      const matchesSearch =
+        inst.name.toLowerCase().includes(q) ||
+        (inst.email || "").toLowerCase().includes(q) ||
+        (inst.phone || "").toLowerCase().includes(q)
+      return matchesStatus && matchesSearch
+    }),
+    [institutes, searchQuery, statusFilter]
+  )
+
+  const openDialog = (institute: Institute, type: DialogType) => {
     setSelectedInstitute(institute)
-    setActionDialog({ open: true, type: 'view' })
+    setDialogType(type)
+    if (type === "editCredentials") {
+      setCredForm({ email: institute.email || "", password: "", confirmPassword: "" })
+      setCredError("")
+    }
+    if (type === "suspend") setSuspendReason("")
   }
 
-  const handleApproveInstitute = (institute: Institute) => {
-    setSelectedInstitute(institute)
-    setActionDialog({ open: true, type: 'approve' })
+  const closeDialog = () => {
+    setDialogType(null)
+    setSelectedInstitute(null)
+    setCredError("")
+    setSuspendReason("")
   }
 
-  const handleSuspendInstitute = (institute: Institute) => {
-    setSelectedInstitute(institute)
-    setActionDialog({ open: true, type: 'suspend' })
-  }
-
-  const handleReactivateInstitute = (institute: Institute) => {
-    setSelectedInstitute(institute)
-    setActionDialog({ open: true, type: 'reactivate' })
-  }
-
-  const handleDeleteInstitute = (institute: Institute) => {
-    setSelectedInstitute(institute)
-    setActionDialog({ open: true, type: 'delete' })
-  }
-
-  const handleEditInstitute = (institute: Institute) => {
-    setSelectedInstitute(institute)
-    setEditForm({
-      name: institute.name || "",
-      email: institute.email || "",
-      phone: institute.phone || "",
-      description: institute.description || "",
-      address: institute.address || "",
-      website: institute.website || "",
-      logo: institute.logo || "",
-      status: institute.status || "pending",
-      password: ""
-    })
-    setActionDialog({ open: true, type: 'edit' })
-  }
-
-  const executeAction = async () => {
+  const handleSaveCredentials = async () => {
     if (!selectedInstitute) return
-
+    setCredError("")
+    if (!credForm.email) { setCredError("البريد الإلكتروني مطلوب"); return }
+    if (credForm.password && credForm.password !== credForm.confirmPassword) {
+      setCredError("كلمة المرور وتأكيدها غير متطابقين"); return
+    }
     try {
-      if (actionDialog.type === 'approve') {
-        await adminService.approveInstitute(selectedInstitute.id)
-      } else if (actionDialog.type === 'suspend') {
-        await adminService.suspendInstitute(selectedInstitute.id, suspendReason)
-      } else if (actionDialog.type === 'reactivate') {
-        await adminService.reactivateInstitute(selectedInstitute.id)
-      } else if (actionDialog.type === 'delete') {
-        await adminService.deleteInstitute(selectedInstitute.id)
-      } else if (actionDialog.type === 'edit') {
-        await adminService.updateInstitute(selectedInstitute.id, editForm)
-      }
-
-      await loadInstitutes()
-      setActionDialog({ open: false, type: null })
-      setSelectedInstitute(null)
-      setSuspendReason("")
-    } catch (err) {
-      console.error(err)
+      setCredLoading(true)
+      const payload: any = { email: credForm.email }
+      if (credForm.password) payload.password = credForm.password
+      await adminService.updateInstitute(selectedInstitute.id, payload)
+      toast.success("تم تحديث بيانات الدخول بنجاح")
+      closeDialog()
+      loadInstitutes()
+    } catch (err: any) {
+      setCredError(err?.response?.data?.message || "فشل تحديث البيانات")
+    } finally {
+      setCredLoading(false)
     }
   }
 
-  const getStatusBadge = (status: Institute['status']) => {
+  const handleSuspend = async () => {
+    if (!selectedInstitute || !suspendReason.trim()) return
+    try {
+      setActionLoading(true)
+      await adminService.suspendInstitute(selectedInstitute.id, suspendReason)
+      toast.success("تم تعليق المعهد بنجاح")
+      closeDialog()
+      loadInstitutes()
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "فشل تعليق المعهد")
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const handleReactivate = async () => {
+    if (!selectedInstitute) return
+    try {
+      setActionLoading(true)
+      await adminService.reactivateInstitute(selectedInstitute.id)
+      toast.success("تم إعادة تنشيط المعهد بنجاح")
+      closeDialog()
+      loadInstitutes()
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "فشل إعادة التنشيط")
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const handleApprove = async () => {
+    if (!selectedInstitute) return
+    try {
+      setActionLoading(true)
+      await adminService.approveInstitute(selectedInstitute.id)
+      toast.success("تم اعتماد المعهد بنجاح")
+      closeDialog()
+      loadInstitutes()
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "فشل اعتماد المعهد")
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const getStatusBadge = (status: Institute['status'] | string | undefined) => {
     switch (status) {
-      case 'approved':
-        return <Badge className="bg-green-100 text-green-800">معتمد</Badge>
-      case 'pending':
-        return <Badge className="bg-yellow-100 text-yellow-800">قيد المراجعة</Badge>
-      case 'suspended':
-        return <Badge className="bg-red-100 text-red-800">معلق</Badge>
-      default:
-        return <Badge variant="secondary">{status}</Badge>
+      case 'approved': return <Badge className="bg-green-100 text-green-800">معتمد</Badge>
+      case 'pending': return <Badge className="bg-yellow-100 text-yellow-800">قيد المراجعة</Badge>
+      case 'suspended': return <Badge className="bg-orange-100 text-orange-800">معلق</Badge>
+      case 'rejected': return <Badge className="bg-red-100 text-red-800">مرفوض</Badge>
+      default: return <Badge variant="secondary">{status}</Badge>
     }
   }
 
-  if (loading) return <div className="p-8 text-center">جاري تحميل المعاهد...</div>
-  if (error) return <div className="p-8 text-center text-red-500">{error}</div>
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <AdminPageHeader title="إدارة المعاهد" description="مراجعة وإدارة المعاهد المسجلة في المنصة" />
+        <div className="flex justify-center p-12"><p>جاري التحميل...</p></div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
-      <AdminPageHeader
-        title="إدارة المعاهد"
-        description="مراجعة وإدارة المعاهد المسجلة في المنصة"
-      />
+      <AdminPageHeader title="إدارة المعاهد" description="مراجعة وإدارة المعاهد المسجلة في المنصة" />
 
-      {/* Stats Cards */}
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -175,7 +196,6 @@ function AdminInstitutesContent() {
             <p className="text-xs text-muted-foreground">معاهد مسجلة</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">معاهد معتمدة</CardTitle>
@@ -183,12 +203,11 @@ function AdminInstitutesContent() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {institutes.filter(inst => inst.status === 'approved' || inst.verificationStatus === 'approved').length}
+              {institutes.filter(i => i.status === 'approved' || i.verificationStatus === 'approved').length}
             </div>
             <p className="text-xs text-muted-foreground">معاهد نشطة</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">قيد المراجعة</CardTitle>
@@ -196,26 +215,53 @@ function AdminInstitutesContent() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {institutes.filter(inst => inst.status === 'pending' || inst.verificationStatus === 'pending').length}
+              {institutes.filter(i => i.status === 'pending' || i.verificationStatus === 'pending').length}
             </div>
             <p className="text-xs text-muted-foreground">طلبات جديدة</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Institutes Table */}
+      {/* Search & Filter */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <Input
+                placeholder="البحث باسم المعهد أو البريد الإلكتروني أو رقم الهاتف..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="h-10 rounded-md border border-input bg-background px-3 text-sm min-w-[160px]"
+            >
+              <option value="all">كل الحالات</option>
+              <option value="approved">معتمد</option>
+              <option value="pending">قيد المراجعة</option>
+              <option value="suspended">معلق</option>
+              <option value="rejected">مرفوض</option>
+            </select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Table */}
       <Card>
         <CardHeader>
-          <CardTitle>قائمة المعاهد</CardTitle>
+          <CardTitle>قائمة المعاهد ({filteredInstitutes.length})</CardTitle>
         </CardHeader>
         <CardContent>
-          {institutes.length === 0 ? (
-            <div className="text-center p-8 text-gray-500">لا توجد معاهد مسجلة</div>
+          {filteredInstitutes.length === 0 ? (
+            <div className="text-center p-8 text-gray-500">لا توجد معاهد مطابقة للبحث</div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>المعاهد</TableHead>
+                  <TableHead>المعهد</TableHead>
+                  <TableHead>رقم الهاتف</TableHead>
                   <TableHead>الموقع</TableHead>
                   <TableHead>تاريخ التسجيل</TableHead>
                   <TableHead>الحالة</TableHead>
@@ -223,81 +269,62 @@ function AdminInstitutesContent() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {institutes.map((institute) => (
+                {filteredInstitutes.map((institute) => (
                   <TableRow key={institute.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {institute.logo ? (
-                          <img
-                            src={getFileUrl(institute.logo)}
-                            alt={institute.name}
-                            className="w-8 h-8 rounded-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                            <Building className="h-4 w-4 text-gray-500" />
-                          </div>
-                        )}
+                        <div className="w-9 h-9 rounded-full bg-gray-100 flex-shrink-0 overflow-hidden">
+                          {institute.logo ? (
+                            <img
+                              src={getFileUrl(institute.logo)}
+                              alt={institute.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Building className="h-4 w-4 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
                         <div>
                           <div className="font-medium">{institute.name}</div>
                           <div className="text-sm text-gray-500">{institute.email}</div>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="text-sm">{institute.address || '-'}</div>
-                    </TableCell>
-                    <TableCell>
-                      {formatDate(institute.createdAt)}
-                    </TableCell>
+                    <TableCell className="text-sm text-gray-600">{institute.phone || '-'}</TableCell>
+                    <TableCell className="text-sm text-gray-600">{institute.address || '-'}</TableCell>
+                    <TableCell className="text-sm text-gray-600">{formatDate(institute.createdAt)}</TableCell>
                     <TableCell>{getStatusBadge(institute.verificationStatus || institute.status)}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handleViewInstitute(institute)}>
+                        {/* View */}
+                        <Button variant="outline" size="sm" title="عرض التفاصيل" onClick={() => openDialog(institute, 'view')}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleEditInstitute(institute)}>
-                          <Edit className="h-4 w-4" />
+                        {/* Edit credentials */}
+                        <Button variant="outline" size="sm" title="تعديل بيانات الدخول" onClick={() => openDialog(institute, 'editCredentials')}>
+                          <KeyRound className="h-4 w-4" />
                         </Button>
+                        {/* Approve if pending */}
                         {(institute.status === 'pending' || institute.verificationStatus === 'pending') && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleApproveInstitute(institute)}
-                            className="bg-green-600 hover:bg-green-700"
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            اعتماد
+                          <Button size="sm" onClick={() => openDialog(institute, 'approve')} className="bg-green-600 hover:bg-green-700 h-8">
+                            <CheckCircle className="h-4 w-4 mr-1" />اعتماد
                           </Button>
                         )}
+                        {/* Suspend if approved */}
                         {(institute.status === 'approved' || institute.verificationStatus === 'approved') && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleSuspendInstitute(institute)}
-                            className="border-orange-300 text-orange-600 hover:bg-orange-50"
-                          >
-                            <XCircle className="h-4 w-4 mr-1" />
-                            تعليق
+                          <Button variant="outline" size="sm" title="تعليق المعهد" onClick={() => openDialog(institute, 'suspend')} className="border-orange-300 text-orange-600 hover:bg-orange-50">
+                            <UserX className="h-4 w-4" />
                           </Button>
                         )}
+                        {/* Reactivate if suspended */}
                         {institute.status === 'suspended' && (
-                          <Button
-                            size="sm"
-                            onClick={() => handleReactivateInstitute(institute)}
-                            className="bg-blue-600 hover:bg-blue-700"
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            إعادة تفعيل
+                          <Button variant="outline" size="sm" title="إعادة تنشيط" onClick={() => openDialog(institute, 'reactivate')} className="border-green-300 text-green-600 hover:bg-green-50">
+                            <UserCheck className="h-4 w-4" />
                           </Button>
                         )}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDeleteInstitute(institute)}
-                          className="border-red-300 text-red-600 hover:bg-red-50"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -308,230 +335,193 @@ function AdminInstitutesContent() {
         </CardContent>
       </Card>
 
-      {/* Action Dialog */}
-      <Dialog open={actionDialog.open} onOpenChange={(open) => !open && setActionDialog({ open: false, type: null })}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>
-              {actionDialog.type === 'view' && 'تفاصيل المعهد'}
-              {actionDialog.type === 'approve' && 'اعتماد المعهد'}
-              {actionDialog.type === 'suspend' && 'تعليق المعهد'}
-              {actionDialog.type === 'reactivate' && 'إعادة تفعيل المعهد'}
-              {actionDialog.type === 'delete' && 'حذف المعهد'}
-              {actionDialog.type === 'edit' && 'تعديل بيانات المعهد'}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            {selectedInstitute && actionDialog.type === 'view' && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  {selectedInstitute.logo ? (
-                    <img
-                      src={getFileUrl(selectedInstitute.logo)}
-                      alt={selectedInstitute.name}
-                      className="w-20 h-20 rounded-full object-cover border"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center border">
-                      <Building className="h-10 w-10 text-gray-500" />
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="text-xl font-bold">{selectedInstitute.name}</h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      {getStatusBadge(selectedInstitute.verificationStatus || selectedInstitute.status)}
-                      <span className="text-sm text-gray-500">منذ {formatDate(selectedInstitute.createdAt)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
-                  <div>
-                    <h4 className="font-semibold text-sm text-gray-500 mb-1">البريد الإلكتروني</h4>
-                    <p>{selectedInstitute.email}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm text-gray-500 mb-1">رقم الهاتف</h4>
-                    <p dir="ltr" className="text-right">{selectedInstitute.phone || 'غير متوفر'}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm text-gray-500 mb-1">الموقع الإلكتروني</h4>
-                    {selectedInstitute.website ? (
-                      <a href={selectedInstitute.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate block">
-                        {selectedInstitute.website}
-                      </a>
-                    ) : (
-                      <p>غير متوفر</p>
-                    )}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm text-gray-500 mb-1">العنوان</h4>
-                    <p>{selectedInstitute.address || 'غير متوفر'}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-2">نبذة عن المعهد</h4>
-                  <p className="text-gray-700 bg-gray-50 p-4 rounded-lg min-h-[80px]">
-                    {selectedInstitute.description || 'لا يوجد وصف للمعهد.'}
-                  </p>
-                </div>
-
-                {selectedInstitute.licenseDocumentUrl && (
-                  <div>
-                    <h4 className="font-semibold mb-2">وثائق الترخيص</h4>
-                    <a
-                      href={getFileUrl(selectedInstitute.licenseDocumentUrl)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-50 transition-colors text-primary"
-                    >
-                      <img src="/icons/file.svg" alt="file" className="w-5 h-5" />
-                      <span>عرض وثيقة الترخيص</span>
-                    </a>
+      {/* ── View Details ── */}
+      <Dialog open={dialogType === 'view'} onOpenChange={(o) => !o && closeDialog()}>
+        <DialogContent className="sm:max-w-[620px] max-h-[85vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>تفاصيل المعهد</DialogTitle></DialogHeader>
+          {selectedInstitute && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                {selectedInstitute.logo ? (
+                  <img src={getFileUrl(selectedInstitute.logo)} alt={selectedInstitute.name} className="w-20 h-20 rounded-full object-cover border" onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />
+                ) : (
+                  <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center border">
+                    <Building className="h-10 w-10 text-gray-500" />
                   </div>
                 )}
-              </div>
-            )}
-
-            {selectedInstitute && actionDialog.type !== 'edit' && actionDialog.type !== 'view' && (
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-medium mb-2">تفاصيل المعهد:</h4>
-                <div className="space-y-1 text-sm">
-                  <p><strong>الاسم:</strong> {selectedInstitute.name}</p>
-                  <p><strong>البريد:</strong> {selectedInstitute.email}</p>
-                  <p><strong>الهاتف:</strong> {selectedInstitute.phone}</p>
+                <div>
+                  <h3 className="text-xl font-bold">{selectedInstitute.name}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    {getStatusBadge(selectedInstitute.verificationStatus || selectedInstitute.status)}
+                    <span className="text-sm text-gray-500">منذ {formatDate(selectedInstitute.createdAt)}</span>
+                  </div>
                 </div>
               </div>
-            )}
 
-            {actionDialog.type === 'suspend' && (
-              <div>
-                <Label htmlFor="suspend-reason">سبب التعليق</Label>
-                <Textarea
-                  id="suspend-reason"
-                  placeholder="اكتب سبب تعليق المعهد..."
-                  value={suspendReason}
-                  onChange={(e) => setSuspendReason(e.target.value)}
-                />
-              </div>
-            )}
-
-            {actionDialog.type === 'delete' && (
-              <div className="text-red-600 text-sm">
-                هل أنت متأكد من حذف هذا المعهد؟ لا يمكن التراجع عن هذا الإجراء.
-              </div>
-            )}
-
-            {actionDialog.type === 'edit' && (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl">
                 <div>
-                  <Label htmlFor="edit-name">اسم المعهد</Label>
-                  <Input
-                    id="edit-name"
-                    value={editForm.name}
-                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  />
+                  <h4 className="font-semibold text-sm text-gray-500 mb-1">البريد الإلكتروني</h4>
+                  <p className="text-sm font-medium">{selectedInstitute.email || 'غير متوفر'}</p>
                 </div>
                 <div>
-                  <Label htmlFor="edit-email">البريد الإلكتروني</Label>
-                  <Input
-                    id="edit-email"
-                    value={editForm.email}
-                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                  />
+                  <h4 className="font-semibold text-sm text-gray-500 mb-1">رقم الهاتف</h4>
+                  <p className="text-sm font-medium" dir="ltr" style={{ textAlign: "right" }}>{selectedInstitute.phone || 'غير متوفر'}</p>
                 </div>
                 <div>
-                  <Label htmlFor="edit-phone">رقم الهاتف</Label>
-                  <Input
-                    id="edit-phone"
-                    value={editForm.phone}
-                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                  />
+                  <h4 className="font-semibold text-sm text-gray-500 mb-1">الموقع الإلكتروني</h4>
+                  {selectedInstitute.website ? (
+                    <a href={selectedInstitute.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate block text-sm font-medium">
+                      {selectedInstitute.website}
+                    </a>
+                  ) : <p className="text-sm font-medium">غير متوفر</p>}
                 </div>
                 <div>
-                  <Label htmlFor="edit-logo">رابط الشعار</Label>
-                  <Input
-                    id="edit-logo"
-                    value={editForm.logo}
-                    onChange={(e) => setEditForm({ ...editForm, logo: e.target.value })}
-                    placeholder="https://example.com/logo.jpg"
-                  />
+                  <h4 className="font-semibold text-sm text-gray-500 mb-1">رقم الترخيص</h4>
+                  <p className="text-sm font-medium">{selectedInstitute.licenseNumber || 'غير متوفر'}</p>
                 </div>
                 <div>
-                  <Label htmlFor="edit-password">كلمة المرور الجديدة</Label>
-                  <Input
-                    id="edit-password"
-                    type="password"
-                    value={editForm.password}
-                    onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
-                    placeholder="اتركها فارغة إذا لم ترد التغيير"
-                  />
+                  <h4 className="font-semibold text-sm text-gray-500 mb-1">العنوان</h4>
+                  <p className="text-sm font-medium">{selectedInstitute.address || 'غير متوفر'}</p>
                 </div>
                 <div>
-                  <Label htmlFor="edit-description">الوصف</Label>
-                  <Textarea
-                    id="edit-description"
-                    value={editForm.description}
-                    onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-address">العنوان</Label>
-                  <Input
-                    id="edit-address"
-                    value={editForm.address}
-                    onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-website">الموقع الإلكتروني</Label>
-                  <Input
-                    id="edit-website"
-                    value={editForm.website}
-                    onChange={(e) => setEditForm({ ...editForm, website: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-status">الحالة</Label>
-                  <Select
-                    value={editForm.status}
-                    onValueChange={(value) => setEditForm({ ...editForm, status: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="اختر الحالة" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="approved">معتمد</SelectItem>
-                      <SelectItem value="pending">قيد المراجعة</SelectItem>
-                      <SelectItem value="suspended">معلق</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <h4 className="font-semibold text-sm text-gray-500 mb-1">رابط الموقع الجغرافي (الخريطة)</h4>
+                  {selectedInstitute.locationUrl ? (
+                    <a href={selectedInstitute.locationUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate block text-sm font-medium">
+                      عرض الموقع
+                    </a>
+                  ) : <p className="text-sm font-medium">غير متوفر</p>}
                 </div>
               </div>
-            )}
 
-            <DialogFooter className="gap-2">
-              <Button
-                variant="outline"
-                onClick={() => setActionDialog({ open: false, type: null })}
-              >
-                {actionDialog.type === 'view' ? 'إغلاق' : 'إلغاء'}
-              </Button>
-              {actionDialog.type !== 'view' && (
-                <Button
-                  onClick={executeAction}
-                  variant={actionDialog.type === 'delete' ? "destructive" : "default"}
-                >
-                  {actionDialog.type === 'approve' && 'اعتماد المعهد'}
-                  {actionDialog.type === 'suspend' && 'تعليق المعهد'}
-                  {actionDialog.type === 'reactivate' && 'إعادة التفعيل'}
-                  {actionDialog.type === 'delete' && 'حذف'}
-                  {actionDialog.type === 'edit' && 'حفظ التغييرات'}
-                </Button>
+              {selectedInstitute.description && (
+                <div>
+                  <h4 className="font-semibold mb-2">نبذة عن المعهد</h4>
+                  <p className="text-gray-700 bg-gray-50 p-4 rounded-lg text-sm min-h-[80px]">
+                    {selectedInstitute.description}
+                  </p>
+                </div>
               )}
-            </DialogFooter>
-          </div>
+
+              {selectedInstitute.features && selectedInstitute.features.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-2">المميزات والخدمات</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedInstitute.features.map((feature: string, i: number) => (
+                      <Badge key={i} variant="secondary">{feature}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedInstitute.licenseDocumentUrl && (
+                <div>
+                  <h4 className="font-semibold mb-2">وثائق الترخيص</h4>
+                  <a href={getFileUrl(selectedInstitute.licenseDocumentUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-50 transition-colors text-primary text-sm">
+                    عرض وثيقة الترخيص
+                  </a>
+                </div>
+              )}
+              <Button onClick={closeDialog} className="w-full">إغلاق</Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Edit Credentials ── */}
+      <Dialog open={dialogType === 'editCredentials'} onOpenChange={(o) => !o && closeDialog()}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader><DialogTitle>تعديل بيانات الدخول</DialogTitle></DialogHeader>
+          {selectedInstitute && (
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">تعديل بيانات دخول المعهد: <strong>{selectedInstitute.name}</strong></p>
+              {credError && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{credError}</p>}
+              <div>
+                <Label>البريد الإلكتروني الجديد</Label>
+                <Input type="email" value={credForm.email} onChange={(e) => setCredForm({ ...credForm, email: e.target.value })} className="mt-1" />
+              </div>
+              <div>
+                <Label>كلمة المرور الجديدة</Label>
+                <Input type="password" value={credForm.password} onChange={(e) => setCredForm({ ...credForm, password: e.target.value })} placeholder="اتركها فارغة إذا لم ترد التغيير" className="mt-1" />
+              </div>
+              {credForm.password && (
+                <div>
+                  <Label>تأكيد كلمة المرور</Label>
+                  <Input type="password" value={credForm.confirmPassword} onChange={(e) => setCredForm({ ...credForm, confirmPassword: e.target.value })} className="mt-1" />
+                </div>
+              )}
+              <DialogFooter className="gap-2">
+                <Button variant="outline" onClick={closeDialog}>إلغاء</Button>
+                <Button onClick={handleSaveCredentials} disabled={credLoading}>{credLoading ? "جاري الحفظ..." : "حفظ التغييرات"}</Button>
+              </DialogFooter>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Approve ── */}
+      <Dialog open={dialogType === 'approve'} onOpenChange={(o) => !o && closeDialog()}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader><DialogTitle>اعتماد المعهد</DialogTitle></DialogHeader>
+          {selectedInstitute && (
+            <div className="space-y-4">
+              <div className="p-4 bg-green-50 rounded-lg">
+                <p className="text-green-800">هل ترغب في اعتماد المعهد <strong>{selectedInstitute.name}</strong>؟</p>
+                <p className="text-sm text-green-600 mt-1">سيتم تفعيل الحساب وتمكينه من إدارة الدورات والقاعات.</p>
+              </div>
+              <DialogFooter className="gap-2">
+                <Button variant="outline" onClick={closeDialog}>إلغاء</Button>
+                <Button onClick={handleApprove} disabled={actionLoading} className="bg-green-600 hover:bg-green-700">
+                  {actionLoading ? "جاري الاعتماد..." : "اعتماد المعهد"}
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Suspend ── */}
+      <Dialog open={dialogType === 'suspend'} onOpenChange={(o) => !o && closeDialog()}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader><DialogTitle>تعليق المعهد</DialogTitle></DialogHeader>
+          {selectedInstitute && (
+            <div className="space-y-4">
+              <div className="p-4 bg-orange-50 rounded-lg">
+                <p className="text-orange-800">هل أنت متأكد من تعليق المعهد <strong>{selectedInstitute.name}</strong>؟</p>
+                <p className="text-sm text-orange-600 mt-1">سيُمنع من تسجيل الدخول وتنفيذ أي عمليات جديدة.</p>
+              </div>
+              <div>
+                <Label>سبب التعليق <span className="text-red-500">*</span></Label>
+                <Textarea value={suspendReason} onChange={(e) => setSuspendReason(e.target.value)} placeholder="اكتب سبب التعليق..." className="mt-1" />
+              </div>
+              <DialogFooter className="gap-2">
+                <Button variant="outline" onClick={closeDialog}>إلغاء</Button>
+                <Button onClick={handleSuspend} disabled={actionLoading || !suspendReason.trim()} className="bg-orange-600 hover:bg-orange-700">
+                  {actionLoading ? "جاري التعليق..." : "تعليق المعهد"}
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Reactivate ── */}
+      <Dialog open={dialogType === 'reactivate'} onOpenChange={(o) => !o && closeDialog()}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader><DialogTitle>إعادة تنشيط المعهد</DialogTitle></DialogHeader>
+          {selectedInstitute && (
+            <div className="space-y-4">
+              <div className="p-4 bg-green-50 rounded-lg">
+                <p className="text-green-800">هل تريد إعادة تنشيط المعهد <strong>{selectedInstitute.name}</strong>؟</p>
+                <p className="text-sm text-green-600 mt-1">سيتمكن من تسجيل الدخول والعمل بشكل طبيعي.</p>
+              </div>
+              <DialogFooter className="gap-2">
+                <Button variant="outline" onClick={closeDialog}>إلغاء</Button>
+                <Button onClick={handleReactivate} disabled={actionLoading} className="bg-green-600 hover:bg-green-700">
+                  {actionLoading ? "جاري التنشيط..." : "إعادة التنشيط"}
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

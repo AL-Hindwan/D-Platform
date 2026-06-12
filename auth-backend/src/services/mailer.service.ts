@@ -232,6 +232,33 @@ class MailerService {
         });
     }
 
+    // ── Admin ──────────────────────────────────────────────────────
+    async sendNewTrainerApplication(to: string, adminName: string, trainerName: string) {
+        await this.send({
+            to,
+            subject: `🆕 طلب تسجيل مدرب جديد: ${trainerName}`,
+            html: this.wrapHtml('طلب تسجيل مدرب', `
+                <p>مرحباً <strong>${adminName}</strong>،</p>
+                <div class="card"><p>👤 قام المدرب <strong>${trainerName}</strong> بإنشاء حساب جديد وهو بانتظار مراجعتك.</p></div>
+                <p>يرجى الدخول إلى لوحة التحكم لمراجعة الطلب واتخاذ القرار المناسب.</p>
+                <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/verifications">مراجعة الطلبات</a>
+            `),
+        });
+    }
+
+    async sendNewInstituteApplication(to: string, adminName: string, instituteName: string) {
+        await this.send({
+            to,
+            subject: `🆕 طلب تسجيل معهد جديد: ${instituteName}`,
+            html: this.wrapHtml('طلب تسجيل معهد', `
+                <p>مرحباً <strong>${adminName}</strong>،</p>
+                <div class="card"><p>🏛️ قام المعهد <strong>${instituteName}</strong> بإنشاء حساب جديد وهو بانتظار مراجعتك.</p></div>
+                <p>يرجى الدخول إلى لوحة التحكم لمراجعة الطلب واتخاذ القرار المناسب.</p>
+                <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/verifications">مراجعة الطلبات</a>
+            `),
+        });
+    }
+
     async sendNewBookingRequest(to: string, instituteName: string, trainerName: string, roomName: string) {
         await this.send({
             to,

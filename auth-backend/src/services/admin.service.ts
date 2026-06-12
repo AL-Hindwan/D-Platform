@@ -1311,6 +1311,59 @@ export class AdminService {
             avatar: u.avatar
         }));
     }
+
+    /**
+     * Get all halls (rooms) across all institutes — admin view
+     */
+    async getAllHalls() {
+        const rooms = await prisma.room.findMany({
+            where: { isActive: true },
+            include: {
+                institute: {
+                    select: {
+                        id: true,
+                        name: true,
+                        logo: true,
+                    }
+                }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+        return rooms;
+    }
+
+    /**
+     * Update hall (admin view) - e.g. activate/deactivate
+     */
+    async updateHall(hallId: string, data: any, adminId: string) {
+        const room = await prisma.room.findUnique({
+            where: { id: hallId },
+        });
+
+        if (!room) {
+            throw new Error('القاعة غير موجودة');
+        }
+
+        const updatedRoom = await prisma.room.update({
+            where: { id: hallId },
+            data: {
+                isActive: data.isActive !== undefined ? data.isActive : undefined,
+            },
+        });
+
+        // Log action
+        await prisma.auditLog.create({
+            data: {
+                action: AuditAction.UPDATE,
+                entityName: 'Room',
+                entityId: hallId,
+                description: `Admin updated hall: ${room.name} (isActive: ${data.isActive})`,
+                performedBy: adminId,
+            },
+        });
+
+        return { message: 'تم تحديث حالة القاعة بنجاح' };
+    }
 }
 
 export default new AdminService();

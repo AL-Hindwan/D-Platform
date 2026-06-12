@@ -66,5 +66,9 @@ router.post('/announcements/:id/send', adminController.sendAnnouncement.bind(adm
 router.get('/settings', settingsController.getSettings);
 router.put('/settings', settingsController.updateSettings);
 
+// Halls (all institutes) - admin view
+router.get('/halls', adminController.getAllHalls.bind(adminController));
+router.put('/halls/:id', adminController.updateHall.bind(adminController));
+
 export default router;
 

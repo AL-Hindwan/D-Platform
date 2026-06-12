@@ -12,6 +12,7 @@ import {
 import { config } from '../config';
 import { mailerService } from './mailer.service';
 import { auditService } from './audit.service';
+import notificationService from './notification.service';
 import {
     RegisterInput,
     LoginInput,
@@ -107,6 +108,39 @@ export class AuthService {
             description: `تم إنشاء حساب جديد بصلاحية ${role || 'STUDENT'}`,
             performedBy: user.id,
         });
+
+        // Notify admins if trainer or institute
+        if (role === 'TRAINER' || role === 'INSTITUTE_ADMIN') {
+            const admins = await prisma.user.findMany({
+                where: { role: 'PLATFORM_ADMIN' },
+                select: { id: true, email: true, name: true }
+            });
+
+            if (admins.length > 0) {
+                const notifType = role === 'TRAINER' ? 'NEW_TRAINER_APPLICATION' : 'NEW_INSTITUTE_APPLICATION';
+                const title = role === 'TRAINER' ? 'تسجيل مدرب جديد' : 'تسجيل معهد جديد';
+                const message = `تم تسجيل ${role === 'TRAINER' ? 'مدرب' : 'معهد'} جديد (${name}) وهو بانتظار المراجعة.`;
+                const actionUrl = '/admin/verifications';
+
+                await Promise.all(admins.map(async admin => {
+                    await notificationService.createNotification({
+                        type: notifType as any,
+                        title,
+                        message,
+                        actionUrl,
+                        userId: admin.id,
+                        relatedEntityId: user.id
+                    });
+
+                    // Send email
+                    if (role === 'TRAINER') {
+                        await mailerService.sendNewTrainerApplication(admin.email, admin.name, name);
+                    } else if (role === 'INSTITUTE_ADMIN') {
+                        await mailerService.sendNewInstituteApplication(admin.email, admin.name, name);
+                    }
+                }));
+            }
+        }
 
         // Return different messages based on role
         const message = (role === 'TRAINER' || role === 'INSTITUTE_ADMIN')

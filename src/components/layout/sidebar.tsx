@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -73,11 +73,13 @@ const instituteAdminMenuItems = [
 
 const platformAdminMenuItems = [
   { href: "/admin/dashboard", label: "لوحة التحكم", icon: Home },
+  { href: "/admin/notifications", label: "الإشعارات", icon: Bell },
   { href: "/admin/verifications", label: "طلبات التحقق", icon: Shield },
   { href: "/admin/institutes", label: "إدارة المعاهد", icon: Building },
   { href: "/admin/trainers", label: "إدارة المدربين", icon: UserCheck },
   { href: "/admin/students", label: "إدارة الطلاب", icon: Users },
   { href: "/admin/courses", label: "إدارة الدورات", icon: BookOpen },
+  { href: "/admin/halls", label: "إدارة القاعات", icon: Building2 },
   { href: "/admin/announcements", label: "الإعلانات العامة", icon: Megaphone },
   { href: "/admin/logs", label: "سجلات النظام", icon: FileText },
   { href: "/admin/system", label: "إعدادات النظام", icon: Settings },

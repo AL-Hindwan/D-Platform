@@ -55,8 +55,10 @@ export interface Institute {
   address?: string;
   logo?: string;
   website?: string;
+  locationUrl?: string;
   licenseNumber?: string;
   licenseDocumentUrl?: string;
+  features?: string[];
   verificationStatus?: VerificationStatus;
   rejectionReason?: string;
   status: InstituteStatus;

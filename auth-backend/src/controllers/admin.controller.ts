@@ -476,6 +476,38 @@ export class AdminController {
             return sendError(res, error.message, 400);
         }
     }
+
+    /**
+     * Get all halls (admin view — all institutes)
+     */
+    async getAllHalls(req: AuthRequest, res: Response, _next: NextFunction) {
+        try {
+            if (req.user?.role !== 'PLATFORM_ADMIN') {
+                return sendError(res, 'غير مصرح لك بالوصول', 403);
+            }
+            const halls = await adminService.getAllHalls();
+            return sendSuccess(res, 'تم جلب القاعات بنجاح', halls);
+        } catch (error: any) {
+            return sendError(res, error.message, 400);
+        }
+    }
+
+    /**
+     * Update hall (activate/deactivate)
+     */
+    async updateHall(req: AuthRequest, res: Response, _next: NextFunction) {
+        try {
+            if (req.user?.role !== 'PLATFORM_ADMIN') {
+                return sendError(res, 'غير مصرح لك بالوصول', 403);
+            }
+            const { id } = req.params;
+            const adminId = req.user.id;
+            const result = await adminService.updateHall(id, req.body, adminId);
+            return sendSuccess(res, result.message);
+        } catch (error: any) {
+            return sendError(res, error.message, 400);
+        }
+    }
 }
 
 export default new AdminController();

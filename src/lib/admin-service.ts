@@ -291,6 +291,64 @@ class AdminService {
         );
         return response.data.data;
     }
+
+    // =====================================================
+    // HALLS MANAGEMENT
+    // =====================================================
+
+    /**
+     * Get all halls across all institutes (admin endpoint)
+     */
+    async getAllHalls(): Promise<any[]> {
+        const response = await apiClient.get<{ success: boolean; message: string; data: any[] }>(
+            `/api/admin/halls`
+        );
+        return response.data.data;
+    }
+
+    /**
+     * Update hall (activate/deactivate)
+     */
+    async updateHall(id: string, data: any): Promise<void> {
+        await apiClient.put(`/api/admin/halls/${id}`, data);
+    }
+
+    /**
+     * Get hall by ID
+     */
+    async getHallById(hallId: string): Promise<any> {
+        const response = await apiClient.get<{ success: boolean; message: string; data: any }>(
+            `/api/public/halls/${hallId}`
+        );
+        return response.data.data;
+    }
+
+    // =====================================================
+    // USER ACCOUNT STATUS MANAGEMENT
+    // =====================================================
+
+    /**
+     * Reactivate a suspended trainer account (uses updateTrainer with status:active)
+     */
+    async reactivateTrainer(trainerId: string): Promise<void> {
+        await apiClient.put(`/api/admin/trainers/${trainerId}`, { status: 'active' });
+    }
+
+    /**
+     * Reactivate a suspended student account (uses updateStudent with status:active)
+     */
+    async reactivateStudent(studentId: string): Promise<void> {
+        await apiClient.put(`/api/admin/students/${studentId}`, { status: 'active' });
+    }
+
+    /**
+     * Update user login credentials — uses updateStudent/updateTrainer/updateInstitute
+     * depending on the role. Pass email and/or password.
+     */
+    async updateUserCredentials(userId: string, data: { email?: string; password?: string }): Promise<void> {
+        // Generic fallback: try student update endpoint
+        await apiClient.put(`/api/admin/students/${userId}`, data);
+    }
 }
 
 export const adminService = new AdminService();

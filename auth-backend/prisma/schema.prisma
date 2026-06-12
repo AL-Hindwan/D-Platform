@@ -194,6 +194,8 @@ model Room {
   isActive     Boolean       @default(true) @map("is_active")
   instituteId  String        @map("institute_id")
   availability Json?         @map("availability")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime?     @updatedAt @map("updated_at")
   bookings     RoomBooking[]
   institute    Institute     @relation(fields: [instituteId], references: [id], onDelete: Cascade)
   sessions     Session[]

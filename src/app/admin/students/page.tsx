@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -8,37 +8,32 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Eye, UserX, Users, BookOpen, Trash2, Edit } from "lucide-react"
+import { Eye, Users, BookOpen, UserX, UserCheck, Settings, KeyRound } from "lucide-react"
 import { User } from "@/types"
 import { formatDate, getFileUrl } from "@/lib/utils"
 import { AdminPageHeader } from "@/components/admin/page-header"
 import { adminService } from "@/lib/admin-service"
+import { toast } from "sonner"
+
+type DialogType = 'view' | 'editCredentials' | 'suspend' | 'reactivate' | null
 
 export default function AdminStudents() {
   const [students, setStudents] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
   const [selectedStudent, setSelectedStudent] = useState<User | null>(null)
-  const [actionDialog, setActionDialog] = useState<{ open: boolean; type: 'view' | 'suspend' | 'delete' | 'edit' | null }>({
-    open: false,
-    type: null
-  })
-  const [deleteReason, setDeleteReason] = useState("")
-  const [suspendReason, setSuspendReason] = useState("")
+  const [dialogType, setDialogType] = useState<DialogType>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
-  const [editForm, setEditForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    role: "student",
-    status: "active",
-    avatar: "",
-    password: ""
-  })
+
+  // Edit credentials form
+  const [credForm, setCredForm] = useState({ email: "", password: "", confirmPassword: "" })
+  const [credError, setCredError] = useState("")
+  const [credLoading, setCredLoading] = useState(false)
+
+  // Suspend form
+  const [suspendReason, setSuspendReason] = useState("")
+  const [actionLoading, setActionLoading] = useState(false)
 
   useEffect(() => {
     loadStudents()
@@ -48,93 +43,104 @@ export default function AdminStudents() {
     try {
       setLoading(true)
       const data = await adminService.getAllStudents()
-      // Note: If adminService.getAllStudents doesn't support params, 
-      // we might need to update it or add ?t=... here if it uses apiClient directly.
       setStudents(data)
     } catch (err: any) {
-      setError(err?.response?.data?.message || "فشل تحميل بيانات الطلاب")
+      toast.error(err?.response?.data?.message || "فشل تحميل بيانات الطلاب")
     } finally {
       setLoading(false)
     }
   }
 
-  const filteredStudents = students.filter(student =>
-    (statusFilter === "all" || student.status === statusFilter) &&
-    (student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.email.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredStudents = useMemo(() =>
+    students.filter((s) => {
+      const matchesStatus = statusFilter === "all" || s.status === statusFilter
+      const q = searchQuery.toLowerCase()
+      const matchesSearch =
+        s.name.toLowerCase().includes(q) ||
+        s.email.toLowerCase().includes(q) ||
+        (s.phone || "").toLowerCase().includes(q)
+      return matchesStatus && matchesSearch
+    }),
+    [students, searchQuery, statusFilter]
   )
 
-  const handleViewStudent = (student: User) => {
+  const openDialog = (student: User, type: DialogType) => {
     setSelectedStudent(student)
-    setActionDialog({ open: true, type: 'view' })
+    setDialogType(type)
+    if (type === "editCredentials") {
+      setCredForm({ email: student.email, password: "", confirmPassword: "" })
+      setCredError("")
+    }
+    if (type === "suspend") setSuspendReason("")
   }
 
-  const handleSuspendStudent = (student: User) => {
-    setSelectedStudent(student)
-    setSuspendReason("")
-    setActionDialog({ open: true, type: 'suspend' })
+  const closeDialog = () => {
+    setDialogType(null)
+    setSelectedStudent(null)
+    setCredError("")
   }
 
-  const handleDeleteStudent = (student: User) => {
-    setSelectedStudent(student)
-    setDeleteReason("")
-    setActionDialog({ open: true, type: 'delete' })
-  }
-
-  const handleEditStudent = (student: User) => {
-    setSelectedStudent(student)
-    setEditForm({
-      name: student.name,
-      email: student.email,
-      phone: student.phone || "",
-      role: student.role as string,
-      status: student.status || "active",
-      avatar: student.avatar || "",
-      password: ""
-    })
-    setActionDialog({ open: true, type: 'edit' })
-  }
-
-  const executeAction = async () => {
+  const handleSaveCredentials = async () => {
     if (!selectedStudent) return
-
+    setCredError("")
+    if (!credForm.email) { setCredError("البريد الإلكتروني مطلوب"); return }
+    if (credForm.password && credForm.password !== credForm.confirmPassword) {
+      setCredError("كلمة المرور وتأكيدها غير متطابقين")
+      return
+    }
     try {
-      setError("")
-      setSuccess("")
-
-      if (actionDialog.type === 'delete') {
-        if (deleteReason.length < 5) return;
-        await adminService.deleteStudent(selectedStudent.id);
-        setSuccess("تم حذف الطالب بنجاح");
-      } else if (actionDialog.type === 'edit') {
-        await adminService.updateStudent(selectedStudent.id, editForm);
-        setSuccess("تم تحديث بيانات الطالب بنجاح");
-      } else if (actionDialog.type === 'suspend') {
-        if (!suspendReason) return;
-        await adminService.suspendStudent(selectedStudent.id, suspendReason);
-        setSuccess("تم تعليق حساب الطالب");
-      }
-
-      setActionDialog({ open: false, type: null })
-      setSelectedStudent(null)
-      loadStudents() // Reload data
+      setCredLoading(true)
+      const payload: any = { email: credForm.email }
+      if (credForm.password) payload.password = credForm.password
+      await adminService.updateStudent(selectedStudent.id, payload)
+      toast.success("تم تحديث بيانات الدخول بنجاح")
+      closeDialog()
+      loadStudents()
     } catch (err: any) {
-      setError(err?.response?.data?.message || err?.message || "فشل تنفيذ الإجراء")
+      setCredError(err?.response?.data?.message || "فشل تحديث البيانات")
+    } finally {
+      setCredLoading(false)
+    }
+  }
+
+  const handleSuspend = async () => {
+    if (!selectedStudent || !suspendReason.trim()) return
+    try {
+      setActionLoading(true)
+      await adminService.suspendStudent(selectedStudent.id, suspendReason)
+      toast.success("تم تعليق الحساب بنجاح")
+      closeDialog()
+      loadStudents()
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "فشل تعليق الحساب")
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const handleReactivate = async () => {
+    if (!selectedStudent) return
+    try {
+      setActionLoading(true)
+      await adminService.reactivateStudent(selectedStudent.id)
+      toast.success("تم إعادة تنشيط الحساب بنجاح")
+      closeDialog()
+      loadStudents()
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "فشل إعادة التنشيط")
+    } finally {
+      setActionLoading(false)
     }
   }
 
   const totalStudents = students.length
-  const activeStudents = students.filter(s => s.status === 'active').length
-  // Mock data for enrollments since we don't have it in the user object yet
-  const totalEnrollments = 0
+  const activeStudents = students.filter((s) => s.status === "active").length
+  const suspendedStudents = students.filter((s) => s.status === "suspended").length
 
   if (loading) {
     return (
       <div className="space-y-6">
-        <AdminPageHeader
-          title="إدارة الطلاب"
-          description="مراجعة وإدارة الطلاب المسجلين في المنصة"
-        />
+        <AdminPageHeader title="إدارة الطلاب" description="مراجعة وإدارة الطلاب المسجلين في المنصة" />
         <div className="flex justify-center p-12">
           <p>جاري التحميل...</p>
         </div>
@@ -149,19 +155,7 @@ export default function AdminStudents() {
         description="مراجعة وإدارة الطلاب المسجلين في المنصة"
       />
 
-      {error && (
-        <Card className="border-red-200 bg-red-50">
-          <CardContent className="p-4 text-red-800">{error}</CardContent>
-        </Card>
-      )}
-
-      {success && (
-        <Card className="border-green-200 bg-green-50">
-          <CardContent className="p-4 text-green-800">{success}</CardContent>
-        </Card>
-      )}
-
-      {/* Stats Cards */}
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -173,37 +167,35 @@ export default function AdminStudents() {
             <p className="text-xs text-muted-foreground">طالب مسجل</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">الطلاب النشطين</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeStudents}</div>
             <p className="text-xs text-muted-foreground">حساب نشط</p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">إجمالي التسجيلات</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">الحسابات المعلقة</CardTitle>
+            <UserX className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalEnrollments}</div>
-            <p className="text-xs text-muted-foreground">تسجيل في دورات</p>
+            <div className="text-2xl font-bold">{suspendedStudents}</div>
+            <p className="text-xs text-muted-foreground">حساب معلق</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Search and Filters */}
+      {/* Search & Filter */}
       <Card>
         <CardContent className="pt-6">
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <Input
-                placeholder="البحث في الطلاب..."
+                placeholder="البحث بالاسم أو البريد الإلكتروني أو رقم الهاتف..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -222,16 +214,17 @@ export default function AdminStudents() {
         </CardContent>
       </Card>
 
-      {/* Students Table */}
+      {/* Table */}
       <Card>
         <CardHeader>
-          <CardTitle>قائمة الطلاب</CardTitle>
+          <CardTitle>قائمة الطلاب ({filteredStudents.length})</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>الطالب</TableHead>
+                <TableHead>رقم الهاتف</TableHead>
                 <TableHead>تاريخ التسجيل</TableHead>
                 <TableHead>الحالة</TableHead>
                 <TableHead>الإجراءات</TableHead>
@@ -240,270 +233,296 @@ export default function AdminStudents() {
             <TableBody>
               {filteredStudents.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-6 text-gray-500">
-                    لا يوجد طلاب مطابقين للبحث
+                  <TableCell colSpan={5} className="text-center py-8 text-gray-500">
+                    لا يوجد طلاب مطابقون للبحث
                   </TableCell>
                 </TableRow>
-              ) : filteredStudents.map((student) => (
-                <TableRow key={student.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      {student.avatar ? (
-                        <img
-                          src={getFileUrl(student.avatar)}
-                          alt={student.name}
-                          className="w-8 h-8 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                          <Users className="h-4 w-4 text-gray-500" />
+              ) : (
+                filteredStudents.map((student) => (
+                  <TableRow key={student.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-gray-100 flex-shrink-0 overflow-hidden">
+                          {student.avatar ? (
+                            <img
+                              src={getFileUrl(student.avatar)}
+                              alt={student.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = "none"
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-500 font-bold text-sm">
+                              {student.name.charAt(0)}
+                            </div>
+                          )}
                         </div>
-                      )}
-                      <div>
-                        <div className="font-medium">{student.name}</div>
-                        <div className="text-sm text-gray-500">{student.email}</div>
+                        <div>
+                          <div className="font-medium">{student.name}</div>
+                          <div className="text-sm text-gray-500">{student.email}</div>
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {formatDate(student.createdAt)}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={student.status === 'active' ? 'default' : 'secondary'}>
-                      {student.status === 'active' ? 'نشط' :
-                        student.status === 'suspended' ? 'معلق' : student.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" onClick={() => handleViewStudent(student)}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleEditStudent(student)}>
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      {(student.status === 'active') && (
+                    </TableCell>
+                    <TableCell className="text-sm text-gray-600">
+                      {student.phone || "-"}
+                    </TableCell>
+                    <TableCell className="text-sm text-gray-600">
+                      {formatDate(student.createdAt)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        className={
+                          student.status === "active"
+                            ? "bg-green-100 text-green-800"
+                            : student.status === "suspended"
+                            ? "bg-orange-100 text-orange-800"
+                            : "bg-gray-100 text-gray-600"
+                        }
+                      >
+                        {student.status === "active"
+                          ? "نشط"
+                          : student.status === "suspended"
+                          ? "معلق"
+                          : student.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        {/* View */}
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleSuspendStudent(student)}
-                          className="border-orange-300 text-orange-600 hover:bg-orange-50"
+                          title="عرض التفاصيل"
+                          onClick={() => openDialog(student, "view")}
                         >
-                          <UserX className="h-4 w-4 mr-1" />
-                          تعليق
+                          <Eye className="h-4 w-4" />
                         </Button>
-                      )}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDeleteStudent(student)}
-                        className="border-red-300 text-red-600 hover:bg-red-50"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                        {/* Edit credentials */}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          title="تعديل بيانات الدخول"
+                          onClick={() => openDialog(student, "editCredentials")}
+                        >
+                          <KeyRound className="h-4 w-4" />
+                        </Button>
+                        {/* Suspend / Reactivate */}
+                        {student.status === "active" ? (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            title="تعليق الحساب"
+                            onClick={() => openDialog(student, "suspend")}
+                            className="border-orange-300 text-orange-600 hover:bg-orange-50"
+                          >
+                            <UserX className="h-4 w-4" />
+                          </Button>
+                        ) : student.status === "suspended" ? (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            title="إعادة تنشيط الحساب"
+                            onClick={() => openDialog(student, "reactivate")}
+                            className="border-green-300 text-green-600 hover:bg-green-50"
+                          >
+                            <UserCheck className="h-4 w-4" />
+                          </Button>
+                        ) : null}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
 
-      {/* Student Details Dialog */}
-      <Dialog open={actionDialog.open && actionDialog.type === 'view'} onOpenChange={(open) => !open && setActionDialog({ open: false, type: null })}>
-        <DialogContent className="sm:max-w-[600px]">
+      {/* ── View Details Dialog ── */}
+      <Dialog open={dialogType === "view"} onOpenChange={(o) => !o && closeDialog()}>
+        <DialogContent className="sm:max-w-[560px] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>تفاصيل الطالب</DialogTitle>
           </DialogHeader>
           {selectedStudent && (
             <div className="space-y-6">
+              {/* Avatar + basic */}
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                <div className="w-20 h-20 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
                   {selectedStudent.avatar ? (
-                    <img src={getFileUrl(selectedStudent.avatar)} alt={selectedStudent.name} className="w-full h-full object-cover" />
+                    <img
+                      src={getFileUrl(selectedStudent.avatar)}
+                      alt={selectedStudent.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+                    />
                   ) : (
-                    <Users className="h-8 w-8 text-gray-600" />
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl font-bold">
+                      {selectedStudent.name.charAt(0)}
+                    </div>
                   )}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold">{selectedStudent.name}</h3>
-                  <p className="text-gray-600">{selectedStudent.email}</p>
-                  <p className="text-sm text-gray-500">
-                    {selectedStudent.phone || "لا يوجد رقم هاتف"}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    انضم في {formatDate(selectedStudent.createdAt)}
-                  </p>
+                  <h3 className="text-lg font-bold">{selectedStudent.name}</h3>
+                  <p className="text-gray-600 text-sm">{selectedStudent.email}</p>
+                  <p className="text-gray-500 text-sm">{selectedStudent.phone || "لا يوجد رقم هاتف"}</p>
                   <div className="flex gap-2 mt-2">
-                    <Badge variant={selectedStudent.status === 'active' ? 'default' : 'secondary'}>
-                      {selectedStudent.status === 'active' ? 'نشط' : selectedStudent.status === 'suspended' ? 'معلق' : 'قيد المراجعة'}
+                    <Badge
+                      className={
+                        selectedStudent.status === "active"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-orange-100 text-orange-800"
+                      }
+                    >
+                      {selectedStudent.status === "active" ? "نشط" : "معلق"}
                     </Badge>
                     <Badge variant="outline">{selectedStudent.role}</Badge>
                   </div>
                 </div>
               </div>
 
-              <div className="flex gap-2">
-                <Button onClick={() => setActionDialog({ open: false, type: null })} className="flex-1">
-                  إغلاق
-                </Button>
+              {/* Info grid */}
+              <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl text-sm">
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">تاريخ التسجيل</p>
+                  <p>{formatDate(selectedStudent.createdAt)}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">حالة الحساب</p>
+                  <p>{selectedStudent.status === "active" ? "نشط" : selectedStudent.status === "suspended" ? "معلق" : selectedStudent.status}</p>
+                </div>
               </div>
+
+              <Button onClick={closeDialog} className="w-full">إغلاق</Button>
             </div>
           )}
         </DialogContent>
       </Dialog>
 
-      {/* Suspend Dialog */}
-      <Dialog open={actionDialog.open && actionDialog.type === 'suspend'} onOpenChange={(open) => !open && setActionDialog({ open: false, type: null })}>
+      {/* ── Edit Credentials Dialog ── */}
+      <Dialog open={dialogType === "editCredentials"} onOpenChange={(o) => !o && closeDialog()}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>تعليق الطالب</DialogTitle>
+            <DialogTitle>تعديل بيانات الدخول</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            {selectedStudent && (
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <p>هل أنت متأكد من تعليق حساب الطالب <strong>{selectedStudent.name}</strong>؟</p>
-                <p className="text-sm text-gray-600 mt-2">سيتم منع الوصول إلى جميع الدورات والمحتوى.</p>
+          {selectedStudent && (
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded-lg">
+                تعديل بيانات دخول الطالب: <strong>{selectedStudent.name}</strong>
+              </p>
+              {credError && (
+                <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{credError}</p>
+              )}
+              <div>
+                <Label htmlFor="s-email">البريد الإلكتروني الجديد</Label>
+                <Input
+                  id="s-email"
+                  type="email"
+                  value={credForm.email}
+                  onChange={(e) => setCredForm({ ...credForm, email: e.target.value })}
+                  className="mt-1"
+                />
               </div>
-            )}
-            <div>
-              <Label htmlFor="suspend-reason">سبب التعليق</Label>
-              <Textarea
-                id="suspend-reason"
-                placeholder="سبب التعليق"
-                value={suspendReason}
-                onChange={(e) => setSuspendReason(e.target.value)}
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={() => setActionDialog({ open: false, type: null })}
-              >
-                إلغاء
-              </Button>
-              <Button onClick={executeAction} className="bg-red-600 hover:bg-red-700">
-                تعليق الحساب
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Dialog */}
-      <Dialog open={actionDialog.open && actionDialog.type === 'delete'} onOpenChange={(open) => !open && setActionDialog({ open: false, type: null })}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>حذف الطالب</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            {selectedStudent && (
-              <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+              <div>
+                <Label htmlFor="s-password">كلمة المرور الجديدة</Label>
+                <Input
+                  id="s-password"
+                  type="password"
+                  value={credForm.password}
+                  onChange={(e) => setCredForm({ ...credForm, password: e.target.value })}
+                  placeholder="اتركها فارغة إذا لم ترد التغيير"
+                  className="mt-1"
+                />
+              </div>
+              {credForm.password && (
                 <div>
-                  <p className="text-red-600 font-medium">هل أنت متأكد من حذف حساب الطالب <strong>{selectedStudent.name}</strong>؟</p>
-                  <p className="text-sm text-gray-600 mt-1">لا يمكن التراجع عن هذا الإجراء.</p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="delete-reason" className="text-sm">سبب الحذف <span className="text-red-500">*</span></Label>
-                  <Textarea
-                    id="delete-reason"
-                    placeholder="يرجى كتابة سبب الحذف..."
-                    value={deleteReason}
-                    onChange={(e) => setDeleteReason(e.target.value)}
-                    className="bg-white"
+                  <Label htmlFor="s-confirm">تأكيد كلمة المرور</Label>
+                  <Input
+                    id="s-confirm"
+                    type="password"
+                    value={credForm.confirmPassword}
+                    onChange={(e) => setCredForm({ ...credForm, confirmPassword: e.target.value })}
+                    className="mt-1"
                   />
                 </div>
-              </div>
-            )}
-            <DialogFooter className="gap-2">
-              <Button
-                variant="outline"
-                onClick={() => setActionDialog({ open: false, type: null })}
-              >
-                إلغاء
-              </Button>
-              <Button
-                onClick={executeAction}
-                variant="destructive"
-                disabled={deleteReason.length < 5}
-              >
-                حذف
-              </Button>
-            </DialogFooter>
-          </div>
+              )}
+              <DialogFooter className="gap-2">
+                <Button variant="outline" onClick={closeDialog}>إلغاء</Button>
+                <Button onClick={handleSaveCredentials} disabled={credLoading}>
+                  {credLoading ? "جاري الحفظ..." : "حفظ التغييرات"}
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
-      {/* Edit Dialog */}
-      <Dialog open={actionDialog.open && actionDialog.type === 'edit'} onOpenChange={(open) => !open && setActionDialog({ open: false, type: null })}>
+      {/* ── Suspend Dialog ── */}
+      <Dialog open={dialogType === "suspend"} onOpenChange={(o) => !o && closeDialog()}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>تعديل بيانات الطالب</DialogTitle>
+            <DialogTitle>تعليق الحساب</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="edit-name">الاسم</Label>
-              <Input
-                id="edit-name"
-                value={editForm.name}
-                onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-              />
+          {selectedStudent && (
+            <div className="space-y-4">
+              <div className="p-4 bg-orange-50 rounded-lg">
+                <p className="text-orange-800">
+                  هل أنت متأكد من تعليق حساب الطالب <strong>{selectedStudent.name}</strong>؟
+                </p>
+                <p className="text-sm text-orange-600 mt-1">سيُمنع من تسجيل الدخول وتنفيذ أي عمليات جديدة.</p>
+              </div>
+              <div>
+                <Label htmlFor="suspend-reason">سبب التعليق <span className="text-red-500">*</span></Label>
+                <Input
+                  id="suspend-reason"
+                  value={suspendReason}
+                  onChange={(e) => setSuspendReason(e.target.value)}
+                  placeholder="اكتب سبب التعليق..."
+                  className="mt-1"
+                />
+              </div>
+              <DialogFooter className="gap-2">
+                <Button variant="outline" onClick={closeDialog}>إلغاء</Button>
+                <Button
+                  onClick={handleSuspend}
+                  disabled={actionLoading || !suspendReason.trim()}
+                  className="bg-orange-600 hover:bg-orange-700"
+                >
+                  {actionLoading ? "جاري التعليق..." : "تعليق الحساب"}
+                </Button>
+              </DialogFooter>
             </div>
-            <div>
-              <Label htmlFor="edit-email">البريد الإلكتروني</Label>
-              <Input
-                id="edit-email"
-                value={editForm.email}
-                onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-              />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Reactivate Dialog ── */}
+      <Dialog open={dialogType === "reactivate"} onOpenChange={(o) => !o && closeDialog()}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>إعادة تنشيط الحساب</DialogTitle>
+          </DialogHeader>
+          {selectedStudent && (
+            <div className="space-y-4">
+              <div className="p-4 bg-green-50 rounded-lg">
+                <p className="text-green-800">
+                  هل تريد إعادة تنشيط حساب الطالب <strong>{selectedStudent.name}</strong>؟
+                </p>
+                <p className="text-sm text-green-600 mt-1">سيتمكن من تسجيل الدخول والعمل بشكل طبيعي.</p>
+              </div>
+              <DialogFooter className="gap-2">
+                <Button variant="outline" onClick={closeDialog}>إلغاء</Button>
+                <Button
+                  onClick={handleReactivate}
+                  disabled={actionLoading}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {actionLoading ? "جاري التنشيط..." : "إعادة التنشيط"}
+                </Button>
+              </DialogFooter>
             </div>
-            <div>
-              <Label htmlFor="edit-phone">رقم الهاتف</Label>
-              <Input
-                id="edit-phone"
-                value={editForm.phone}
-                onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-password">كلمة المرور الجديدة</Label>
-              <Input
-                id="edit-password"
-                type="password"
-                value={editForm.password}
-                onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
-                placeholder="اتركها فارغة إذا لم ترد التغيير"
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-status">الحالة</Label>
-              <Select
-                value={editForm.status}
-                onValueChange={(value) => setEditForm({ ...editForm, status: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="اختر الحالة" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">نشط</SelectItem>
-                  <SelectItem value="suspended">معلق</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <DialogFooter className="gap-2">
-              <Button
-                variant="outline"
-                onClick={() => setActionDialog({ open: false, type: null })}
-              >
-                إلغاء
-              </Button>
-              <Button onClick={executeAction}>
-                حفظ التغييرات
-              </Button>
-            </DialogFooter>
-          </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

@@ -2,219 +2,425 @@
 
 import { useState, useEffect, useMemo } from "react"
 import Image from "next/image"
-import { ChevronDown, Users, CalendarDays, Clock3, Eye, XCircle, Trash2, X } from "lucide-react"
+import { ChevronDown, Users, CalendarDays, Eye, BookOpen, Clock } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Course } from "@/types"
 import { AdminPageHeader } from "@/components/admin/page-header"
 import { adminService } from "@/lib/admin-service"
-import { getFileUrl } from "@/lib/utils"
+import { getFileUrl, formatDate } from "@/lib/utils"
 import { toast } from "sonner"
 
 function formatPrice(value: number) {
   return new Intl.NumberFormat("en-US").format(value || 0)
 }
 
-function FilterSelect({ value, onChange, options }: { value: string; onChange: (value: string) => void; options: { label: string; value: string }[] }) {
+function FilterSelect({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: { label: string; value: string }[] }) {
   return (
     <div className="relative">
       <ChevronDown className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-11 min-w-[140px] appearance-none rounded-xl border border-slate-200 bg-white px-4 pl-8 text-sm font-semibold text-slate-700 outline-none hover:border-blue-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+        className="h-10 min-w-[140px] appearance-none rounded-md border border-input bg-background px-4 pl-8 text-sm text-slate-700 outline-none hover:border-blue-200 focus:border-blue-400"
       >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>{option.label}</option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>{o.label}</option>
         ))}
       </select>
     </div>
   )
 }
 
+const getStatusBadge = (status: string) => {
+  switch (status) {
+    case "active": return <Badge className="bg-green-100 text-green-800">نشط</Badge>
+    case "draft": return <Badge className="bg-yellow-100 text-yellow-800">مسودة</Badge>
+    case "completed": return <Badge className="bg-purple-100 text-purple-800">مكتمل</Badge>
+    case "pending_review": return <Badge className="bg-blue-100 text-blue-800">قيد المراجعة</Badge>
+    case "pending_minimum": return <Badge className="bg-orange-100 text-orange-800">في انتظار الحد الأدنى</Badge>
+    default: return <Badge variant="secondary">{status}</Badge>
+  }
+}
+
 export default function AdminCourses() {
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [categoryFilter, setCategoryFilter] = useState<string>("all")
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [categoryFilter, setCategoryFilter] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
-  const [courseToDeleteId, setCourseToDeleteId] = useState<string | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  const fetchCourses = async () => {
-    try {
-      setLoading(true)
-      setError("")
-      const data = await adminService.getAllCourses()
-      setCourses(data as Course[])
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "فشل في جلب الدورات")
-    } finally {
-      setLoading(false)
-    }
-  }
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null)
+  const [detailOpen, setDetailOpen] = useState(false)
 
   useEffect(() => {
     fetchCourses()
   }, [])
 
-  const filteredCourses = useMemo(
-    () =>
-      courses.filter((course) => {
-        const matchesStatus = statusFilter === "all" || course.status === statusFilter
-        const matchesCategory = categoryFilter === "all" || course.category === categoryFilter
-        const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) || (course.trainer?.name || "").toLowerCase().includes(searchQuery.toLowerCase())
-        return matchesStatus && matchesCategory && matchesSearch
-      }),
+  const fetchCourses = async () => {
+    try {
+      setLoading(true)
+      const data = await adminService.getAllCourses()
+      setCourses(data as Course[])
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "فشل في جلب الدورات")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filteredCourses = useMemo(() =>
+    courses.filter((course) => {
+      const matchesStatus = statusFilter === "all" || course.status === statusFilter
+      const matchesCategory = categoryFilter === "all" || course.category === categoryFilter
+      const q = searchQuery.toLowerCase()
+      const matchesSearch =
+        course.title.toLowerCase().includes(q) ||
+        (course.trainer?.name || "").toLowerCase().includes(q) ||
+        (course.institute?.name || "").toLowerCase().includes(q)
+      return matchesStatus && matchesCategory && matchesSearch
+    }),
     [courses, statusFilter, categoryFilter, searchQuery]
   )
 
-  const uniqueCategories = Array.from(new Set(courses.map((course) => course.category).filter(Boolean)))
+  const uniqueCategories = Array.from(new Set(courses.map((c) => c.category).filter(Boolean)))
 
-  const suspendCourse = async (courseId: string) => {
-    try {
-      await adminService.suspendCourse(courseId)
-      toast.success("تم تعليق الدورة")
-      await fetchCourses()
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "فشل تعليق الدورة")
-    }
-  }
-
-  const confirmDeleteCourse = async () => {
-    if (!courseToDeleteId) return
-    try {
-      setIsDeleting(true)
-      await adminService.deleteCourse(courseToDeleteId)
-      toast.success("تم حذف الدورة")
-      setCourses((prev) => prev.filter((c) => c.id !== courseToDeleteId))
-      setCourseToDeleteId(null)
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "فشل حذف الدورة")
-    } finally {
-      setIsDeleting(false)
-    }
-  }
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "active":
-        return <Badge className="bg-green-100 text-green-800">نشط</Badge>
-      case "draft":
-        return <Badge className="bg-yellow-100 text-yellow-800">مسودة</Badge>
-      case "completed":
-        return <Badge className="bg-purple-100 text-purple-800">مكتمل</Badge>
-      case "cancelled":
-        return <Badge className="bg-red-100 text-red-800">ملغي</Badge>
-      case "rejected":
-        return <Badge className="bg-orange-100 text-orange-800">مرفوض</Badge>
-      default:
-        return <Badge variant="secondary">{status}</Badge>
-    }
-  }
+  const totalCourses = courses.length
+  const activeCourses = courses.filter(c => c.status === 'active').length
+  const totalStudents = courses.reduce((acc, c) => acc + (c.enrolledStudents || 0), 0)
 
   if (loading) return <div className="py-10 text-center">جارِ التحميل...</div>
 
   return (
-    <section dir="rtl" className="min-h-full bg-transparent space-y-4">
-      <AdminPageHeader title="إدارة الدورات" description="نفس تصميم استعراض المدرب مع صلاحيات وإجراءات الأدمن" />
+    <section dir="rtl" className="min-h-full bg-transparent space-y-6">
+      <AdminPageHeader title="إدارة الدورات" description="مراجعة جميع الدورات المسجلة في المنصة (عرض فقط)" />
 
-      {error && <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">{error}</div>}
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">إجمالي الدورات</CardTitle>
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalCourses}</div>
+            <p className="text-xs text-muted-foreground">دورة مسجلة</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">الدورات النشطة</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{activeCourses}</div>
+            <p className="text-xs text-muted-foreground">دورة نشطة</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">إجمالي الطلاب</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalStudents}</div>
+            <p className="text-xs text-muted-foreground">طالب مسجل في دورات</p>
+          </CardContent>
+        </Card>
+      </div>
 
-      <div className="rounded-3xl border border-slate-200/80 bg-white p-3 shadow-[0_4px_14px_rgba(15,23,42,0.035)] md:px-4 md:py-3.5">
-        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="ابحث عن دورة أو مدرب..." className="h-11 w-64 rounded-xl" />
-            <FilterSelect value={statusFilter} onChange={setStatusFilter} options={[{ label: "كل الحالات", value: "all" }, { label: "نشط", value: "active" }, { label: "مسودة", value: "draft" }, { label: "مكتمل", value: "completed" }, { label: "ملغي", value: "cancelled" }, { label: "مرفوض", value: "rejected" }]} />
-            <FilterSelect value={categoryFilter} onChange={setCategoryFilter} options={[{ label: "كل الفئات", value: "all" }, ...uniqueCategories.map((c) => ({ label: c as string, value: c as string }))]} />
+      {/* Filters */}
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-3">
+            <Input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="ابحث عن دورة أو مدرب أو معهد..."
+              className="h-10 w-64 rounded-md"
+            />
+            <FilterSelect
+              value={statusFilter}
+              onChange={setStatusFilter}
+              options={[
+                { label: "كل الحالات", value: "all" },
+                { label: "نشطة", value: "active" },
+                { label: "مسودة", value: "draft" },
+                { label: "مكتملة", value: "completed" },
+                { label: "قيد المراجعة", value: "pending_review" },
+                { label: "في انتظار الحد الأدنى", value: "pending_minimum" },
+              ]}
+            />
+            <FilterSelect
+              value={categoryFilter}
+              onChange={setCategoryFilter}
+              options={[
+                { label: "كل الفئات", value: "all" },
+                ...uniqueCategories.map((c) => ({ label: c as string, value: c as string })),
+              ]}
+            />
           </div>
-          <p className="px-1 text-sm font-semibold text-slate-500 md:whitespace-nowrap">تم العثور على {filteredCourses.length} دورات</p>
+          <p className="text-sm font-medium text-slate-500">
+            {filteredCourses.length} دورة
+          </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {filteredCourses.map((course) => (
-          <article key={course.id} className="group flex h-full min-h-[390px] flex-col overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(37,99,235,0.16)]">
-            <div className="relative h-[188px] overflow-hidden bg-slate-100 md:h-[196px]">
-              <Image src={getFileUrl(course.image) || "/images/course-web.png"} alt={course.title} fill unoptimized className="object-cover object-center" />
-              <span className="absolute bottom-3 right-3 rounded-full bg-white/86 px-2.5 py-1 text-[11px] font-semibold text-slate-700 backdrop-blur-[2px]">{course.category || "الفئة"}</span>
-            </div>
-            <div className="flex flex-1 flex-col p-3.5 text-right">
-              <h3 className="line-clamp-2 text-[17px] font-extrabold leading-6 text-slate-900">{course.title}</h3>
-              <p className="mt-1 text-xs text-slate-500">{course.trainer?.name || "-"} • {course.institute?.name || "-"}</p>
+      {/* Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>قائمة الدورات</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>الدورة</TableHead>
+                <TableHead>الفئة</TableHead>
+                <TableHead>المالك</TableHead>
+                <TableHead>الطلاب</TableHead>
+                <TableHead>الحالة</TableHead>
+                <TableHead>تاريخ البداية</TableHead>
+                <TableHead>السعر</TableHead>
+                <TableHead>الإجراءات</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredCourses.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center py-8 text-gray-500">
+                    لا توجد دورات مطابقة للبحث
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredCourses.map((course) => (
+                  <TableRow key={course.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-9 rounded-md overflow-hidden bg-slate-100 flex-shrink-0">
+                          {course.image ? (
+                            <img
+                              src={getFileUrl(course.image) || "/images/course-web.png"}
+                              alt={course.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => { (e.target as HTMLImageElement).src = "/images/course-web.png" }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-slate-200">
+                              <BookOpen className="h-4 w-4 text-slate-400" />
+                            </div>
+                          )}
+                        </div>
+                        <span className="font-medium text-sm line-clamp-2 max-w-[200px]">{course.title}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-sm text-gray-600">{course.category || "-"}</TableCell>
+                    <TableCell>
+                      <div className="text-sm">
+                        {course.trainer?.name && <div className="font-medium">{course.trainer.name}</div>}
+                        {course.institute?.name && <div className="text-gray-500">{course.institute.name}</div>}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className="flex items-center gap-1 text-sm">
+                        <Users className="h-3.5 w-3.5 text-slate-400" />
+                        {course.enrolledStudents || 0}/{course.maxStudents}
+                      </span>
+                    </TableCell>
+                    <TableCell>{getStatusBadge(course.status)}</TableCell>
+                    <TableCell className="text-sm text-gray-600">
+                      <span className="flex items-center gap-1">
+                        <CalendarDays className="h-3.5 w-3.5 text-slate-400" />
+                        {new Date(course.startDate).toLocaleDateString("en-CA")}
+                      </span>
+                    </TableCell>
+                    <TableCell className="font-bold text-blue-600 text-sm">
+                      {formatPrice(course.price)} <span className="text-xs font-normal text-blue-400">ر.ي</span>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8"
+                        onClick={() => { setSelectedCourse(course); setDetailOpen(true) }}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
-              <div className="mt-2.5 flex items-center justify-between text-[12px] font-medium text-slate-600">
-                <span className="inline-flex items-center gap-1"><Users className="h-3.5 w-3.5 text-slate-500" />{course.enrolledStudents || 0}/{course.maxStudents}</span>
-                <span className="inline-flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5 text-slate-500" />{new Date(course.startDate).toLocaleDateString("en-CA")}</span>
-                <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5 text-slate-500" />{course.duration} ساعة</span>
+      {/* ── Course Details Dialog ── */}
+      <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
+        <DialogContent className="sm:max-w-[680px] max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>تفاصيل الدورة</DialogTitle>
+          </DialogHeader>
+          {selectedCourse && (
+            <div className="space-y-6">
+              {/* Course image */}
+              <div className="relative w-full h-48 rounded-xl overflow-hidden bg-slate-100">
+                <img
+                  src={getFileUrl(selectedCourse.image) || "/images/course-web.png"}
+                  alt={selectedCourse.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).src = "/images/course-web.png" }}
+                />
               </div>
 
-              <div className="mt-auto space-y-2 pt-2.5">
-                <div>{getStatusBadge(course.status)}</div>
-                <div className="flex items-center justify-between gap-2 border-t border-slate-100 px-1 pt-3">
-                  <div className="flex items-center gap-1">
-                    <Button size="sm" variant="outline" className="h-8"><Eye className="h-4 w-4" /></Button>
-                    {(course.status === "active" || course.status === "draft") && (
-                      <Button size="sm" variant="outline" className="h-8 text-orange-600" onClick={() => suspendCourse(course.id)}><XCircle className="h-4 w-4" /></Button>
-                    )}
-                    <Button size="sm" variant="outline" className="h-8 text-red-600" onClick={() => setCourseToDeleteId(course.id)}><Trash2 className="h-4 w-4" /></Button>
+              {/* Title & status */}
+              <div>
+                <h3 className="text-xl font-bold">{selectedCourse.title}</h3>
+                <div className="flex items-center gap-2 mt-2">
+                  {getStatusBadge(selectedCourse.status)}
+                  {selectedCourse.category && <Badge variant="outline">{selectedCourse.category}</Badge>}
+                </div>
+              </div>
+
+              {/* Description */}
+              {selectedCourse.description && (
+                <div>
+                  <h4 className="font-semibold mb-1 text-sm text-gray-500">الوصف</h4>
+                  <p className="text-gray-700 bg-gray-50 p-3 rounded-lg text-sm leading-relaxed">
+                    {selectedCourse.description}
+                  </p>
+                </div>
+              )}
+
+              {/* Short Description */}
+              {selectedCourse.shortDescription && (
+                <div>
+                  <h4 className="font-semibold mb-1 text-sm text-gray-500">وصف قصير</h4>
+                  <p className="text-gray-700 bg-gray-50 p-3 rounded-lg text-sm leading-relaxed">
+                    {selectedCourse.shortDescription}
+                  </p>
+                </div>
+              )}
+
+              {/* Prerequisites & Objectives */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {selectedCourse.prerequisites && (
+                  <div>
+                    <h4 className="font-semibold mb-1 text-sm text-gray-500">المتطلبات الأساسية</h4>
+                    <p className="text-gray-700 bg-gray-50 p-3 rounded-lg text-sm leading-relaxed">
+                      {selectedCourse.prerequisites}
+                    </p>
                   </div>
-                  <p className="whitespace-nowrap text-[20px] font-extrabold leading-none tracking-tight text-[#2563EB]">{formatPrice(course.price)} <span className="text-xs font-bold text-blue-500">ر.ي</span></p>
+                )}
+                {selectedCourse.objectives && selectedCourse.objectives.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-1 text-sm text-gray-500">الأهداف</h4>
+                    <ul className="list-disc list-inside text-gray-700 bg-gray-50 p-3 rounded-lg text-sm leading-relaxed">
+                      {selectedCourse.objectives.map((obj: string, i: number) => (
+                        <li key={i}>{obj}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Tags */}
+              {selectedCourse.tags && selectedCourse.tags.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-1 text-sm text-gray-500">العلامات (Tags)</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedCourse.tags.map((tag: string, i: number) => (
+                      <Badge key={i} variant="secondary">{tag}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Info grid */}
+              <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl text-sm">
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">السعر</p>
+                  <p className="font-bold text-blue-600">{formatPrice(selectedCourse.price)} ر.ي</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">المدة</p>
+                  <p className="font-medium">{selectedCourse.duration} ساعة</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">تاريخ البداية</p>
+                  <p className="font-medium">{new Date(selectedCourse.startDate).toLocaleDateString("ar-YE")}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">تاريخ النهاية</p>
+                  <p className="font-medium">{new Date(selectedCourse.endDate).toLocaleDateString("ar-YE")}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">عدد الطلاب</p>
+                  <p className="font-medium">{selectedCourse.enrolledStudents || 0} / {selectedCourse.maxStudents}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 font-medium mb-1">تاريخ الإنشاء</p>
+                  <p className="font-medium">{formatDate(selectedCourse.createdAt)}</p>
                 </div>
               </div>
-            </div>
-          </article>
-        ))}
-      </div>
 
-      <Dialog
-        open={!!courseToDeleteId}
-        onOpenChange={(open) => {
-          if (!open && !isDeleting) setCourseToDeleteId(null)
-        }}
-      >
-        <DialogContent
-          dir="rtl"
-          className="max-w-md rounded-[6.5px] border border-slate-200 bg-white p-0 shadow-xl [&>[data-dialog-close=default]]:hidden"
-        >
-          <div className="p-5 text-right">
-            <DialogHeader className="space-y-2 text-right">
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1 text-right">
-                  <DialogTitle className="text-lg font-bold text-slate-900">حذف الدورة</DialogTitle>
-                  <DialogDescription className="text-sm leading-6 text-slate-600">
-                    هل أنت متأكد من حذف هذه الدورة؟ لا يمكن التراجع عن هذا الإجراء.
-                  </DialogDescription>
-                </div>
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[6.5px] bg-red-50 text-red-600">
-                  <X className="h-4 w-4" />
-                </div>
+              {/* Trainer & Institute */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {selectedCourse.trainer && (
+                  <div className="bg-gray-50 p-3 rounded-xl">
+                    <p className="text-xs text-gray-500 font-medium mb-2">المدرب</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                        {(selectedCourse.trainer as any).avatar ? (
+                          <img
+                            src={getFileUrl((selectedCourse.trainer as any).avatar)}
+                            alt={selectedCourse.trainer.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-sm">
+                            {selectedCourse.trainer.name?.charAt(0)}
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{selectedCourse.trainer.name}</p>
+                        <p className="text-xs text-gray-500">{selectedCourse.trainer.email}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {selectedCourse.institute && (
+                  <div className="bg-gray-50 p-3 rounded-xl">
+                    <p className="text-xs text-gray-500 font-medium mb-2">المعهد</p>
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                        {selectedCourse.institute.logo ? (
+                          <img
+                            src={getFileUrl(selectedCourse.institute.logo)}
+                            alt={selectedCourse.institute.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <BookOpen className="h-4 w-4 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                      <p className="font-medium text-sm">{selectedCourse.institute.name}</p>
+                    </div>
+                  </div>
+                )}
               </div>
-            </DialogHeader>
 
-            <div className="mt-5 flex items-center justify-start gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="h-9 rounded-[6.5px] px-4"
-                onClick={() => setCourseToDeleteId(null)}
-                disabled={isDeleting}
-              >
-                إلغاء
-              </Button>
-              <Button
-                type="button"
-                className="h-9 rounded-[6.5px] bg-red-600 px-4 text-white hover:bg-red-700"
-                onClick={confirmDeleteCourse}
-                disabled={isDeleting}
-              >
-                {isDeleting ? "جاري الحذف..." : "حذف الدورة"}
-              </Button>
+              <Button onClick={() => setDetailOpen(false)} className="w-full">إغلاق</Button>
             </div>
-          </div>
+          )}
         </DialogContent>
       </Dialog>
     </section>
