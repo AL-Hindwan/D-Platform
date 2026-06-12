@@ -239,6 +239,7 @@ class AdminService {
         category?: string;
         scheduledDate?: string;
         scheduledTime?: string;
+        recipientIds?: string[];
     }): Promise<{ id: string }> {
         const response = await apiClient.post<{ success: boolean; message: string; data: { id: string } }>(
             '/api/admin/announcements',
@@ -277,6 +278,16 @@ class AdminService {
     async getAuditLogs(): Promise<any[]> {
         const response = await apiClient.get<{ success: boolean; message: string; data: any[] }>(
             `/api/admin/audit-logs?t=${Date.now()}`
+        );
+        return response.data.data;
+    }
+
+    /**
+     * Search users by name, email, or phone
+     */
+    async searchUsers(query: string): Promise<any[]> {
+        const response = await apiClient.get<{ success: boolean; message: string; data: any[] }>(
+            `/api/admin/users/search?q=${encodeURIComponent(query)}`
         );
         return response.data.data;
     }

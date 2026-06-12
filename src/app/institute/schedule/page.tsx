@@ -307,13 +307,14 @@ export default function InstituteSchedulePage() {
     setIsSaving(true)
     try {
       if (actionType === "cancel") {
-        await instituteService.updateSession(selectedSession.id, { status: "CANCELLED" })
+        await instituteService.updateSession(selectedSession.id, { status: "CANCELLED", reason })
         setSessions((prev) => prev.map((s) => (s.id === selectedSession.id ? { ...s, status: "cancelled" } : s)))
         toast.error("تم إلغاء الجلسة")
       } else if (actionType === "update_link") {
         await instituteService.updateSession(selectedSession.id, {
           meetingLink: selectedSession.meetingLink ?? undefined,
           updateAll,
+          reason,
         })
         if (updateAll) {
           setSessions((prev) =>
@@ -340,6 +341,7 @@ export default function InstituteSchedulePage() {
           endTime,
           meetingLink: selectedSession.meetingLink ?? undefined,
           updateAll,
+          reason,
         })
         setSessions((prev) => prev.map((s) => (s.id === selectedSession.id ? { ...s, startTime, endTime, meetingLink: selectedSession.meetingLink } : s)))
         toast.success("تم تغيير موعد الجلسة بنجاح")

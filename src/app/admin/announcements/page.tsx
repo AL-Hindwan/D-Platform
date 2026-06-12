@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Bell, Megaphone, Users, Calendar, Send, Trash2, Edit, Paperclip, Clock, Loader2, RefreshCw } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Bell, Megaphone, Users, Calendar, Send, Trash2, Edit, Paperclip, Clock, Loader2, RefreshCw, Search, X, CheckSquare } from "lucide-react"
 import { formatDate } from "@/lib/utils"
 import { AdminPageHeader } from "@/components/admin/page-header"
 import { format } from "date-fns"
@@ -21,7 +22,7 @@ interface Announcement {
   id: string
   title: string
   content: string
-  targetAudience: 'all' | 'students' | 'trainers' | 'institutes'
+  targetAudience: 'all' | 'students' | 'trainers' | 'institutes' | 'specific_users'
   category: 'general' | 'event' | 'maintenance' | 'urgent'
   status: 'draft' | 'scheduled' | 'sent'
   scheduledDate?: Date | string | null
@@ -39,6 +40,7 @@ const emptyForm = {
   scheduledDate: "",
   scheduledTime: "",
   attachment: "",
+  recipientIds: [] as string[],
 }
 
 export default function AdminAnnouncements() {
@@ -52,6 +54,20 @@ export default function AdminAnnouncements() {
   })
   const [editForm, setEditForm] = useState({ ...emptyForm })
   const [newAnnouncement, setNewAnnouncement] = useState({ ...emptyForm })
+
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [selectedUsers, setSelectedUsers] = useState<any[]>([])
+
+  const [editSearchQuery, setEditSearchQuery] = useState("")
+  const [editSearchResults, setEditSearchResults] = useState<any[]>([])
+  const [editSelectedUsers, setEditSelectedUsers] = useState<any[]>([])
+
+  const [allStudents, setAllStudents] = useState<any[]>([])
+  const [allTrainers, setAllTrainers] = useState<any[]>([])
+  const [allInstitutes, setAllInstitutes] = useState<any[]>([])
+  const [isFetchingLists, setIsFetchingLists] = useState(false)
 
   // ── Fetch ──────────────────────────────────────────────
   const fetchAnnouncements = useCallback(async () => {
@@ -67,6 +83,31 @@ export default function AdminAnnouncements() {
   }, [])
 
   useEffect(() => { fetchAnnouncements() }, [fetchAnnouncements])
+
+  useEffect(() => {
+    if (newAnnouncement.targetAudience === 'specific_users' || editForm.targetAudience === 'specific_users') {
+      if (allStudents.length === 0 && allTrainers.length === 0 && allInstitutes.length === 0 && !isFetchingLists) {
+        const fetchLists = async () => {
+          setIsFetchingLists(true)
+          try {
+            const [students, trainers, institutes] = await Promise.all([
+              adminService.getAllStudents(),
+              adminService.getAllTrainers(),
+              adminService.getAllInstitutes()
+            ])
+            setAllStudents(students.map((u: any) => ({ id: u.id, name: u.name, email: u.email, role: 'student' })))
+            setAllTrainers(trainers.map((t: any) => ({ id: t.user?.id || t.userId, name: t.user?.name || 'مدرب', email: t.user?.email || '', role: 'trainer' })))
+            setAllInstitutes(institutes.map((i: any) => ({ id: i.user?.id || i.userId, name: i.name || i.user?.name || 'معهد', email: i.user?.email || i.email || '', role: 'institute' })))
+          } catch (err) {
+            console.error(err)
+          } finally {
+            setIsFetchingLists(false)
+          }
+        }
+        fetchLists()
+      }
+    }
+  }, [newAnnouncement.targetAudience, editForm.targetAudience])
 
   // ── Create ──────────────────────────────────────────────
   const handleCreateAnnouncement = async () => {
@@ -92,6 +133,7 @@ export default function AdminAnnouncements() {
         category: newAnnouncement.category,
         scheduledDate: newAnnouncement.status === 'scheduled' ? newAnnouncement.scheduledDate : undefined,
         scheduledTime: newAnnouncement.status === 'scheduled' ? newAnnouncement.scheduledTime : undefined,
+        recipientIds: newAnnouncement.targetAudience === 'specific_users' ? selectedUsers.map(u => u.id) : undefined,
       })
       if (isSendNow && result?.id) {
         const sendResult = await adminService.sendAnnouncement(result.id)
@@ -100,6 +142,8 @@ export default function AdminAnnouncements() {
         toast.success(newAnnouncement.status === 'scheduled' ? "تم جدولة الإعلان بنجاح" : "تم حفظ الإعلان كمسودة")
       }
       setNewAnnouncement({ ...emptyForm })
+      setSelectedUsers([])
+      setSearchQuery("")
       fetchAnnouncements()
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "فشل إنشاء الإعلان")
@@ -139,8 +183,50 @@ export default function AdminAnnouncements() {
       scheduledDate: sd ? format(sd, "yyyy-MM-dd") : "",
       scheduledTime: sd ? format(sd, "HH:mm") : "",
       attachment: announcement.attachment || "",
+      recipientIds: (announcement as any).recipientIds || [],
     })
+    setEditSelectedUsers([]) // Reset edit selected users, fetching them back is complex, they can just search again if needed or we keep the IDs.
     setActionDialog({ open: true, type: 'edit' })
+  }
+
+  const handleSearchUsers = async (query: string, isEdit = false) => {
+    if (isEdit) setEditSearchQuery(query)
+    else setSearchQuery(query)
+
+    if (query.trim().length < 2) {
+      if (isEdit) setEditSearchResults([])
+      else setSearchResults([])
+      return
+    }
+
+    try {
+      setIsSearching(true)
+      const results = await adminService.searchUsers(query)
+      if (isEdit) setEditSearchResults(results)
+      else setSearchResults(results)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  const toggleUserSelection = (user: any, isEdit = false) => {
+    if (isEdit) {
+      if (editSelectedUsers.some(u => u.id === user.id)) {
+        setEditSelectedUsers(prev => prev.filter(u => u.id !== user.id))
+        setEditForm(prev => ({ ...prev, recipientIds: prev.recipientIds.filter(id => id !== user.id) }))
+      } else {
+        setEditSelectedUsers(prev => [...prev, user])
+        setEditForm(prev => ({ ...prev, recipientIds: [...prev.recipientIds, user.id] }))
+      }
+    } else {
+      if (selectedUsers.some(u => u.id === user.id)) {
+        setSelectedUsers(prev => prev.filter(u => u.id !== user.id))
+      } else {
+        setSelectedUsers(prev => [...prev, user])
+      }
+    }
   }
 
   // ── Execute dialog action ──────────────────────────────
@@ -160,6 +246,7 @@ export default function AdminAnnouncements() {
           status: editForm.status,
           scheduledDate: editForm.scheduledDate || "",
           scheduledTime: editForm.scheduledTime || "",
+          recipientIds: editForm.targetAudience === 'specific_users' ? editForm.recipientIds : undefined,
         })
         toast.success("تم تحديث الإعلان")
       }
@@ -197,6 +284,7 @@ export default function AdminAnnouncements() {
       case 'students':  return 'الطلاب'
       case 'trainers':  return 'المدربين'
       case 'institutes':return 'المعاهد'
+      case 'specific_users': return 'مستخدمين محددين'
       default:          return audience
     }
   }
@@ -241,9 +329,127 @@ export default function AdminAnnouncements() {
                     <SelectItem value="students">الطلاب</SelectItem>
                     <SelectItem value="trainers">المدربين</SelectItem>
                     <SelectItem value="institutes">المعاهد</SelectItem>
+                    <SelectItem value="specific_users">مستخدمين محددين</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
+
+              {newAnnouncement.targetAudience === 'specific_users' && (
+                <div className="space-y-3 p-3 bg-slate-50 border border-slate-100 rounded-md">
+                  <Label>تحديد المستخدمين المخصصين</Label>
+                  
+                  <Tabs defaultValue="search" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4 mb-2">
+                      <TabsTrigger value="search">بحث</TabsTrigger>
+                      <TabsTrigger value="students">الطلاب</TabsTrigger>
+                      <TabsTrigger value="trainers">المدربين</TabsTrigger>
+                      <TabsTrigger value="institutes">المعاهد</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="search" className="space-y-2 mt-0">
+                      <div className="relative">
+                        <Search className="absolute right-3 top-2.5 h-4 w-4 text-slate-400" />
+                        <Input
+                          placeholder="ابحث بالاسم، الإيميل، أو الجوال..."
+                          className="pr-9"
+                          value={searchQuery}
+                          onChange={(e) => handleSearchUsers(e.target.value)}
+                        />
+                        {isSearching && <Loader2 className="absolute left-3 top-2.5 h-4 w-4 animate-spin text-slate-400" />}
+                      </div>
+
+                      {searchResults.length > 0 && searchQuery.length >= 2 && (
+                        <div className="max-h-[150px] overflow-y-auto border rounded-md bg-white p-1">
+                          {searchResults.map(user => {
+                            const isSelected = selectedUsers.some(u => u.id === user.id)
+                            return (
+                              <div
+                                key={user.id}
+                                className={`flex items-center justify-between p-2 cursor-pointer rounded-sm hover:bg-slate-50 text-sm ${isSelected ? 'bg-blue-50' : ''}`}
+                                onClick={() => toggleUserSelection(user)}
+                              >
+                                <div className="flex flex-col">
+                                  <span className="font-medium text-slate-700">{user.name}</span>
+                                  <span className="text-xs text-slate-500">{user.email} - {user.role === 'student' ? 'طالب' : user.role === 'trainer' ? 'مدرب' : 'معهد'}</span>
+                                </div>
+                                {isSelected && <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">تم الاختيار</Badge>}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </TabsContent>
+
+                    <TabsContent value="students" className="mt-0">
+                      <div className="max-h-[200px] overflow-y-auto border rounded-md bg-white p-1">
+                        {isFetchingLists ? <div className="p-4 text-center text-sm text-gray-500"><Loader2 className="h-4 w-4 animate-spin mx-auto" /></div> :
+                        allStudents.length === 0 ? <div className="p-4 text-center text-sm text-gray-500">لا يوجد طلاب</div> :
+                        allStudents.map(user => {
+                          const isSelected = selectedUsers.some(u => u.id === user.id)
+                          return (
+                            <div key={user.id} className={`flex items-center justify-between p-2 cursor-pointer rounded-sm hover:bg-slate-50 text-sm ${isSelected ? 'bg-blue-50' : ''}`} onClick={() => toggleUserSelection(user)}>
+                              <span className="font-medium text-slate-700">{user.name}</span>
+                              {isSelected && <CheckSquare className="h-4 w-4 text-blue-600" />}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="trainers" className="mt-0">
+                      <div className="max-h-[200px] overflow-y-auto border rounded-md bg-white p-1">
+                        {isFetchingLists ? <div className="p-4 text-center text-sm text-gray-500"><Loader2 className="h-4 w-4 animate-spin mx-auto" /></div> :
+                        allTrainers.length === 0 ? <div className="p-4 text-center text-sm text-gray-500">لا يوجد مدربين</div> :
+                        allTrainers.map(user => {
+                          const isSelected = selectedUsers.some(u => u.id === user.id)
+                          return (
+                            <div key={user.id} className={`flex items-center justify-between p-2 cursor-pointer rounded-sm hover:bg-slate-50 text-sm ${isSelected ? 'bg-blue-50' : ''}`} onClick={() => toggleUserSelection(user)}>
+                              <span className="font-medium text-slate-700">{user.name}</span>
+                              {isSelected && <CheckSquare className="h-4 w-4 text-blue-600" />}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="institutes" className="mt-0">
+                      <div className="max-h-[200px] overflow-y-auto border rounded-md bg-white p-1">
+                        {isFetchingLists ? <div className="p-4 text-center text-sm text-gray-500"><Loader2 className="h-4 w-4 animate-spin mx-auto" /></div> :
+                        allInstitutes.length === 0 ? <div className="p-4 text-center text-sm text-gray-500">لا يوجد معاهد</div> :
+                        allInstitutes.map(user => {
+                          const isSelected = selectedUsers.some(u => u.id === user.id)
+                          return (
+                            <div key={user.id} className={`flex items-center justify-between p-2 cursor-pointer rounded-sm hover:bg-slate-50 text-sm ${isSelected ? 'bg-blue-50' : ''}`} onClick={() => toggleUserSelection(user)}>
+                              <span className="font-medium text-slate-700">{user.name}</span>
+                              {isSelected && <CheckSquare className="h-4 w-4 text-blue-600" />}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+
+                  {selectedUsers.length > 0 && (
+                    <div className="pt-2">
+                      <p className="text-xs font-medium text-slate-500 mb-2">المستخدمون المحدّدون ({selectedUsers.length}):</p>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedUsers.map(user => (
+                          <Badge key={user.id} variant="secondary" className="flex items-center gap-1 pl-1 bg-white border">
+                            <span className="max-w-[100px] truncate" title={user.name}>{user.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => toggleUserSelection(user)}
+                              className="rounded-full hover:bg-slate-200 p-0.5"
+                            >
+                              <X className="h-3 w-3 text-slate-500" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div>
                 <Label htmlFor="category">نوع الإعلان</Label>
@@ -465,9 +671,123 @@ export default function AdminAnnouncements() {
                   <SelectItem value="students">الطلاب</SelectItem>
                   <SelectItem value="trainers">المدربين</SelectItem>
                   <SelectItem value="institutes">المعاهد</SelectItem>
+                  <SelectItem value="specific_users">مستخدمين محددين</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+
+            {editForm.targetAudience === 'specific_users' && (
+              <div className="space-y-3 p-3 bg-slate-50 border border-slate-100 rounded-md">
+                <Label>تحديد المستخدمين المخصصين</Label>
+                
+                <Tabs defaultValue="search" className="w-full">
+                  <TabsList className="grid w-full grid-cols-4 mb-2">
+                    <TabsTrigger value="search">بحث</TabsTrigger>
+                    <TabsTrigger value="students">الطلاب</TabsTrigger>
+                    <TabsTrigger value="trainers">المدربين</TabsTrigger>
+                    <TabsTrigger value="institutes">المعاهد</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="search" className="space-y-2 mt-0">
+                    <div className="relative">
+                      <Search className="absolute right-3 top-2.5 h-4 w-4 text-slate-400" />
+                      <Input
+                        placeholder="ابحث بالاسم، الإيميل، أو الجوال..."
+                        className="pr-9"
+                        value={editSearchQuery}
+                        onChange={(e) => handleSearchUsers(e.target.value, true)}
+                      />
+                      {isSearching && <Loader2 className="absolute left-3 top-2.5 h-4 w-4 animate-spin text-slate-400" />}
+                    </div>
+
+                    {editSearchResults.length > 0 && editSearchQuery.length >= 2 && (
+                      <div className="max-h-[120px] overflow-y-auto border rounded-md bg-white p-1">
+                        {editSearchResults.map(user => {
+                          const isSelected = editSelectedUsers.some(u => u.id === user.id) || editForm.recipientIds.includes(user.id);
+                          return (
+                            <div
+                              key={user.id}
+                              className={`flex items-center justify-between p-2 cursor-pointer rounded-sm hover:bg-slate-50 text-sm ${isSelected ? 'bg-blue-50' : ''}`}
+                              onClick={() => toggleUserSelection(user, true)}
+                            >
+                              <div className="flex flex-col">
+                                <span className="font-medium text-slate-700">{user.name}</span>
+                                <span className="text-xs text-slate-500">{user.email}</span>
+                              </div>
+                              {isSelected && <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">تم الاختيار</Badge>}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="students" className="mt-0">
+                    <div className="max-h-[150px] overflow-y-auto border rounded-md bg-white p-1">
+                      {isFetchingLists ? <div className="p-4 text-center text-sm text-gray-500"><Loader2 className="h-4 w-4 animate-spin mx-auto" /></div> :
+                      allStudents.map(user => {
+                        const isSelected = editSelectedUsers.some(u => u.id === user.id) || editForm.recipientIds.includes(user.id)
+                        return (
+                          <div key={user.id} className={`flex items-center justify-between p-2 cursor-pointer rounded-sm hover:bg-slate-50 text-sm ${isSelected ? 'bg-blue-50' : ''}`} onClick={() => toggleUserSelection(user, true)}>
+                            <span className="font-medium text-slate-700">{user.name}</span>
+                            {isSelected && <CheckSquare className="h-4 w-4 text-blue-600" />}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="trainers" className="mt-0">
+                    <div className="max-h-[150px] overflow-y-auto border rounded-md bg-white p-1">
+                      {isFetchingLists ? <div className="p-4 text-center text-sm text-gray-500"><Loader2 className="h-4 w-4 animate-spin mx-auto" /></div> :
+                      allTrainers.map(user => {
+                        const isSelected = editSelectedUsers.some(u => u.id === user.id) || editForm.recipientIds.includes(user.id)
+                        return (
+                          <div key={user.id} className={`flex items-center justify-between p-2 cursor-pointer rounded-sm hover:bg-slate-50 text-sm ${isSelected ? 'bg-blue-50' : ''}`} onClick={() => toggleUserSelection(user, true)}>
+                            <span className="font-medium text-slate-700">{user.name}</span>
+                            {isSelected && <CheckSquare className="h-4 w-4 text-blue-600" />}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="institutes" className="mt-0">
+                    <div className="max-h-[150px] overflow-y-auto border rounded-md bg-white p-1">
+                      {isFetchingLists ? <div className="p-4 text-center text-sm text-gray-500"><Loader2 className="h-4 w-4 animate-spin mx-auto" /></div> :
+                      allInstitutes.map(user => {
+                        const isSelected = editSelectedUsers.some(u => u.id === user.id) || editForm.recipientIds.includes(user.id)
+                        return (
+                          <div key={user.id} className={`flex items-center justify-between p-2 cursor-pointer rounded-sm hover:bg-slate-50 text-sm ${isSelected ? 'bg-blue-50' : ''}`} onClick={() => toggleUserSelection(user, true)}>
+                            <span className="font-medium text-slate-700">{user.name}</span>
+                            {isSelected && <CheckSquare className="h-4 w-4 text-blue-600" />}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </TabsContent>
+                </Tabs>
+
+                {(editSelectedUsers.length > 0 || editForm.recipientIds.length > 0) && (
+                  <div className="pt-2">
+                    <p className="text-xs font-medium text-slate-500 mb-2">المستخدمون المحدّدون ({Math.max(editSelectedUsers.length, editForm.recipientIds.length)}):</p>
+                    <div className="flex flex-wrap gap-2">
+                      {editSelectedUsers.map(user => (
+                        <Badge key={user.id} variant="secondary" className="flex items-center gap-1 pl-1 bg-white border">
+                          <span className="max-w-[100px] truncate" title={user.name}>{user.name}</span>
+                          <button type="button" onClick={() => toggleUserSelection(user, true)} className="rounded-full hover:bg-slate-200 p-0.5">
+                            <X className="h-3 w-3 text-slate-500" />
+                          </button>
+                        </Badge>
+                      ))}
+                      {editSelectedUsers.length === 0 && editForm.recipientIds.length > 0 && (
+                        <span className="text-xs text-gray-400">لا يتم عرض أسماء المستخدمين السابقين، ابحث لإضافة المزيد أو لحذف الحاليين.</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             <div>
               <Label htmlFor="edit-category">نوع الإعلان</Label>
               <Select value={editForm.category} onValueChange={(value) => setEditForm({ ...editForm, category: value })}>

@@ -109,6 +109,10 @@ export default function StudentNotificationsPage() {
       case "session":
         return <Calendar className="h-5 w-5" />
       case "announcement":
+      case "announcement_general":
+      case "announcement_event":
+      case "announcement_maintenance":
+      case "announcement_urgent":
         return <Megaphone className="h-5 w-5" />
       default:
         return <Bell className="h-5 w-5" />
@@ -124,7 +128,14 @@ export default function StudentNotificationsPage() {
       case "session":
         return "text-orange-600 bg-orange-100"
       case "announcement":
+      case "announcement_general":
         return "text-purple-600 bg-purple-100"
+      case "announcement_urgent":
+        return "text-red-600 bg-red-100"
+      case "announcement_maintenance":
+        return "text-orange-600 bg-orange-100"
+      case "announcement_event":
+        return "text-blue-600 bg-blue-100"
       default:
         return "text-gray-600 bg-gray-100"
     }
@@ -139,14 +150,21 @@ export default function StudentNotificationsPage() {
       case "session":
         return "درس"
       case "announcement":
+      case "announcement_general":
         return "إعلان"
+      case "announcement_urgent":
+        return "عاجل"
+      case "announcement_maintenance":
+        return "صيانة"
+      case "announcement_event":
+        return "فعالية"
       default:
         return type
     }
   }
 
   const filteredNotifications = notifications.filter((n) => {
-    const matchesType = typeFilter === "all" ? true : n.type === typeFilter
+    const matchesType = typeFilter === "all" ? true : (typeFilter === "announcement" ? n.type?.startsWith("announcement") : n.type === typeFilter)
     const matchesStatus = statusFilter === "all" ? true : statusFilter === "unread" ? !n.isRead : n.isRead
     return matchesType && matchesStatus
   })

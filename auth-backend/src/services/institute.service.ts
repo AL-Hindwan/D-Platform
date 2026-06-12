@@ -2064,6 +2064,12 @@ class InstituteService {
                 courseId,
             }));
 
+            // Snapshot old sessions before deletion (for change detection)
+            const oldSessions = await prisma.session.findMany({
+                where: { courseId },
+                select: { startTime: true, endTime: true }
+            });
+
             // Delete old sessions first
             await prisma.session.deleteMany({ where: { courseId } });
 
@@ -2109,6 +2115,52 @@ class InstituteService {
                 });
             } else {
                 await prisma.session.createMany({ data: mappedSessions });
+            }
+
+            // ── Notify enrolled students if schedule actually changed ──
+            const hasChanged = oldSessions.length !== mappedSessions.length ||
+                oldSessions.some((old: any, i: number) => {
+                    const nw = mappedSessions[i];
+                    return !nw ||
+                        old.startTime.getTime() !== nw.startTime.getTime() ||
+                        old.endTime.getTime() !== nw.endTime.getTime();
+                });
+
+            if (hasChanged && oldSessions.length > 0) {
+                setImmediate(async () => {
+                    try {
+                        const enrollments = await prisma.enrollment.findMany({
+                            where: {
+                                courseId,
+                                status: { in: ['ACTIVE', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT'] },
+                                deletedAt: null
+                            },
+                            select: { student: { select: { id: true, name: true, email: true, phone: true } } }
+                        });
+
+                        const reason: string | undefined = (data as any).sessionChangeReason || undefined;
+                        const count = mappedSessions.length;
+
+                        for (const { student } of enrollments) {
+                            await notificationService.createNotification({
+                                userId: student.id,
+                                type: 'SESSION_REMINDER' as any,
+                                title: `🗓️ تحديث الجدول الدراسي لدورة "${updatedCourse.title}"`,
+                                message: `تم تحديث جدول دورة "${updatedCourse.title}" بالكامل (${count} جلسة).${reason ? ` السبب: ${reason}` : ''}`,
+                                relatedEntityId: courseId,
+                                actionUrl: '/student/courses',
+                                emailFn: student.email
+                                    ? () => mailerService.sendSessionsRescheduled(student.email!, student.name, updatedCourse.title, count, reason)
+                                    : undefined,
+                                whaFn: student.phone
+                                    ? () => whatsAppService.notifySessionsRescheduled(student.phone!, student.name, updatedCourse.title, count, reason)
+                                    : undefined,
+                            });
+                        }
+                    } catch (err) {
+                        console.error('[institute.updateCourse] Failed to notify students of schedule change:', err);
+                    }
+                });
             }
         }
 
@@ -2575,7 +2627,7 @@ class InstituteService {
     /**
      * Reschedule or cancel a session in one of this institute's halls
      */
-    async updateSession(userId: string, sessionId: string, data: { startTime?: Date; endTime?: Date; status?: string; meetingLink?: string; updateAll?: boolean }) {
+    async updateSession(userId: string, sessionId: string, data: { startTime?: Date; endTime?: Date; status?: string; meetingLink?: string; updateAll?: boolean; reason?: string }) {
         const institute = await prisma.institute.findUnique({ where: { userId } });
         if (!institute) throw new Error('لم يتم العثور على المعهد');
 
@@ -2659,24 +2711,74 @@ class InstituteService {
             }
         }
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'Session',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تعديل جلسة تدريبية',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'Session',
+            entityId: 'system_log',
+            description: 'تعديل جلسة تدريبية',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
-        return prisma.session.update({
-                    where: { id: sessionId },
-                    data: {
-                        ...(data.startTime && { startTime: data.startTime }),
-                        ...(data.endTime && { endTime: data.endTime }),
-                        ...(data.status && { status: data.status as any }),
-                        ...(data.meetingLink !== undefined && { meetingLink: data.meetingLink })
+        const updated = await prisma.session.update({
+            where: { id: sessionId },
+            data: {
+                ...(data.startTime && { startTime: data.startTime }),
+                ...(data.endTime && { endTime: data.endTime }),
+                ...(data.status && { status: data.status as any }),
+                ...(data.meetingLink !== undefined && { meetingLink: data.meetingLink })
+            }
+        });
+
+        // ── Notify enrolled students about the session change ──
+        if ((data.startTime || data.endTime) && session.courseId) {
+            setImmediate(async () => {
+                try {
+                    const course = await prisma.course.findUnique({
+                        where: { id: session.courseId! },
+                        select: { title: true }
+                    });
+                    const courseTitle = course?.title ?? 'الدورة';
+
+                    const enrollments = await prisma.enrollment.findMany({
+                        where: {
+                            courseId: session.courseId!,
+                            status: { in: ['ACTIVE', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT'] },
+                            deletedAt: null
+                        },
+                        select: { student: { select: { id: true, name: true, email: true, phone: true } } }
+                    });
+
+                    const changes = {
+                        oldStart: session.startTime,
+                        oldEnd: session.endTime,
+                        newStart: data.startTime ?? session.startTime,
+                        newEnd: data.endTime ?? session.endTime,
+                        topic: session.topic ?? undefined,
+                    };
+
+                    for (const { student } of enrollments) {
+                        await notificationService.createNotification({
+                            userId: student.id,
+                            type: 'SESSION_REMINDER' as any,
+                            title: `📅 تعديل موعد جلسة في دورة "${courseTitle}"`,
+                            message: `تم تعديل موعد جلسة${session.topic ? ` "${session.topic}"` : ''} في دورة "${courseTitle}".${data.reason ? ` السبب: ${data.reason}` : ''}`,
+                            relatedEntityId: session.courseId ?? undefined,
+                            actionUrl: '/student/courses',
+                            emailFn: student.email
+                                ? () => mailerService.sendSessionUpdated(student.email!, student.name, courseTitle, changes, data.reason)
+                                : undefined,
+                            whaFn: student.phone
+                                ? () => whatsAppService.notifySessionUpdated(student.phone!, student.name, courseTitle, { oldStart: changes.oldStart, newStart: changes.newStart, topic: changes.topic }, data.reason)
+                                : undefined,
+                        });
                     }
-                });
+                } catch (err) {
+                    console.error('[institute.updateSession] Failed to notify students:', err);
+                }
+            });
+        }
+
+        return updated;
     }
 
     /**

@@ -411,12 +411,12 @@ export class AdminController {
             if (req.user?.role !== 'PLATFORM_ADMIN') {
                 return sendError(res, 'غير مصرح لك بالوصول', 403);
             }
-            const { title, content, targetAudience, category, scheduledDate, scheduledTime } = req.body;
+            const { title, content, targetAudience, category, scheduledDate, scheduledTime, recipientIds } = req.body;
             if (!title || !content) {
                 return sendError(res, 'العنوان والمحتوى مطلوبان', 400);
             }
             const result = await adminService.createAnnouncement(
-                { title, content, targetAudience, category, scheduledDate, scheduledTime },
+                { title, content, targetAudience, category, scheduledDate, scheduledTime, recipientIds },
                 req.user!.userId
             );
             return sendSuccess(res, result.message, { id: result.id });
@@ -459,6 +459,19 @@ export class AdminController {
             const { id } = req.params;
             const result = await adminService.sendAnnouncement(id);
             return sendSuccess(res, result.message, { recipientCount: result.recipientCount });
+        } catch (error: any) {
+            return sendError(res, error.message, 400);
+        }
+    }
+
+    async searchUsers(req: AuthRequest, res: Response, _next: NextFunction) {
+        try {
+            if (req.user?.role !== 'PLATFORM_ADMIN') {
+                return sendError(res, 'غير مصرح لك بالوصول', 403);
+            }
+            const { q } = req.query;
+            const result = await adminService.searchUsers(q as string);
+            return sendSuccess(res, 'تم البحث بنجاح', result);
         } catch (error: any) {
             return sendError(res, error.message, 400);
         }

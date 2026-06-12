@@ -275,7 +275,7 @@ class InstituteService {
         return response.data.data;
     }
 
-    async updateSession(sessionId: string, data: { startTime?: string; endTime?: string; status?: string; meetingLink?: string; updateAll?: boolean }): Promise<any> {
+    async updateSession(sessionId: string, data: { startTime?: string; endTime?: string; status?: string; meetingLink?: string; updateAll?: boolean; reason?: string }): Promise<any> {
         const response = await apiClient.patch<{ success: boolean; message: string; data: any }>(
             `/api/institute/sessions/${sessionId}`, data
         );

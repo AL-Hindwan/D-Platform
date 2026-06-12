@@ -98,6 +98,39 @@ class WhatsAppService {
             : `❌ مرحباً ${recipientName}،\n\nتم رفض حجزك لقاعة "${roomName}".\n\n— منصة الدورات`;
         await this.send(phone, msg);
     }
+
+    // ── Session Change Notifications ───────────────────────────────
+
+    async notifySessionUpdated(
+        phone: string,
+        studentName: string,
+        courseTitle: string,
+        changes: { oldStart?: Date; newStart?: Date; topic?: string },
+        reason?: string,
+    ) {
+        const fmt = (d?: Date) =>
+            d ? d.toLocaleString('ar-SA-u-nu-latn', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+
+        const topicPart = changes.topic ? `\nالجلسة: "${changes.topic}"` : '';
+        const reasonPart = reason ? `\n📝 السبب: ${reason}` : '';
+
+        await this.send(phone,
+            `📅 تعديل موعد جلسة — ${studentName}\n\nدورة: "${courseTitle}"${topicPart}\n\n⏱️ القديم: ${fmt(changes.oldStart)}\n🆕 الجديد: ${fmt(changes.newStart)}${reasonPart}\n\n— منصة الدورات`
+        );
+    }
+
+    async notifySessionsRescheduled(
+        phone: string,
+        studentName: string,
+        courseTitle: string,
+        sessionsCount: number,
+        reason?: string,
+    ) {
+        const reasonPart = reason ? `\n📝 السبب: ${reason}` : '';
+        await this.send(phone,
+            `🗓️ تحديث الجدول الدراسي — ${studentName}\n\nتم تحديث جدول دورة "${courseTitle}" بالكامل.\nعدد الجلسات الجديدة: ${sessionsCount} جلسة${reasonPart}\n\nيرجى مراجعة الجدول الجديد في المنصة.\n\n— منصة الدورات`
+        );
+    }
 }
 
 export const whatsAppService = new WhatsAppService();

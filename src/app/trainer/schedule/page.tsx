@@ -292,13 +292,14 @@ export default function TrainerSchedulePage() {
     setIsSaving(true)
     try {
       if (actionType === "cancel") {
-        await trainerService.updateSession(selectedSession.id, { status: "CANCELLED" })
+        await trainerService.updateSession(selectedSession.id, { status: "CANCELLED", reason })
         setSessions((prev) => prev.map((s) => (s.id === selectedSession.id ? { ...s, status: "cancelled" } : s)))
         toast.error("تم إلغاء الجلسة")
       } else if (actionType === "update_link") {
         await trainerService.updateSession(selectedSession.id, {
           meetingLink: selectedSession.meetingLink ?? undefined,
           updateAll,
+          reason,
         })
         if (updateAll) {
           setSessions((prev) =>
@@ -325,6 +326,7 @@ export default function TrainerSchedulePage() {
           endTime,
           meetingLink: selectedSession.meetingLink ?? undefined,
           updateAll,
+          reason,
         })
         setSessions((prev) => prev.map((s) => (s.id === selectedSession.id ? { ...s, startTime, endTime, meetingLink: selectedSession.meetingLink } : s)))
         toast.success("تم تغيير موعد الجلسة بنجاح")

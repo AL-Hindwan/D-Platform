@@ -1088,9 +1088,10 @@ export class AdminService {
         category?: string;
         scheduledDate?: string;
         scheduledTime?: string;
+        recipientIds?: string[];
     }, senderId: string) {
         const audienceMap: Record<string, any> = {
-            all: 'ALL', students: 'STUDENTS', trainers: 'TRAINERS', institutes: 'INSTITUTES',
+            all: 'ALL', students: 'STUDENTS', trainers: 'TRAINERS', institutes: 'INSTITUTES', specific_users: 'SPECIFIC_USERS',
         };
         const categoryMap: Record<string, any> = {
             general: 'GENERAL', event: 'EVENT', maintenance: 'MAINTENANCE', urgent: 'URGENT',
@@ -1114,6 +1115,7 @@ export class AdminService {
                 status: scheduledAt ? 'SCHEDULED' : 'DRAFT',
                 scheduledAt,
                 senderId,
+                recipientIds: data.recipientIds ?? [],
             },
         });
 
@@ -1131,9 +1133,10 @@ export class AdminService {
         status?: string;
         scheduledDate?: string;
         scheduledTime?: string;
+        recipientIds?: string[];
     }) {
         const audienceMap: Record<string, any> = {
-            all: 'ALL', students: 'STUDENTS', trainers: 'TRAINERS', institutes: 'INSTITUTES',
+            all: 'ALL', students: 'STUDENTS', trainers: 'TRAINERS', institutes: 'INSTITUTES', specific_users: 'SPECIFIC_USERS',
         };
         const categoryMap: Record<string, any> = {
             general: 'GENERAL', event: 'EVENT', maintenance: 'MAINTENANCE', urgent: 'URGENT',
@@ -1159,6 +1162,7 @@ export class AdminService {
         if (data.targetAudience !== undefined) updateData.targetAudience = audienceMap[data.targetAudience] ?? 'ALL';
         if (data.category !== undefined) updateData.category = categoryMap[data.category] ?? 'GENERAL';
         if (data.status !== undefined) updateData.status = statusMap[data.status] ?? 'DRAFT';
+        if (data.recipientIds !== undefined) updateData.recipientIds = data.recipientIds;
         if (scheduledAt !== undefined) updateData.scheduledAt = scheduledAt;
 
         await (prisma.announcement.update as any)({ where: { id }, data: updateData });
@@ -1182,19 +1186,38 @@ export class AdminService {
         if ((announcement as any).status === 'SENT') throw new Error('تم إرسال هذا الإعلان مسبقاً');
 
         // Resolve target users
-        const roleMap: Record<string, string[]> = {
-            ALL: ['STUDENT', 'TRAINER', 'INSTITUTE_ADMIN'],
-            STUDENTS: ['STUDENT'],
-            TRAINERS: ['TRAINER'],
-            INSTITUTES: ['INSTITUTE_ADMIN'],
-        };
-        const roles = roleMap[(announcement as any).targetAudience] ?? ['STUDENT', 'TRAINER', 'INSTITUTE_ADMIN'];
+        let users: any[] = [];
+        const audience = (announcement as any).targetAudience;
 
-        // Fetch users with email and name for email sending
-        const users = await prisma.user.findMany({
-            where: { role: { in: roles as any }, status: 'ACTIVE' },
-            select: { id: true, name: true, email: true },
-        });
+        if (audience === 'SPECIFIC_USERS') {
+            const recipientIds = (announcement as any).recipientIds || [];
+            if (recipientIds.length > 0) {
+                users = await prisma.user.findMany({
+                    where: { id: { in: recipientIds }, status: 'ACTIVE' },
+                    select: { id: true, name: true, email: true },
+                });
+            }
+        } else {
+            const roleMap: Record<string, string[]> = {
+                ALL: ['STUDENT', 'TRAINER', 'INSTITUTE_ADMIN'],
+                STUDENTS: ['STUDENT'],
+                TRAINERS: ['TRAINER'],
+                INSTITUTES: ['INSTITUTE_ADMIN'],
+            };
+            const roles = roleMap[audience] ?? ['STUDENT', 'TRAINER', 'INSTITUTE_ADMIN'];
+
+            users = await prisma.user.findMany({
+                where: { role: { in: roles as any }, status: 'ACTIVE' },
+                select: { id: true, name: true, email: true },
+            });
+        }
+
+        // Determine NotificationType based on Category
+        const cat = (announcement as any).category;
+        let notificationType = 'ANNOUNCEMENT_GENERAL';
+        if (cat === 'URGENT') notificationType = 'ANNOUNCEMENT_URGENT';
+        else if (cat === 'EVENT') notificationType = 'ANNOUNCEMENT_EVENT';
+        else if (cat === 'MAINTENANCE') notificationType = 'ANNOUNCEMENT_MAINTENANCE';
 
         // Mark announcement as SENT
         await (prisma.announcement.update as any)({
@@ -1207,7 +1230,7 @@ export class AdminService {
             await prisma.notification.createMany({
                 data: users.map(u => ({
                     userId: u.id,
-                    type: 'NEW_ANNOUNCEMENT' as any,
+                    type: notificationType as any,
                     title: announcement.title,
                     message: announcement.message,
                     relatedEntityId: announcement.id,
@@ -1216,12 +1239,13 @@ export class AdminService {
             });
 
             // Send email to every user (fire-and-forget)
+            const emailTitle = cat === 'URGENT' ? `[عاجل] ${announcement.title}` : (cat === 'MAINTENANCE' ? `[صيانة] ${announcement.title}` : announcement.title);
             for (const user of users) {
                 if (user.email) {
                     mailerService.sendAnnouncementEmail(
                         user.email,
                         user.name,
-                        announcement.title,
+                        emailTitle,
                         announcement.message
                     ).catch((err: any) => console.error('[Mailer] Admin announcement email failed:', err));
                 }
@@ -1249,6 +1273,43 @@ export class AdminService {
                 performedAt: 'desc',
             },
         });
+    }
+
+    /**
+     * Search users (students, trainers, institutes) by name, email, or phone
+     */
+    async searchUsers(query: string) {
+        if (!query || query.trim().length < 2) return [];
+        const term = query.trim();
+        
+        const users = await prisma.user.findMany({
+            where: {
+                OR: [
+                    { name: { contains: term, mode: 'insensitive' } },
+                    { email: { contains: term, mode: 'insensitive' } },
+                    { phone: { contains: term, mode: 'insensitive' } }
+                ],
+                role: { in: ['STUDENT', 'TRAINER', 'INSTITUTE_ADMIN'] }
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                phone: true,
+                role: true,
+                avatar: true
+            },
+            take: 20
+        });
+
+        return users.map(u => ({
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            phone: u.phone,
+            role: u.role.toLowerCase(),
+            avatar: u.avatar
+        }));
     }
 }
 

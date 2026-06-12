@@ -397,6 +397,69 @@ class MailerService {
             `),
         });
     }
+
+    // ── Session Change Notifications ───────────────────────────────
+
+    /**
+     * Notify a student that a single session has been rescheduled/updated
+     */
+    async sendSessionUpdated(
+        to: string,
+        studentName: string,
+        courseTitle: string,
+        changes: { oldStart?: Date; oldEnd?: Date; newStart?: Date; newEnd?: Date; topic?: string },
+        reason?: string,
+    ) {
+        const fmt = (d?: Date) =>
+            d ? d.toLocaleString('ar-SA-u-nu-latn', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+
+        const oldTime = `${fmt(changes.oldStart)} — ${fmt(changes.oldEnd)}`;
+        const newTime = `${fmt(changes.newStart)} — ${fmt(changes.newEnd)}`;
+        const topicLine = changes.topic ? `<p><strong>موضوع الجلسة:</strong> ${changes.topic}</p>` : '';
+
+        await this.send({
+            to,
+            subject: `📅 تعديل موعد جلسة في دورة "${courseTitle}"`,
+            html: this.wrapHtml('تعديل موعد جلسة', `
+                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>نودّ إعلامك بأنه تم تعديل موعد إحدى جلسات دورة <strong>${courseTitle}</strong>.</p>
+                ${topicLine}
+                <div class="card">
+                    <p>⏱️ <strong>الموعد القديم:</strong><br/>${oldTime}</p>
+                    <p>🆕 <strong>الموعد الجديد:</strong><br/>${newTime}</p>
+                    ${reason ? `<p>📝 <strong>سبب التعديل:</strong> ${reason}</p>` : ''}
+                </div>
+                <p>يرجى تحديث جدولك الشخصي وفقاً للموعد الجديد.</p>
+                <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/student/courses">عرض جدول الدورة</a>
+            `),
+        });
+    }
+
+    /**
+     * Notify a student that the entire course schedule has been replaced
+     */
+    async sendSessionsRescheduled(
+        to: string,
+        studentName: string,
+        courseTitle: string,
+        sessionsCount: number,
+        reason?: string,
+    ) {
+        await this.send({
+            to,
+            subject: `🗓️ تحديث جدول دورة "${courseTitle}"`,
+            html: this.wrapHtml('تحديث الجدول الدراسي', `
+                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>نودّ إعلامك بأنه تم تحديث الجدول الدراسي الكامل لدورة <strong>${courseTitle}</strong>.</p>
+                <div class="card">
+                    <p>📚 <strong>عدد الجلسات الجديدة:</strong> ${sessionsCount} جلسة</p>
+                    ${reason ? `<p>📝 <strong>سبب التعديل:</strong> ${reason}</p>` : ''}
+                </div>
+                <p>يرجى الدخول إلى منصتك لمراجعة الجدول الجديد بالتفصيل.</p>
+                <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/student/courses">مراجعة الجدول الجديد</a>
+            `),
+        });
+    }
 }
 
 export const mailerService = new MailerService();

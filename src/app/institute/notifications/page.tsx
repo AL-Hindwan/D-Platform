@@ -52,7 +52,11 @@ export default function InstituteNotificationsPage() {
         switch (type) {
             case 'booking': return <Calendar className="h-5 w-5" />
             case 'enrollment': return <UserPlus className="h-5 w-5" />
-            case 'announcement': return <Megaphone className="h-5 w-5" />
+            case 'announcement': 
+            case 'announcement_general':
+            case 'announcement_event':
+            case 'announcement_maintenance':
+            case 'announcement_urgent': return <Megaphone className="h-5 w-5" />
             case 'session': return <Clock className="h-5 w-5" />
             default: return <Info className="h-5 w-5" />
         }
@@ -62,7 +66,11 @@ export default function InstituteNotificationsPage() {
         switch (type) {
             case 'booking': return 'text-blue-600 bg-blue-100'
             case 'enrollment': return 'text-green-600 bg-green-100'
-            case 'announcement': return 'text-purple-600 bg-purple-100'
+            case 'announcement': 
+            case 'announcement_general': return 'text-purple-600 bg-purple-100'
+            case 'announcement_urgent': return 'text-red-600 bg-red-100'
+            case 'announcement_maintenance': return 'text-orange-600 bg-orange-100'
+            case 'announcement_event': return 'text-blue-600 bg-blue-100'
             case 'session': return 'text-orange-600 bg-orange-100'
             default: return 'text-gray-600 bg-gray-100'
         }
@@ -72,14 +80,18 @@ export default function InstituteNotificationsPage() {
         switch (type) {
             case 'booking': return 'حجز'
             case 'enrollment': return 'تسجيل'
-            case 'announcement': return 'إعلان'
+            case 'announcement': 
+            case 'announcement_general': return 'إعلان'
+            case 'announcement_urgent': return 'عاجل'
+            case 'announcement_maintenance': return 'صيانة'
+            case 'announcement_event': return 'فعالية'
             case 'session': return 'درس'
             default: return type
         }
     }
 
     const filteredNotifications = notifications.filter(n =>
-        filter === "all" ? true : filter === "unread" ? !n.isRead : n.type === filter
+        filter === "all" ? true : filter === "unread" ? !n.isRead : (filter === "announcement" ? n.type?.startsWith("announcement") : n.type === filter)
     )
 
     const markAllAsRead = async () => {

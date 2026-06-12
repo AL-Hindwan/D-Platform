@@ -680,12 +680,13 @@ class TrainerController {
         try {
             if (req.user?.role !== 'TRAINER') return sendError(res, 'غير مصرح لك بالوصول', 403);
             const { sessionId } = req.params;
-            const { startTime, endTime, status, meetingLink } = req.body;
+            const { startTime, endTime, status, meetingLink, reason } = req.body;
             const data = {
                 ...(startTime && { startTime: new Date(startTime) }),
                 ...(endTime && { endTime: new Date(endTime) }),
                 ...(status && { status }),
-                ...(meetingLink !== undefined && { meetingLink })
+                ...(meetingLink !== undefined && { meetingLink }),
+                ...(reason !== undefined && { reason }),
             };
             const updated = await trainerService.updateSession(req.user.userId, sessionId, data);
             return sendSuccess(res, 'تم تحديث الجلسة بنجاح', updated);

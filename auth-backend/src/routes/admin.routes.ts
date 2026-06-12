@@ -8,6 +8,9 @@ const router = Router();
 // All admin routes require authentication
 router.use(authenticate);
 
+// Search users
+router.get('/users/search', adminController.searchUsers.bind(adminController));
+
 // Get pending verifications
 router.get('/verifications/pending', adminController.getPendingVerifications);
 
