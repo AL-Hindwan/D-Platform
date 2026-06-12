@@ -3,6 +3,7 @@ import prisma from "../config/database";
 import notificationService from "../services/notification.service";
 import { mailerService } from "../services/mailer.service";
 import { whatsAppService } from "../services/whatsapp.service";
+import { auditService } from "./audit.service";
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
@@ -280,26 +281,35 @@ class InstituteService {
             },
         });
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Institute',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تعديل ملف المعهد',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return {
-            id: updatedInstitute.id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-            phone: updatedUser.phone,
-            avatar: updatedUser.avatar,
-            role: "institute_admin",
-            instituteName: updatedInstitute.name,
-            publicEmail: updatedInstitute.email,
-            publicPhone: updatedInstitute.phone,
-            instituteLogo: updatedInstitute.logo,
-            instituteAddress: updatedInstitute.address,
-            instituteWebsite: updatedInstitute.website,
-            instituteLocationUrl: updatedInstitute.locationUrl,
-            instituteDescription: updatedInstitute.description,
-            licenseNumber: updatedInstitute.licenseNumber,
-            licenseDocument: updatedInstitute.licenseDocumentUrl,
-            licenseDocumentUrl: updatedInstitute.licenseDocumentUrl,
-            verificationStatus: updatedInstitute.verificationStatus,
-        };
+                    id: updatedInstitute.id,
+                    name: updatedUser.name,
+                    email: updatedUser.email,
+                    phone: updatedUser.phone,
+                    avatar: updatedUser.avatar,
+                    role: "institute_admin",
+                    instituteName: updatedInstitute.name,
+                    publicEmail: updatedInstitute.email,
+                    publicPhone: updatedInstitute.phone,
+                    instituteLogo: updatedInstitute.logo,
+                    instituteAddress: updatedInstitute.address,
+                    instituteWebsite: updatedInstitute.website,
+                    instituteLocationUrl: updatedInstitute.locationUrl,
+                    instituteDescription: updatedInstitute.description,
+                    licenseNumber: updatedInstitute.licenseNumber,
+                    licenseDocument: updatedInstitute.licenseDocumentUrl,
+                    licenseDocumentUrl: updatedInstitute.licenseDocumentUrl,
+                    verificationStatus: updatedInstitute.verificationStatus,
+                };
     }
 
     // =====================================================
@@ -333,16 +343,25 @@ class InstituteService {
             });
         }
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'BankAccount',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'إضافة حساب بنكي جديد',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.bankAccount.create({
-            data: {
-                instituteId: institute.id,
-                bankName: data.bankName,
-                accountName: data.accountName,
-                accountNumber: data.accountNumber,
-                iban: data.iban,
-                isActive: shouldBeActive,
-            }
-        });
+                    data: {
+                        instituteId: institute.id,
+                        bankName: data.bankName,
+                        accountName: data.accountName,
+                        accountNumber: data.accountNumber,
+                        iban: data.iban,
+                        isActive: shouldBeActive,
+                    }
+                });
     }
 
     async updateBankAccount(userId: string, accountId: string, data: { bankName?: string; accountName?: string; accountNumber?: string; iban?: string; isActive?: boolean }) {
@@ -362,10 +381,19 @@ class InstituteService {
             });
         }
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'BankAccount',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تعديل حساب بنكي',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.bankAccount.update({
-            where: { id: accountId },
-            data
-        });
+                    where: { id: accountId },
+                    data
+                });
     }
 
     async deleteBankAccount(userId: string, accountId: string) {
@@ -394,6 +422,15 @@ class InstituteService {
                 });
             }
         }
+
+        
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'BankAccount',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'حذف حساب بنكي',
+                    performedBy: userId
+                }).catch(e => console.error(e));
 
         return { success: true };
     }
@@ -690,6 +727,15 @@ class InstituteService {
                 }
             }
         }
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'Announcement',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'إرسال إعلان جديد',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return announcement;
     }
 
@@ -732,13 +778,22 @@ class InstituteService {
         });
         if (!existing) throw new Error('الإعلان غير موجود أو لا تملك صلاحية تعديله');
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Announcement',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تعديل إعلان',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return (prisma.announcement as any).update({
-            where: { id: announcementId },
-            data: {
-                ...(data.title && { title: data.title }),
-                ...(data.message && { message: data.message }),
-            }
-        });
+                    where: { id: announcementId },
+                    data: {
+                        ...(data.title && { title: data.title }),
+                        ...(data.message && { message: data.message }),
+                    }
+                });
     }
 
     /**
@@ -751,6 +806,15 @@ class InstituteService {
         if (!existing) throw new Error('الإعلان غير موجود أو لا تملك صلاحية حذفه');
 
         await (prisma.announcement as any).delete({ where: { id: announcementId } });
+        
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'Announcement',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'حذف إعلان',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return { success: true };
     }
 
@@ -871,6 +935,15 @@ class InstituteService {
             data: { deletedAt: new Date() },
         });
 
+        
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'Course',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'حذف دورة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return { message: "تم حذف الدورة بنجاح" };
     }
 
@@ -907,6 +980,15 @@ class InstituteService {
             where: { id: courseId },
             data: { staffTrainerIds: [newTrainerId], trainerId: null },
         });
+
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Course',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تغيير مدرب الدورة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
 
         return { message: "تم تغيير المدرب بنجاح" };
     }
@@ -1006,18 +1088,27 @@ class InstituteService {
         if (!institute) throw new Error("لم يتم العثور على المعهد");
         if (!data.name) throw new Error("اسم المدرب مطلوب");
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'InstituteStaff',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'إضافة عضو فريق عمل جديد',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.instituteStaff.create({
-            data: {
-                instituteId: institute.id,
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
-                bio: data.bio,
-                avatar: data.avatar,
-                specialties: data.specialties ?? [],
-                notes: data.notes,
-            },
-        });
+                    data: {
+                        instituteId: institute.id,
+                        name: data.name,
+                        email: data.email,
+                        phone: data.phone,
+                        bio: data.bio,
+                        avatar: data.avatar,
+                        specialties: data.specialties ?? [],
+                        notes: data.notes,
+                    },
+                });
     }
 
     /**
@@ -1033,6 +1124,14 @@ class InstituteService {
         if (!staff) throw new Error("لم يتم العثور على عضو الطاقم");
 
         await prisma.instituteStaff.delete({ where: { id: staffId } });
+
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'InstituteStaff',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'حذف عضو من فريق العمل',
+                    performedBy: userId
+                }).catch(e => console.error(e));
     }
 
     /**
@@ -1051,10 +1150,19 @@ class InstituteService {
         });
         if (!staff) throw new Error("لم يتم العثور على عضو الطاقم");
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'InstituteStaff',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تحديث حالة عضو فريق العمل',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.instituteStaff.update({
-            where: { id: staffId },
-            data: { status },
-        });
+                    where: { id: staffId },
+                    data: { status },
+                });
     }
 
     /**
@@ -1080,17 +1188,26 @@ class InstituteService {
         });
         if (!staff) throw new Error("لم يتم العثور على المدرب");
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'InstituteStaff',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تعديل بيانات عضو فريق العمل',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.instituteStaff.update({
-            where: { id: staffId },
-            data: {
-                ...(data.name !== undefined && { name: data.name }),
-                email: data.email !== undefined ? data.email : undefined,
-                phone: data.phone !== undefined ? data.phone : undefined,
-                bio: data.bio !== undefined ? data.bio : undefined,
-                ...(data.avatar !== undefined && { avatar: data.avatar }),
-                notes: data.notes !== undefined ? data.notes : undefined,
-            },
-        });
+                    where: { id: staffId },
+                    data: {
+                        ...(data.name !== undefined && { name: data.name }),
+                        email: data.email !== undefined ? data.email : undefined,
+                        phone: data.phone !== undefined ? data.phone : undefined,
+                        bio: data.bio !== undefined ? data.bio : undefined,
+                        ...(data.avatar !== undefined && { avatar: data.avatar }),
+                        notes: data.notes !== undefined ? data.notes : undefined,
+                    },
+                });
     }
 
     // =====================================================
@@ -1279,12 +1396,21 @@ class InstituteService {
         const institute = await prisma.institute.findUnique({ where: { userId } });
         if (!institute) throw new Error("لم يتم العثور على المعهد");
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'Room',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'إضافة قاعة جديدة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.room.create({
-            data: {
-                ...data,
-                instituteId: institute.id,
-            },
-        });
+                    data: {
+                        ...data,
+                        instituteId: institute.id,
+                    },
+                });
     }
 
     /**
@@ -1315,10 +1441,19 @@ class InstituteService {
         });
         if (!hall) throw new Error("لم يتم العثور على القاعة");
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Room',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تعديل قاعة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.room.update({
-            where: { id: hallId },
-            data,
-        });
+                    where: { id: hallId },
+                    data,
+                });
     }
 
     /**
@@ -1346,9 +1481,18 @@ class InstituteService {
             });
         }
 
+        
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'Room',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'حذف قاعة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.room.delete({
-            where: { id: hallId },
-        });
+                    where: { id: hallId },
+                });
     }
 
     /**
@@ -1591,6 +1735,15 @@ class InstituteService {
             }
         }
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'RoomBooking',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تحديث حالة حجز قاعة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return updatedBooking;
 
     }
@@ -1704,6 +1857,15 @@ class InstituteService {
                     cancellationReason: reason,
                 },
             });
+
+            
+                    auditService.logAction({
+                        action: 'UPDATE',
+                        entityName: 'Enrollment',
+                        entityId: 'system_log', // Default if ID is complex to resolve
+                        description: 'إلغاء تسجيل طالب',
+                        performedBy: userId
+                    }).catch(e => console.error(e));
 
             return { message: "تم إلغاء تسجيل الطالب بنجاح" };
         });
@@ -1950,6 +2112,15 @@ class InstituteService {
             }
         }
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Course',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تعديل بيانات دورة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return updatedCourse;
     }
 
@@ -2187,6 +2358,15 @@ class InstituteService {
             });
         }
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'Course',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'إنشاء دورة جديدة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return course;
     }
 
@@ -2281,6 +2461,15 @@ class InstituteService {
         }
 
         await this.activateCourseAndNotifyStudents(courseId);
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Course',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تفعيل دورة كانت معلقة بانتظار الحد الأدنى',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return { courseId };
     }
 
@@ -2470,15 +2659,24 @@ class InstituteService {
             }
         }
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Session',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تعديل جلسة تدريبية',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.session.update({
-            where: { id: sessionId },
-            data: {
-                ...(data.startTime && { startTime: data.startTime }),
-                ...(data.endTime && { endTime: data.endTime }),
-                ...(data.status && { status: data.status as any }),
-                ...(data.meetingLink !== undefined && { meetingLink: data.meetingLink })
-            }
-        });
+                    where: { id: sessionId },
+                    data: {
+                        ...(data.startTime && { startTime: data.startTime }),
+                        ...(data.endTime && { endTime: data.endTime }),
+                        ...(data.status && { status: data.status as any }),
+                        ...(data.meetingLink !== undefined && { meetingLink: data.meetingLink })
+                    }
+                });
     }
 
     /**
@@ -2748,6 +2946,15 @@ class InstituteService {
                     console.error('[InstituteService] updateEnrollmentStatus notification error:', notifErr);
                 }
             });
+
+            
+                    auditService.logAction({
+                        action: 'UPDATE',
+                        entityName: 'Enrollment',
+                        entityId: 'system_log', // Default if ID is complex to resolve
+                        description: 'تحديث حالة تسجيل طالب',
+                        performedBy: userId
+                    }).catch(e => console.error(e));
 
             return updatedEnrollment;
         });

@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import React, { useCallback, useMemo, useRef, useState, ReactNode } from "react"
 import Image from "next/image"
@@ -650,25 +650,24 @@ export default function HallDetailsPage() {
                       </div>
                     </div>
 
-                    <div className="mt-3 flex justify-center">
+                    <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
                       {(isBookingPending || isBookingApproved) && (
                         <Button
                           type="button"
-                          variant="ghost"
+                          variant="outline"
                           onClick={() => window.location.href = "/trainer/room-bookings"}
-                          className="h-auto w-fit rounded-[6.5px] bg-white/90 px-4 py-1.5 text-sm font-medium text-slate-900 hover:bg-white"
+                          className="h-9 w-fit rounded-[6.5px] border-white/30 bg-transparent px-4 text-sm font-medium text-white hover:bg-white/10 hover:text-white"
                         >
                           {isBookingPending ? "عرض تفاصيل الطلب" : "عرض الحجز"}
                         </Button>
                       )}
-                      {isBookingRejected && (
-                        <Button
-                          onClick={() => setIsBookingOpen(true)}
-                          className="h-9 w-fit rounded-[6.5px] bg-white/90 px-5 text-sm text-slate-900 hover:bg-white"
-                        >
-                          طلب حجز جديد
-                        </Button>
-                      )}
+                      
+                      <Button
+                        onClick={() => setIsBookingOpen(true)}
+                        className="h-9 w-fit rounded-[6.5px] bg-white px-5 text-sm font-semibold text-slate-900 hover:bg-slate-50 shadow-sm"
+                      >
+                        {isBookingRejected ? "طلب حجز جديد" : "حجز فترة أخرى"}
+                      </Button>
                     </div>
                   </div>
                 )}

@@ -11,6 +11,7 @@ import {
 } from '../utils/jwt';
 import { config } from '../config';
 import { mailerService } from './mailer.service';
+import { auditService } from './audit.service';
 import {
     RegisterInput,
     LoginInput,
@@ -98,6 +99,14 @@ export class AuthService {
 
         // In production, send email with verificationToken
         console.log('📧 Email Verification Token:', verificationToken);
+
+        await auditService.logAction({
+            action: 'CREATE',
+            entityName: 'User',
+            entityId: user.id,
+            description: `تم إنشاء حساب جديد بصلاحية ${role || 'STUDENT'}`,
+            performedBy: user.id,
+        });
 
         // Return different messages based on role
         const message = (role === 'TRAINER' || role === 'INSTITUTE_ADMIN')
@@ -542,6 +551,14 @@ export class AuthService {
             console.warn('Redis error during password reset (non-fatal):', error);
         }
 
+        await auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'User',
+            entityId: tokenRecord.userId,
+            description: 'تم إعادة تعيين كلمة المرور (نسيان كلمة المرور)',
+            performedBy: tokenRecord.userId,
+        });
+
         return { message: 'Password reset successfully' };
     }
 
@@ -668,6 +685,14 @@ export class AuthService {
         } catch (error) {
             console.warn('Redis error during password change (non-fatal):', error);
         }
+
+        await auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'User',
+            entityId: userId,
+            description: 'تم تغيير كلمة المرور',
+            performedBy: userId,
+        });
 
         return { message: 'تم تغيير كلمة المرور بنجاح' };
     }

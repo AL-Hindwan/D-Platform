@@ -4,6 +4,7 @@ import { hashPassword, comparePassword } from '../utils/password';
 import notificationService from './notification.service';
 import { mailerService } from './mailer.service';
 import { whatsAppService } from './whatsapp.service';
+import { auditService } from "./audit.service";
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
@@ -341,13 +342,22 @@ class TrainerService {
             });
         }
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'BankAccount',
+                    entityId: 'system_log',
+                    description: 'إضافة حساب بنكي جديد',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.bankAccount.create({
-            data: {
-                ...data,
-                isActive: shouldBeActive,
-                trainerId: userId,
-            },
-        });
+                    data: {
+                        ...data,
+                        isActive: shouldBeActive,
+                        trainerId: userId,
+                    },
+                });
     }
 
     /**
@@ -369,10 +379,19 @@ class TrainerService {
             });
         }
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'BankAccount',
+                    entityId: 'system_log',
+                    description: 'تعديل حساب بنكي',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.bankAccount.update({
-            where: { id: accountId },
-            data,
-        });
+                    where: { id: accountId },
+                    data,
+                });
     }
 
     /**
@@ -405,6 +424,14 @@ class TrainerService {
                 });
             }
         }
+
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'BankAccount',
+                    entityId: 'system_log',
+                    description: 'حذف حساب بنكي',
+                    performedBy: userId
+                }).catch(e => console.error(e));
     }
 
     /**
@@ -722,6 +749,15 @@ class TrainerService {
             }
         }
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Course',
+                    entityId: 'system_log',
+                    description: 'تعديل بيانات دورة للمدرب',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return updated;
     }
 
@@ -748,10 +784,19 @@ class TrainerService {
             throw new Error('لا يمكن حذف دورة بها طلاب مستمرون أو قيد الانتظار. يرجى إلغاء الدورة أو إلغاء تسجيل الطلاب أولاً.');
         }
 
+        
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'Course',
+                    entityId: 'system_log',
+                    description: 'حذف دورة للمدرب',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.course.update({
-            where: { id: courseId },
-            data: { deletedAt: new Date() },
-        });
+                    where: { id: courseId },
+                    data: { deletedAt: new Date() },
+                });
     }
 
     /**
@@ -986,6 +1031,15 @@ class TrainerService {
                     }
                 });
             }
+            
+                    auditService.logAction({
+                        action: 'CREATE',
+                        entityName: 'Announcement',
+                        entityId: 'system_log',
+                        description: 'إنشاء إعلان للطلاب',
+                        performedBy: userId
+                    }).catch(e => console.error(e));
+
             return announcement;
         }
     }
@@ -1030,13 +1084,22 @@ class TrainerService {
         });
         if (!existing) throw new Error('الإعلان غير موجود أو لا تملك صلاحية تعديله');
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Announcement',
+                    entityId: 'system_log',
+                    description: 'تعديل إعلان',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return (prisma.announcement as any).update({
-            where: { id: announcementId },
-            data: {
-                ...(data.title && { title: data.title }),
-                ...(data.message && { message: data.message }),
-            }
-        });
+                    where: { id: announcementId },
+                    data: {
+                        ...(data.title && { title: data.title }),
+                        ...(data.message && { message: data.message }),
+                    }
+                });
     }
 
     /**
@@ -1049,6 +1112,15 @@ class TrainerService {
         if (!existing) throw new Error('الإعلان غير موجود أو لا تملك صلاحية حذفه');
 
         await (prisma.announcement as any).delete({ where: { id: announcementId } });
+        
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'Announcement',
+                    entityId: 'system_log',
+                    description: 'حذف إعلان',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return { success: true };
     }
 
@@ -1068,13 +1140,22 @@ class TrainerService {
             });
 
             // Update enrollment status
+            
+                    auditService.logAction({
+                        action: 'UPDATE',
+                        entityName: 'Enrollment',
+                        entityId: 'system_log',
+                        description: 'إلغاء تسجيل طالب من قبل المدرب',
+                        performedBy: userId
+                    }).catch(e => console.error(e));
+
             return tx.enrollment.update({
-                where: { id: enrollmentId },
-                data: {
-                    status: 'CANCELLED',
-                    cancellationReason: reason,
-                },
-            });
+                            where: { id: enrollmentId },
+                            data: {
+                                status: 'CANCELLED',
+                                cancellationReason: reason,
+                            },
+                        });
         });
     }
 
@@ -1518,6 +1599,15 @@ class TrainerService {
             });
         }
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'RoomBooking',
+                    entityId: 'system_log',
+                    description: 'طلب حجز قاعة',
+                    performedBy: trainerId
+                }).catch(e => console.error(e));
+
         return result;
 
     }
@@ -1679,6 +1769,15 @@ class TrainerService {
             }
         }
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'Course',
+                    entityId: 'system_log',
+                    description: 'إنشاء دورة جديدة للمدرب',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return course;
     }
 
@@ -1771,6 +1870,15 @@ class TrainerService {
             },
         });
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'TrainerProfile',
+                    entityId: 'system_log',
+                    description: 'تحديث الملف الشخصي للمدرب',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return this.getProfile(userId);
     }
 
@@ -1789,6 +1897,15 @@ class TrainerService {
             where: { id: userId },
             data: { password: hashed, failedLoginAttempts: 0, lockUntil: null },
         });
+
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'User',
+                    entityId: 'system_log',
+                    description: 'تغيير كلمة المرور للمدرب',
+                    performedBy: userId
+                }).catch(e => console.error(e));
 
         return { message: 'تم تغيير كلمة المرور بنجاح' };
     }
@@ -1930,6 +2047,15 @@ class TrainerService {
                 roomBookingId: bookingId
             }
         });
+
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'Payment',
+                    entityId: 'system_log',
+                    description: 'إعادة إرسال إيصال الدفع لحجز قاعة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
 
         return updatedBooking;
     }
@@ -2182,6 +2308,15 @@ class TrainerService {
             }
         });
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Enrollment',
+                    entityId: 'system_log',
+                    description: 'تحديث حالة تسجيل طالب من قبل المدرب',
+                    performedBy: trainerId
+                }).catch(e => console.error(e));
+
         return updatedEnrollment;
     }
 
@@ -2328,6 +2463,15 @@ class TrainerService {
                 });
             }
 
+            
+                    auditService.logAction({
+                        action: 'CANCEL',
+                        entityName: 'RoomBooking',
+                        entityId: 'system_log',
+                        description: 'إلغاء حجز قاعة',
+                        performedBy: trainerId
+                    }).catch(e => console.error(e));
+
             return updatedBooking;
         });
     }
@@ -2359,6 +2503,15 @@ class TrainerService {
                 where: { roomBookingId: bookingId },
                 data: { status: 'CANCELLED' }
             });
+
+            
+                    auditService.logAction({
+                        action: 'CANCEL',
+                        entityName: 'RoomBooking',
+                        entityId: 'system_log',
+                        description: 'إلغاء حجز قاعة مباشر',
+                        performedBy: trainerId
+                    }).catch(e => console.error(e));
 
             return updatedBooking;
         });
@@ -2493,15 +2646,24 @@ class TrainerService {
             }
         }
 
+        
+                auditService.logAction({
+                    action: 'UPDATE',
+                    entityName: 'Session',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'تحديث جلسة تدريبية',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.session.update({
-            where: { id: sessionId },
-            data: {
-                ...(data.startTime && { startTime: data.startTime }),
-                ...(data.endTime && { endTime: data.endTime }),
-                ...(data.status && { status: data.status as any }),
-                ...(data.meetingLink !== undefined && { meetingLink: data.meetingLink })
-            }
-        });
+                    where: { id: sessionId },
+                    data: {
+                        ...(data.startTime && { startTime: data.startTime }),
+                        ...(data.endTime && { endTime: data.endTime }),
+                        ...(data.status && { status: data.status as any }),
+                        ...(data.meetingLink !== undefined && { meetingLink: data.meetingLink })
+                    }
+                });
     }
 
 }

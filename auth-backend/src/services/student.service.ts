@@ -2,6 +2,7 @@ import prisma from '../config/database';
 import notificationService from './notification.service';
 import { mailerService } from './mailer.service';
 import { whatsAppService } from './whatsapp.service';
+import { auditService } from "./audit.service";
 
 class StudentService {
     /**
@@ -477,10 +478,19 @@ class StudentService {
             }
         }
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'Enrollment',
+                    entityId: 'system_log',
+                    description: 'التسجيل المبدئي في دورة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return {
-            status: 'PENDING_APPROVAL',
-            enrollmentId: enrollment.id
-        };
+                    status: 'PENDING_APPROVAL',
+                    enrollmentId: enrollment.id
+                };
     }
 
     /**
@@ -554,9 +564,18 @@ class StudentService {
             }
         }
 
+        
+                auditService.logAction({
+                    action: 'CREATE',
+                    entityName: 'Payment',
+                    entityId: 'system_log',
+                    description: 'رفع إيصال دفع لدورة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return {
-            status: 'PAYMENT_CONFIRMED'
-        };
+                    status: 'PAYMENT_CONFIRMED'
+                };
     }
 
     /**
@@ -813,12 +832,21 @@ class StudentService {
      * Remove a course from the student's wishlist
      */
     async removeFromWishlist(userId: string, courseId: string) {
+        
+                auditService.logAction({
+                    action: 'DELETE',
+                    entityName: 'Wishlist',
+                    entityId: 'system_log',
+                    description: 'إزالة دورة من المفضلة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.wishlist.deleteMany({
-            where: {
-                studentId: userId,
-                courseId: courseId
-            }
-        });
+                    where: {
+                        studentId: userId,
+                        courseId: courseId
+                    }
+                });
     }
 
     /**
@@ -851,6 +879,15 @@ class StudentService {
                     courseId: courseId
                 }
             });
+            
+                    auditService.logAction({
+                        action: 'UPDATE',
+                        entityName: 'Wishlist',
+                        entityId: 'system_log', // Default if ID is complex to resolve
+                        description: 'تعديل قائمة المفضلة',
+                        performedBy: userId
+                    }).catch(e => console.error(e));
+
             return { added: true };
         }
     }
@@ -964,10 +1001,19 @@ class StudentService {
         }
 
         // 3. Update status to CANCELLED
+        
+                auditService.logAction({
+                    action: 'CANCEL',
+                    entityName: 'Enrollment',
+                    entityId: 'system_log', // Default if ID is complex to resolve
+                    description: 'إلغاء التسجيل في دورة',
+                    performedBy: userId
+                }).catch(e => console.error(e));
+
         return prisma.enrollment.update({
-            where: { id: enrollmentId },
-            data: { status: 'CANCELLED' }
-        });
+                    where: { id: enrollmentId },
+                    data: { status: 'CANCELLED' }
+                });
     }
 }
 

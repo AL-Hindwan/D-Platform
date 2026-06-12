@@ -24,12 +24,14 @@ interface Log {
   status?: string
   amount?: number
   ip?: string
+  rawAction?: string
 }
 
 export default function AdminLogs() {
   const [logs, setLogs] = useState<Log[]>([])
   const [loading, setLoading] = useState(true)
   const [typeFilter, setTypeFilter] = useState<string>("all")
+  const [actionFilter, setActionFilter] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
@@ -40,16 +42,33 @@ export default function AdminLogs() {
     setLoading(true)
     try {
       const data = await adminService.getAuditLogs()
+      
+      const actionMap: Record<string, string> = {
+        CREATE: 'إنشاء',
+        UPDATE: 'تعديل',
+        DELETE: 'حذف',
+        APPROVE: 'موافقة',
+        REJECT: 'رفض',
+        CANCEL: 'إلغاء'
+      }
+
       // Map backend AuditLog to frontend Log structure
-      const mappedLogs: Log[] = data.map((item: any) => ({
-        id: item.id,
-        type: 'activity', // Default to activity as backend AuditLog is generic
-        action: item.action,
-        details: item.description || '',
-        user: item.performer?.name || 'النظام',
-        createdAt: item.performedAt,
-        status: 'success'
-      }))
+      const mappedLogs: Log[] = data.map((item: any) => {
+        let logType = 'activity';
+        if (item.entityName === 'Payment') logType = 'payment';
+        else if (item.entityName === 'Announcement' || item.entityName === 'Notification') logType = 'notification';
+
+        return {
+          id: item.id,
+          type: logType,
+          rawAction: item.action,
+          action: actionMap[item.action] || item.action,
+          details: item.description || `عملية على ${item.entityName}`,
+          user: item.performer?.name || 'النظام',
+          createdAt: item.performedAt,
+          status: 'success'
+        }
+      })
       setLogs(mappedLogs)
     } catch (error) {
       console.error("Error fetching logs:", error)
@@ -61,11 +80,12 @@ export default function AdminLogs() {
 
   const filteredLogs = logs.filter((log: Log) => {
     const matchesType = typeFilter === "all" || log.type === typeFilter
+    const matchesAction = actionFilter === "all" || log.rawAction === actionFilter
     const matchesSearch =
       log.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
       log.user.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (log.details && log.details.toLowerCase().includes(searchQuery.toLowerCase()))
-    return matchesType && matchesSearch
+    return matchesType && matchesAction && matchesSearch
   })
 
   const getStatusBadge = (status: Log['status']) => {
@@ -100,13 +120,31 @@ export default function AdminLogs() {
     }
   }
 
+  const handleExport = () => {
+    // Add BOM for Excel Arabic support
+    const BOM = "\uFEFF";
+    const csvHeader = "النوع,الإجراء,المستخدم,التفاصيل,التاريخ\n";
+    const csvContent = filteredLogs.map(log => 
+      `${getTypeLabel(log.type)},${log.action},${log.user},"${log.details}",${formatDate(log.createdAt)}`
+    ).join("\n");
+    
+    const blob = new Blob([BOM + csvHeader + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `audit_logs_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <div className="space-y-6">
       <AdminPageHeader
         title="سجلات النظام"
         description="مراقبة نشاط النظام والعمليات المالية والتنبيهات"
         action={
-          <Button variant="outline">
+          <Button variant="outline" onClick={handleExport}>
             <Download className="h-4 w-4 ml-2" />
             تصدير السجلات
           </Button>
@@ -135,6 +173,21 @@ export default function AdminLogs() {
                 <SelectItem value="activity">النشاطات</SelectItem>
                 <SelectItem value="payment">المدفوعات</SelectItem>
                 <SelectItem value="notification">التنبيهات</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={actionFilter} onValueChange={setActionFilter}>
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue placeholder="نوع الإجراء" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">كل الإجراءات</SelectItem>
+                <SelectItem value="CREATE">إنشاء</SelectItem>
+                <SelectItem value="UPDATE">تعديل</SelectItem>
+                <SelectItem value="DELETE">حذف</SelectItem>
+                <SelectItem value="APPROVE">موافقة</SelectItem>
+                <SelectItem value="REJECT">رفض</SelectItem>
+                <SelectItem value="CANCEL">إلغاء</SelectItem>
               </SelectContent>
             </Select>
           </div>

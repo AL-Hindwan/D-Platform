@@ -4,7 +4,7 @@ import { AuditAction } from '@prisma/client';
 import notificationService from './notification.service';
 import { mailerService } from './mailer.service';
 import { whatsAppService } from './whatsapp.service';
-
+import { auditService } from "./audit.service";
 
 export class AdminService {
     /**
