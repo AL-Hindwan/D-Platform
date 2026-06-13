@@ -538,13 +538,13 @@ export default function TrainerExploreCourseDetailsPage() {
     const instituteLogo = instituteRaw?.logo || null
     const instituteDescription = cleanText(instituteRaw?.description) || null
     const isTrainerOwnedCourse = Boolean(course.trainerId)
-    const hasInstitute = !isTrainerOwnedCourse && Boolean(course.instituteId)
+    const hasInstitute = Boolean(instituteName && instituteName !== "غير متوفر")
     const trainerPhone = cleanText(course.instructor?.phone) || (isTrainerOwnedCourse ? "غير متوفر" : institutePhone)
     const trainerEmail = cleanText(course.instructor?.email) || (isTrainerOwnedCourse ? "غير متوفر" : instituteEmail)
     const trainerSubtitle =
       cleanText(course.instructor?.specialties?.[0]) ||
       cleanText(course.instructor?.bio) ||
-      (hasInstitute ? "معهد تدريبي" : "مدرب مستقل")
+      (isTrainerOwnedCourse ? "مدرب مستقل" : "معهد تدريبي")
     const courseStatus = String(course.courseStatus || (course as any).status);
     const isPendingOrDraft = courseStatus === "PENDING_MINIMUM" || courseStatus === "DRAFT";
     const delivery = isPendingOrDraft ? "غير محدد" : deliveryLabel(course.deliveryType);
@@ -576,6 +576,7 @@ export default function TrainerExploreCourseDetailsPage() {
       deliveryDetail,
       roomId: course.deliveryType === "in_person" ? (firstInPersonSession?.room?.id || null) : null,
       instructor: course.instructor,
+      staffTrainers: course.staffTrainers,
       trainerName,
       trainerPhone,
       trainerEmail,
@@ -1030,72 +1031,146 @@ export default function TrainerExploreCourseDetailsPage() {
 
           <section id="instructor" className="scroll-mt-24">
             <SectionTitle icon={UserRound} title="تعرف على المدرب" />
-            <div className="w-full rounded-[6.5px] border border-slate-200 bg-white p-4">
-              <div dir="rtl" className="flex items-start justify-start gap-4 text-right">
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[6.5px] bg-slate-100 md:h-20 md:w-20">
-                  {view.instructor?.avatar ? (
-                    <Image
-                      src={resolveImage(view.instructor.avatar, "/images/course-web.png")}
-                      alt={view.trainerName}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xl font-bold text-slate-700">
-                      {getInitials(view.trainerName)}
-                    </div>
-                  )}
-                </div>
-                <div className="min-w-0 text-right">
-                  <h4 className="text-xl font-bold text-slate-900">{view.trainerName || "غير متوفر"}</h4>
-                  {view.trainerSubtitle ? <p className="mt-1 text-sm text-slate-600">{view.trainerSubtitle}</p> : null}
-                  {view.instructor?.specialties && view.instructor.specialties.length > 0 && (
-                    <div className="mt-3">
-                      <p className="mb-2 text-[13px] font-bold text-slate-800">التخصصات:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {view.instructor.specialties.map(spec => (
-                          <span key={spec} className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                            {spec}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-700">
-                    {view.trainerPhone ? (
-                      <div className="inline-flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-emerald-600" />
-                        {toWhatsAppLink(view.trainerPhone) ? (
-                          <a
-                            href={toWhatsAppLink(view.trainerPhone)!}
-                            target="_blank"
-                            rel="noreferrer"
-                            dir="ltr"
-                            className="text-emerald-700 underline-offset-2 hover:underline"
-                          >
-                            {view.trainerPhone}
-                          </a>
+            <div className="space-y-4">
+              {view.staffTrainers && view.staffTrainers.length > 0 ? (
+                view.staffTrainers.map((trainer: any) => (
+                  <div key={trainer.id} className="w-full rounded-[6.5px] border border-slate-200 bg-white p-4">
+                    <div dir="rtl" className="flex items-start justify-start gap-4 text-right">
+                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[6.5px] bg-slate-100 md:h-20 md:w-20">
+                        {trainer.avatar ? (
+                          <Image
+                            src={resolveImage(trainer.avatar, "/images/course-web.png")}
+                            alt={trainer.name}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
                         ) : (
-                          <span dir="ltr">{view.trainerPhone}</span>
+                          <div className="flex h-full w-full items-center justify-center text-xl font-bold text-slate-700">
+                            {getInitials(trainer.name)}
+                          </div>
                         )}
                       </div>
-                    ) : null}
-                    {view.trainerEmail ? (
-                      <div className="inline-flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-blue-600" />
-                        {toMailtoLink(view.trainerEmail) ? (
-                          <a href={toMailtoLink(view.trainerEmail)!} className="text-blue-700 underline-offset-2 hover:underline">
-                            {view.trainerEmail}
-                          </a>
-                        ) : (
-                          <span>{view.trainerEmail}</span>
+                      <div className="min-w-0 text-right">
+                        <h4 className="text-xl font-bold text-slate-900">{trainer.name || "غير متوفر"}</h4>
+                        {trainer.bio ? <p className="mt-1 text-sm text-slate-600">{trainer.bio}</p> : null}
+                        {trainer.specialties && trainer.specialties.length > 0 && (
+                          <div className="mt-3">
+                            <p className="mb-2 text-[13px] font-bold text-slate-800">التخصصات:</p>
+                            <div className="flex flex-wrap gap-2">
+                              {trainer.specialties.map((spec: string) => (
+                                <span key={spec} className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                  {spec}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
                         )}
+                        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-700">
+                          {trainer.phone ? (
+                            <div className="inline-flex items-center gap-2">
+                              <Phone className="h-4 w-4 text-emerald-600" />
+                              {toWhatsAppLink(trainer.phone) ? (
+                                <a
+                                  href={toWhatsAppLink(trainer.phone)!}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  dir="ltr"
+                                  className="text-emerald-700 underline-offset-2 hover:underline"
+                                >
+                                  {trainer.phone}
+                                </a>
+                              ) : (
+                                <span dir="ltr">{trainer.phone}</span>
+                              )}
+                            </div>
+                          ) : null}
+                          {trainer.email ? (
+                            <div className="inline-flex items-center gap-2">
+                              <Mail className="h-4 w-4 text-blue-600" />
+                              {toMailtoLink(trainer.email) ? (
+                                <a href={toMailtoLink(trainer.email)!} className="text-blue-700 underline-offset-2 hover:underline">
+                                  {trainer.email}
+                                </a>
+                              ) : (
+                                <span>{trainer.email}</span>
+                              )}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
-                    ) : null}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="w-full rounded-[6.5px] border border-slate-200 bg-white p-4">
+                  <div dir="rtl" className="flex items-start justify-start gap-4 text-right">
+                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[6.5px] bg-slate-100 md:h-20 md:w-20">
+                      {view.instructor?.avatar ? (
+                        <Image
+                          src={resolveImage(view.instructor.avatar, "/images/course-web.png")}
+                          alt={view.trainerName}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xl font-bold text-slate-700">
+                          {getInitials(view.trainerName)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0 text-right">
+                      <h4 className="text-xl font-bold text-slate-900">{view.trainerName || "غير متوفر"}</h4>
+                      {view.trainerSubtitle ? <p className="mt-1 text-sm text-slate-600">{view.trainerSubtitle}</p> : null}
+                      {view.instructor?.specialties && view.instructor.specialties.length > 0 && (
+                        <div className="mt-3">
+                          <p className="mb-2 text-[13px] font-bold text-slate-800">التخصصات:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {view.instructor.specialties.map((spec: string) => (
+                              <span key={spec} className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                {spec}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-700">
+                        {view.trainerPhone ? (
+                          <div className="inline-flex items-center gap-2">
+                            <Phone className="h-4 w-4 text-emerald-600" />
+                            {toWhatsAppLink(view.trainerPhone) ? (
+                              <a
+                                href={toWhatsAppLink(view.trainerPhone)!}
+                                target="_blank"
+                                rel="noreferrer"
+                                dir="ltr"
+                                className="text-emerald-700 underline-offset-2 hover:underline"
+                              >
+                                {view.trainerPhone}
+                              </a>
+                            ) : (
+                              <span dir="ltr">{view.trainerPhone}</span>
+                            )}
+                          </div>
+                        ) : null}
+                        {view.trainerEmail ? (
+                          <div className="inline-flex items-center gap-2">
+                            <Mail className="h-4 w-4 text-blue-600" />
+                            {toMailtoLink(view.trainerEmail) ? (
+                              <a href={toMailtoLink(view.trainerEmail)!} className="text-blue-700 underline-offset-2 hover:underline">
+                                {view.trainerEmail}
+                              </a>
+                            ) : (
+                              <span>{view.trainerEmail}</span>
+                            )}
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </section>
 

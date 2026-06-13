@@ -250,31 +250,10 @@ function StudentEnrolledCoursePageContent() {
                   </div>
                 ) : null}
                 <div className="flex flex-wrap gap-2 pt-1">
-                  {!isEnrollmentCancelled && (
-                    <>
-                      {course.deliveryType === "online" && heroMeetingLink && (
-                        <Button asChild className="rounded-lg bg-blue-600 hover:bg-blue-700">
-                          <a href={heroMeetingLink} target="_blank" rel="noreferrer">دخول اللقاء</a>
-                        </Button>
-                      )}
-                      {course.deliveryType !== "online" && (
-                        roomId ? (
-                          <Button 
-                            className="rounded-lg bg-blue-600 hover:bg-blue-700"
-                            onClick={() => {
-                              setSelectedHallId(roomId);
-                              setIsHallModalOpen(true);
-                            }}
-                          >
-                            تفاصيل القاعة
-                          </Button>
-                        ) : roomLocationUrl ? (
-                          <Button asChild className="rounded-lg bg-blue-600 hover:bg-blue-700">
-                            <a href={roomLocationUrl} target="_blank" rel="noreferrer">عرض موقع القاعة</a>
-                          </Button>
-                        ) : null
-                      )}
-                    </>
+                  {!isEnrollmentCancelled && course.deliveryType === "online" && heroMeetingLink && (
+                    <Button asChild className="rounded-lg bg-blue-600 hover:bg-blue-700">
+                      <a href={heroMeetingLink} target="_blank" rel="noreferrer">دخول اللقاء</a>
+                    </Button>
                   )}
                 </div>
               </div>
@@ -291,7 +270,7 @@ function StudentEnrolledCoursePageContent() {
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
           <div className="space-y-4 lg:col-span-2">
-            {isEnrollmentCancelled ? (
+            {isEnrollmentCancelled && (
               <Card className="rounded-[6.5px] border border-[#FDBA74] bg-[#FFF7ED] shadow-sm">
                 <CardContent className="p-5 text-right" dir="rtl">
                   <div className="flex items-start gap-3">
@@ -300,13 +279,14 @@ function StudentEnrolledCoursePageContent() {
                     </span>
                     <div className="space-y-2">
                       <h3 className="text-lg font-bold text-slate-900">تم إلغاء تسجيلك في هذه الدورة</h3>
-                      <p className="text-sm text-slate-700">لم يعد بإمكانك الوصول إلى جدول الدروس أو الإعلانات الخاصة بهذه الدورة.</p>
                       <p className="text-sm text-slate-600">يمكنك العودة إلى دوراتك أو استعراض الدورات المتاحة للتسجيل من جديد.</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            ) : (
+            )}
+            
+            {!isEnrollmentCancelled && (
               <Card className="rounded-[8px] border border-blue-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
                 <CardContent className="p-3 sm:p-4">
                   {nextSession ? (
@@ -369,33 +349,11 @@ function StudentEnrolledCoursePageContent() {
               </Card>
             )}
 
-            {isEnrollmentCancelled ? (
-              <Card className="rounded-[6.5px] border border-slate-200 bg-white shadow-sm">
-                <CardContent className="p-5 text-right" dir="rtl">
-                  <div className="mb-3 flex items-start gap-3">
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[6.5px] bg-slate-100 text-slate-600">
-                      <Lock className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900">محتوى الدورة غير متاح</h3>
-                      <p className="mt-1 text-sm text-slate-600">تم إيقاف الوصول إلى محتوى هذه الدورة لأن تسجيلك ملغي.</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap items-center justify-start gap-2">
-                    <Button asChild className="h-10 rounded-[6.5px] bg-blue-600 px-4 hover:bg-blue-700">
-                      <Link href={backLink}>العودة إلى دوراتي</Link>
-                    </Button>
-                    <Button asChild variant="outline" className="h-10 rounded-[6.5px] border-blue-200 px-4 text-blue-700 hover:bg-blue-50">
-                      <Link href="/student/courses">استعراض الدورات</Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
               <Tabs defaultValue="schedule" dir="rtl" className="space-y-3">
-                <TabsList className="grid h-11 w-full grid-cols-2 rounded-lg bg-slate-100 p-1">
+                <TabsList className="grid h-11 w-full grid-cols-3 rounded-lg bg-slate-100 p-1">
                   <TabsTrigger value="schedule" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-600">جدول الدروس</TabsTrigger>
                   <TabsTrigger value="announcements" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-600">الإعلانات</TabsTrigger>
+                  <TabsTrigger value="details" className="rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-600">تفاصيل الدورة</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="schedule" className="mt-0 space-y-3">
@@ -421,7 +379,7 @@ function StudentEnrolledCoursePageContent() {
                           </div>
                           <div className="flex items-center gap-2">
                             <Badge className="bg-slate-100 text-slate-700 hover:bg-slate-100">{(s.status || "scheduled") === "completed" ? "انتهت" : "قادمة"}</Badge>
-                            {s.meetingLink && (s.status || "") !== "completed" ? (
+                            {s.meetingLink && (s.status || "") !== "completed" && !isEnrollmentCancelled ? (
                               <Button asChild size="sm" className="rounded-lg bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
                                 <a href={s.meetingLink} target="_blank" rel="noreferrer">دخول</a>
                               </Button>
@@ -458,62 +416,158 @@ function StudentEnrolledCoursePageContent() {
                     </Card>
                   )) : <EmptyBlock title="لا توجد إعلانات حتى الآن" description="ستظهر الإعلانات هنا عند نشرها." icon={Megaphone} />}
                 </TabsContent>
+
+                <TabsContent value="details" className="mt-0 space-y-4">
+                  <Card className="rounded-lg border-slate-200">
+                    <CardContent className="p-4 sm:p-6 text-right space-y-6" dir="rtl">
+                      {course.description && (
+                        <div>
+                          <h3 className="text-lg font-bold text-slate-900 mb-2">وصف الدورة</h3>
+                          <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                            {course.description}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {course.objectives && course.objectives.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-bold text-slate-900 mb-2">أهداف الدورة</h3>
+                          <ul className="list-disc list-inside text-sm text-slate-700 space-y-1 pr-2">
+                            {course.objectives.map((obj: string, i: number) => (
+                              <li key={i}>{obj}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {course.prerequisites && (
+                        <div>
+                          <h3 className="text-lg font-bold text-slate-900 mb-2">المتطلبات السابقة</h3>
+                          <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                            {Array.isArray(course.prerequisites) 
+                              ? course.prerequisites.join("\n") 
+                              : course.prerequisites}
+                          </div>
+                        </div>
+                      )}
+
+                      {!course.description && (!course.objectives || course.objectives.length === 0) && (!course.prerequisites || course.prerequisites.length === 0) && (
+                        <p className="text-sm text-slate-500 text-center py-4">لا توجد تفاصيل إضافية متاحة لهذه الدورة.</p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
               </Tabs>
-            )}
           </div>
 
           <div className="space-y-4">
-            <Card className="rounded-lg border-slate-200">
-              <CardHeader><CardTitle className="text-right text-base">مدرب الدورة</CardTitle></CardHeader>
-              <CardContent className="text-right">
-                <div className="mb-3 flex items-center gap-3" dir="rtl">
-                  <div className="relative h-12 w-12 overflow-hidden rounded-full border border-slate-200">
-                    <Image src={safeImage(instructor?.avatar)} alt={instructor?.name || "المدرب"} fill className="object-cover" unoptimized />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-slate-900">{instructor?.name || "غير محدد"}</p>
-                    {instructor?.bio && <p className="text-xs text-slate-500 mb-2">{instructor.bio}</p>}
-                    {instructor?.specialties && instructor.specialties.length > 0 && (
-                      <div className="mt-2 text-right">
-                        <p className="mb-1 text-[12px] font-bold text-slate-800">التخصصات:</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {instructor.specialties.map((spec: string) => (
-                            <span key={spec} className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                              {spec}
-                            </span>
-                          ))}
-                        </div>
+            {course.staffTrainers && course.staffTrainers.length > 0 ? (
+              course.staffTrainers.map((trainer: any) => (
+                <Card key={trainer.id} className="rounded-lg border-slate-200">
+                  <CardHeader><CardTitle className="text-right text-base">مدرب الدورة</CardTitle></CardHeader>
+                  <CardContent className="text-right">
+                    <div className="mb-3 flex items-center gap-3" dir="rtl">
+                      <div className="relative h-12 w-12 overflow-hidden rounded-full border border-slate-200">
+                        <Image src={safeImage(trainer?.avatar)} alt={trainer?.name || "المدرب"} fill className="object-cover" unoptimized />
                       </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-900">{trainer?.name || "غير محدد"}</p>
+                        {trainer?.bio && <p className="text-xs text-slate-500 mb-2">{trainer.bio}</p>}
+                        {trainer?.specialties && trainer.specialties.length > 0 && (
+                          <div className="mt-2 text-right">
+                            <p className="mb-1 text-[12px] font-bold text-slate-800">التخصصات:</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {trainer.specialties.map((spec: string) => (
+                                <span key={spec} className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                  {spec}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 py-1" dir="rtl">
+                      <Mail className="h-3.5 w-3.5 text-blue-600" />
+                      {trainer?.email ? (
+                        <a href={`mailto:${trainer.email}`} className="text-sm text-blue-600 hover:text-blue-700 hover:underline">
+                          {trainer.email}
+                        </a>
+                      ) : (
+                        <span className="text-sm text-slate-700">-</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 py-1" dir="rtl">
+                      <Phone className="h-3.5 w-3.5 text-green-600" />
+                      {trainer?.phone ? (
+                        <a
+                          href={`https://wa.me/${normalizePhone(trainer.phone)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm text-green-600 hover:text-green-700 hover:underline"
+                        >
+                          {trainer.phone}
+                        </a>
+                      ) : (
+                        <span className="text-sm text-slate-700">-</span>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Card className="rounded-lg border-slate-200">
+                <CardHeader><CardTitle className="text-right text-base">مدرب الدورة</CardTitle></CardHeader>
+                <CardContent className="text-right">
+                  <div className="mb-3 flex items-center gap-3" dir="rtl">
+                    <div className="relative h-12 w-12 overflow-hidden rounded-full border border-slate-200">
+                      <Image src={safeImage(instructor?.avatar)} alt={instructor?.name || "المدرب"} fill className="object-cover" unoptimized />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-slate-900">{instructor?.name || "غير محدد"}</p>
+                      {instructor?.bio && <p className="text-xs text-slate-500 mb-2">{instructor.bio}</p>}
+                      {instructor?.specialties && instructor.specialties.length > 0 && (
+                        <div className="mt-2 text-right">
+                          <p className="mb-1 text-[12px] font-bold text-slate-800">التخصصات:</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {instructor.specialties.map((spec: string) => (
+                              <span key={spec} className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                {spec}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 py-1" dir="rtl">
+                    <Mail className="h-3.5 w-3.5 text-blue-600" />
+                    {instructor?.email ? (
+                      <a href={`mailto:${instructor.email}`} className="text-sm text-blue-600 hover:text-blue-700 hover:underline">
+                        {instructor.email}
+                      </a>
+                    ) : (
+                      <span className="text-sm text-slate-700">-</span>
                     )}
                   </div>
-                </div>
-                <div className="flex items-center gap-2 py-1" dir="rtl">
-                  <Mail className="h-3.5 w-3.5 text-blue-600" />
-                  {instructor?.email ? (
-                    <a href={`mailto:${instructor.email}`} className="text-sm text-blue-600 hover:text-blue-700 hover:underline">
-                      {instructor.email}
-                    </a>
-                  ) : (
-                    <span className="text-sm text-slate-700">-</span>
-                  )}
-                </div>
-                <div className="flex items-center gap-2 py-1" dir="rtl">
-                  <Phone className="h-3.5 w-3.5 text-green-600" />
-                  {instructor?.phone ? (
-                    <a
-                      href={`https://wa.me/${normalizePhone(instructor.phone)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sm text-green-600 hover:text-green-700 hover:underline"
-                    >
-                      {instructor.phone}
-                    </a>
-                  ) : (
-                    <span className="text-sm text-slate-700">-</span>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="flex items-center gap-2 py-1" dir="rtl">
+                    <Phone className="h-3.5 w-3.5 text-green-600" />
+                    {instructor?.phone ? (
+                      <a
+                        href={`https://wa.me/${normalizePhone(instructor.phone)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-sm text-green-600 hover:text-green-700 hover:underline"
+                      >
+                        {instructor.phone}
+                      </a>
+                    ) : (
+                      <span className="text-sm text-slate-700">-</span>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {institute ? (
               <Card className="rounded-lg border-slate-200">

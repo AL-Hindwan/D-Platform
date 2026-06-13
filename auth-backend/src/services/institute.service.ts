@@ -281,35 +281,35 @@ class InstituteService {
             },
         });
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'Institute',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تعديل ملف المعهد',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'Institute',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تعديل ملف المعهد',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return {
-                    id: updatedInstitute.id,
-                    name: updatedUser.name,
-                    email: updatedUser.email,
-                    phone: updatedUser.phone,
-                    avatar: updatedUser.avatar,
-                    role: "institute_admin",
-                    instituteName: updatedInstitute.name,
-                    publicEmail: updatedInstitute.email,
-                    publicPhone: updatedInstitute.phone,
-                    instituteLogo: updatedInstitute.logo,
-                    instituteAddress: updatedInstitute.address,
-                    instituteWebsite: updatedInstitute.website,
-                    instituteLocationUrl: updatedInstitute.locationUrl,
-                    instituteDescription: updatedInstitute.description,
-                    licenseNumber: updatedInstitute.licenseNumber,
-                    licenseDocument: updatedInstitute.licenseDocumentUrl,
-                    licenseDocumentUrl: updatedInstitute.licenseDocumentUrl,
-                    verificationStatus: updatedInstitute.verificationStatus,
-                };
+            id: updatedInstitute.id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            phone: updatedUser.phone,
+            avatar: updatedUser.avatar,
+            role: "institute_admin",
+            instituteName: updatedInstitute.name,
+            publicEmail: updatedInstitute.email,
+            publicPhone: updatedInstitute.phone,
+            instituteLogo: updatedInstitute.logo,
+            instituteAddress: updatedInstitute.address,
+            instituteWebsite: updatedInstitute.website,
+            instituteLocationUrl: updatedInstitute.locationUrl,
+            instituteDescription: updatedInstitute.description,
+            licenseNumber: updatedInstitute.licenseNumber,
+            licenseDocument: updatedInstitute.licenseDocumentUrl,
+            licenseDocumentUrl: updatedInstitute.licenseDocumentUrl,
+            verificationStatus: updatedInstitute.verificationStatus,
+        };
     }
 
     // =====================================================
@@ -343,25 +343,25 @@ class InstituteService {
             });
         }
 
-        
-                auditService.logAction({
-                    action: 'CREATE',
-                    entityName: 'BankAccount',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'إضافة حساب بنكي جديد',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'CREATE',
+            entityName: 'BankAccount',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'إضافة حساب بنكي جديد',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return prisma.bankAccount.create({
-                    data: {
-                        instituteId: institute.id,
-                        bankName: data.bankName,
-                        accountName: data.accountName,
-                        accountNumber: data.accountNumber,
-                        iban: data.iban,
-                        isActive: shouldBeActive,
-                    }
-                });
+            data: {
+                instituteId: institute.id,
+                bankName: data.bankName,
+                accountName: data.accountName,
+                accountNumber: data.accountNumber,
+                iban: data.iban,
+                isActive: shouldBeActive,
+            }
+        });
     }
 
     async updateBankAccount(userId: string, accountId: string, data: { bankName?: string; accountName?: string; accountNumber?: string; iban?: string; isActive?: boolean }) {
@@ -381,19 +381,19 @@ class InstituteService {
             });
         }
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'BankAccount',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تعديل حساب بنكي',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'BankAccount',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تعديل حساب بنكي',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return prisma.bankAccount.update({
-                    where: { id: accountId },
-                    data
-                });
+            where: { id: accountId },
+            data
+        });
     }
 
     async deleteBankAccount(userId: string, accountId: string) {
@@ -423,14 +423,14 @@ class InstituteService {
             }
         }
 
-        
-                auditService.logAction({
-                    action: 'DELETE',
-                    entityName: 'BankAccount',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'حذف حساب بنكي',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'DELETE',
+            entityName: 'BankAccount',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'حذف حساب بنكي',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return { success: true };
     }
@@ -565,7 +565,7 @@ class InstituteService {
 
         const instituteAdmin = institute.user;
 
-        const contactFooter = `\n\n---\n🏛️ المعهد: ${institute.name}\n👤 المرسل: ${instituteAdmin?.name || 'مدير المعهد'}`;
+        const contactFooter = `\n\n---\n🏛️ المعهد: ${institute.name}`;
         const fullMessage = data.message + contactFooter;
 
         // Fetch ALL course IDs for this institute
@@ -727,14 +727,14 @@ class InstituteService {
                 }
             }
         }
-        
-                auditService.logAction({
-                    action: 'CREATE',
-                    entityName: 'Announcement',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'إرسال إعلان جديد',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'CREATE',
+            entityName: 'Announcement',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'إرسال إعلان جديد',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return announcement;
     }
@@ -778,22 +778,22 @@ class InstituteService {
         });
         if (!existing) throw new Error('الإعلان غير موجود أو لا تملك صلاحية تعديله');
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'Announcement',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تعديل إعلان',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'Announcement',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تعديل إعلان',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return (prisma.announcement as any).update({
-                    where: { id: announcementId },
-                    data: {
-                        ...(data.title && { title: data.title }),
-                        ...(data.message && { message: data.message }),
-                    }
-                });
+            where: { id: announcementId },
+            data: {
+                ...(data.title && { title: data.title }),
+                ...(data.message && { message: data.message }),
+            }
+        });
     }
 
     /**
@@ -806,14 +806,14 @@ class InstituteService {
         if (!existing) throw new Error('الإعلان غير موجود أو لا تملك صلاحية حذفه');
 
         await (prisma.announcement as any).delete({ where: { id: announcementId } });
-        
-                auditService.logAction({
-                    action: 'DELETE',
-                    entityName: 'Announcement',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'حذف إعلان',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'DELETE',
+            entityName: 'Announcement',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'حذف إعلان',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return { success: true };
     }
@@ -920,7 +920,7 @@ class InstituteService {
             where: {
                 courseId,
                 status: {
-                    in: ['ACTIVE', 'PRELIMINARY', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT']
+                    in: ['ACTIVE', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT']
                 },
                 deletedAt: null
             }
@@ -935,14 +935,14 @@ class InstituteService {
             data: { deletedAt: new Date() },
         });
 
-        
-                auditService.logAction({
-                    action: 'DELETE',
-                    entityName: 'Course',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'حذف دورة',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'DELETE',
+            entityName: 'Course',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'حذف دورة',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return { message: "تم حذف الدورة بنجاح" };
     }
@@ -981,14 +981,14 @@ class InstituteService {
             data: { staffTrainerIds: [newTrainerId], trainerId: null },
         });
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'Course',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تغيير مدرب الدورة',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'Course',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تغيير مدرب الدورة',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return { message: "تم تغيير المدرب بنجاح" };
     }
@@ -1088,27 +1088,27 @@ class InstituteService {
         if (!institute) throw new Error("لم يتم العثور على المعهد");
         if (!data.name) throw new Error("اسم المدرب مطلوب");
 
-        
-                auditService.logAction({
-                    action: 'CREATE',
-                    entityName: 'InstituteStaff',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'إضافة عضو فريق عمل جديد',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'CREATE',
+            entityName: 'InstituteStaff',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'إضافة عضو فريق عمل جديد',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return prisma.instituteStaff.create({
-                    data: {
-                        instituteId: institute.id,
-                        name: data.name,
-                        email: data.email,
-                        phone: data.phone,
-                        bio: data.bio,
-                        avatar: data.avatar,
-                        specialties: data.specialties ?? [],
-                        notes: data.notes,
-                    },
-                });
+            data: {
+                instituteId: institute.id,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                bio: data.bio,
+                avatar: data.avatar,
+                specialties: data.specialties ?? [],
+                notes: data.notes,
+            },
+        });
     }
 
     /**
@@ -1125,13 +1125,13 @@ class InstituteService {
 
         await prisma.instituteStaff.delete({ where: { id: staffId } });
 
-                auditService.logAction({
-                    action: 'DELETE',
-                    entityName: 'InstituteStaff',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'حذف عضو من فريق العمل',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+        auditService.logAction({
+            action: 'DELETE',
+            entityName: 'InstituteStaff',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'حذف عضو من فريق العمل',
+            performedBy: userId
+        }).catch(e => console.error(e));
     }
 
     /**
@@ -1150,19 +1150,19 @@ class InstituteService {
         });
         if (!staff) throw new Error("لم يتم العثور على عضو الطاقم");
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'InstituteStaff',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تحديث حالة عضو فريق العمل',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'InstituteStaff',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تحديث حالة عضو فريق العمل',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return prisma.instituteStaff.update({
-                    where: { id: staffId },
-                    data: { status },
-                });
+            where: { id: staffId },
+            data: { status },
+        });
     }
 
     /**
@@ -1188,26 +1188,26 @@ class InstituteService {
         });
         if (!staff) throw new Error("لم يتم العثور على المدرب");
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'InstituteStaff',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تعديل بيانات عضو فريق العمل',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'InstituteStaff',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تعديل بيانات عضو فريق العمل',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return prisma.instituteStaff.update({
-                    where: { id: staffId },
-                    data: {
-                        ...(data.name !== undefined && { name: data.name }),
-                        email: data.email !== undefined ? data.email : undefined,
-                        phone: data.phone !== undefined ? data.phone : undefined,
-                        bio: data.bio !== undefined ? data.bio : undefined,
-                        ...(data.avatar !== undefined && { avatar: data.avatar }),
-                        notes: data.notes !== undefined ? data.notes : undefined,
-                    },
-                });
+            where: { id: staffId },
+            data: {
+                ...(data.name !== undefined && { name: data.name }),
+                email: data.email !== undefined ? data.email : undefined,
+                phone: data.phone !== undefined ? data.phone : undefined,
+                bio: data.bio !== undefined ? data.bio : undefined,
+                ...(data.avatar !== undefined && { avatar: data.avatar }),
+                notes: data.notes !== undefined ? data.notes : undefined,
+            },
+        });
     }
 
     // =====================================================
@@ -1275,19 +1275,19 @@ class InstituteService {
         return halls.map(hall => {
             const avail = hall.availability as any;
             const slots = (avail?.slots || []).map((slot: any) => {
-                 const targetDay = dayMap[slot.day];
-                 const isUsed = hall.sessions.some(s => s.startTime.getDay() === targetDay) || 
-                                hall.bookings.some(b => {
-                                   if (b.bookingMode === 'UNIFIED_TIME' && b.selectedDays.includes(slot.day as any)) return true;
-                                   // For custom time, just approximate by checking if it spans this day
-                                   const cur = new Date(b.startDate);
-                                   while (cur <= b.endDate) {
-                                       if (cur.getDay() === targetDay) return true;
-                                       cur.setDate(cur.getDate() + 1);
-                                   }
-                                   return false;
-                                });
-                 return { ...slot, isUsed };
+                const targetDay = dayMap[slot.day];
+                const isUsed = hall.sessions.some(s => s.startTime.getDay() === targetDay) ||
+                    hall.bookings.some(b => {
+                        if (b.bookingMode === 'UNIFIED_TIME' && b.selectedDays.includes(slot.day as any)) return true;
+                        // For custom time, just approximate by checking if it spans this day
+                        const cur = new Date(b.startDate);
+                        while (cur <= b.endDate) {
+                            if (cur.getDay() === targetDay) return true;
+                            cur.setDate(cur.getDate() + 1);
+                        }
+                        return false;
+                    });
+                return { ...slot, isUsed };
             });
 
             const bookedDatesSet = new Set<string>();
@@ -1299,12 +1299,12 @@ class InstituteService {
                 if (b.bookingMode !== 'UNIFIED_TIME') return;
                 const cur = new Date(b.startDate.toISOString().substring(0, 10) + 'T00:00:00');
                 const end = new Date(b.endDate.toISOString().substring(0, 10) + 'T23:59:59');
-                while(cur <= end) {
+                while (cur <= end) {
                     if (b.selectedDays.length > 0) {
-                         const dayMapRev: Record<number, string> = { 0: 'SUNDAY', 1: 'MONDAY', 2: 'TUESDAY', 3: 'WEDNESDAY', 4: 'THURSDAY', 5: 'FRIDAY', 6: 'SATURDAY' };
-                         if (b.selectedDays.includes(dayMapRev[cur.getDay()] as any)) {
-                             bookedDatesSet.add(`${cur.getFullYear()}-${String(cur.getMonth() + 1).padStart(2, '0')}-${String(cur.getDate()).padStart(2, '0')}`);
-                         }
+                        const dayMapRev: Record<number, string> = { 0: 'SUNDAY', 1: 'MONDAY', 2: 'TUESDAY', 3: 'WEDNESDAY', 4: 'THURSDAY', 5: 'FRIDAY', 6: 'SATURDAY' };
+                        if (b.selectedDays.includes(dayMapRev[cur.getDay()] as any)) {
+                            bookedDatesSet.add(`${cur.getFullYear()}-${String(cur.getMonth() + 1).padStart(2, '0')}-${String(cur.getDate()).padStart(2, '0')}`);
+                        }
                     }
                     cur.setDate(cur.getDate() + 1);
                 }
@@ -1412,7 +1412,7 @@ class InstituteService {
             };
             while (cursor <= end) {
                 if (rb.bookingMode === 'UNIFIED_TIME' && rb.selectedDays && Array.isArray(rb.selectedDays) && rb.selectedDays.length > 0) {
-                    const selectedDaysNumbers = rb.selectedDays.map((d:string) => dayMap[d]);
+                    const selectedDaysNumbers = rb.selectedDays.map((d: string) => dayMap[d]);
                     if (!selectedDaysNumbers.includes(cursor.getDay())) {
                         cursor.setDate(cursor.getDate() + 1);
                         continue;
@@ -1459,21 +1459,21 @@ class InstituteService {
         const institute = await prisma.institute.findUnique({ where: { userId } });
         if (!institute) throw new Error("لم يتم العثور على المعهد");
 
-        
-                auditService.logAction({
-                    action: 'CREATE',
-                    entityName: 'Room',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'إضافة قاعة جديدة',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'CREATE',
+            entityName: 'Room',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'إضافة قاعة جديدة',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return prisma.room.create({
-                    data: {
-                        ...data,
-                        instituteId: institute.id,
-                    },
-                });
+            data: {
+                ...data,
+                instituteId: institute.id,
+            },
+        });
     }
 
     async validateInstituteHallUpdate(userId: string, hallId: string, data: any) {
@@ -1502,11 +1502,11 @@ class InstituteService {
         let newAvailSlots: any[] = [];
         let newBlackoutPeriods: any[] = [];
         if (typeof data.availability === 'string') {
-            try { 
+            try {
                 const parsed = JSON.parse(data.availability);
-                newAvailSlots = parsed.slots || []; 
+                newAvailSlots = parsed.slots || [];
                 newBlackoutPeriods = parsed.blackoutPeriods || [];
-            } catch {}
+            } catch { }
         } else {
             newAvailSlots = data.availability?.slots || [];
             newBlackoutPeriods = data.availability?.blackoutPeriods || [];
@@ -1566,7 +1566,7 @@ class InstituteService {
             for (const slot of newAvailSlots) {
                 const upperDay = slot.day?.toUpperCase() || '';
                 if (dayMap[upperDay] !== sessionDay) continue;
-                
+
                 const sSplit = slot.startTime.split(':');
                 const slotStart = parseInt(sSplit[0]) * 60 + parseInt(sSplit[1]);
                 const eSplit = slot.endTime.split(':');
@@ -1612,7 +1612,7 @@ class InstituteService {
             while (current <= end) {
                 const day = current.getDay();
                 if (booking.bookingMode === 'UNIFIED_TIME' && booking.selectedDays.length > 0) {
-                    const selectedDaysNumbers = booking.selectedDays.map((d:string) => dayMap[d]);
+                    const selectedDaysNumbers = booking.selectedDays.map((d: string) => dayMap[d]);
                     if (!selectedDaysNumbers.includes(day)) {
                         current.setDate(current.getDate() + 1);
                         continue;
@@ -1717,18 +1717,18 @@ class InstituteService {
             });
         }
 
-        
-                auditService.logAction({
-                    action: 'DELETE',
-                    entityName: 'Room',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'حذف قاعة',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'DELETE',
+            entityName: 'Room',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'حذف قاعة',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return prisma.room.delete({
-                    where: { id: hallId },
-                });
+            where: { id: hallId },
+        });
     }
 
     /**
@@ -1971,14 +1971,14 @@ class InstituteService {
             }
         }
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'RoomBooking',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تحديث حالة حجز قاعة',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'RoomBooking',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تحديث حالة حجز قاعة',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return updatedBooking;
 
@@ -2094,14 +2094,14 @@ class InstituteService {
                 },
             });
 
-            
-                    auditService.logAction({
-                        action: 'UPDATE',
-                        entityName: 'Enrollment',
-                        entityId: 'system_log', // Default if ID is complex to resolve
-                        description: 'إلغاء تسجيل طالب',
-                        performedBy: userId
-                    }).catch(e => console.error(e));
+
+            auditService.logAction({
+                action: 'UPDATE',
+                entityName: 'Enrollment',
+                entityId: 'system_log', // Default if ID is complex to resolve
+                description: 'إلغاء تسجيل طالب',
+                performedBy: userId
+            }).catch(e => console.error(e));
 
             return { message: "تم إلغاء تسجيل الطالب بنجاح" };
         });
@@ -2288,7 +2288,7 @@ class InstituteService {
         // If publishing (ACTIVE) with sessions payload, create sessions
         if (data.status?.toUpperCase() === 'ACTIVE' && Array.isArray(data.sessions) && data.sessions.length > 0) {
             const isFlexible = data.deliveryType === 'flexible';
-        const sessionType = data.deliveryType === 'online' ? 'ONLINE' : 'IN_PERSON';
+            const sessionType = data.deliveryType === 'online' ? 'ONLINE' : 'IN_PERSON';
             const mappedSessions = data.sessions.map((s: any) => ({
                 startTime: new Date(`${s.date}T${s.startTime}`),
                 endTime: new Date(`${s.date}T${s.endTime}`),
@@ -2402,14 +2402,14 @@ class InstituteService {
             }
         }
 
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'Course',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تعديل بيانات دورة',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'Course',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تعديل بيانات دورة',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return updatedCourse;
     }
@@ -2514,17 +2514,15 @@ class InstituteService {
                 ? [data.trainerId]
                 : [];
 
-        if (trainerIds.length === 0) {
-            throw new Error("يجب اختيار مدرب واحد على الأقل");
-        }
-
         // Validate all trainers belong to this institute and are active
-        const validTrainers = await prisma.instituteStaff.findMany({
-            where: { id: { in: trainerIds }, instituteId: institute.id, status: "ACTIVE" },
-        });
+        if (trainerIds.length > 0) {
+            const validTrainers = await prisma.instituteStaff.findMany({
+                where: { id: { in: trainerIds }, instituteId: institute.id, status: "ACTIVE" },
+            });
 
-        if (validTrainers.length !== trainerIds.length) {
-            throw new Error("بعض المدربين غير موجودين أو غير نشطين في طاقم المعهد");
+            if (validTrainers.length !== trainerIds.length) {
+                throw new Error("بعض المدربين غير موجودين أو غير نشطين في طاقم المعهد");
+            }
         }
 
         // Validate required numeric fields
@@ -2648,14 +2646,14 @@ class InstituteService {
             });
         }
 
-        
-                auditService.logAction({
-                    action: 'CREATE',
-                    entityName: 'Course',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'إنشاء دورة جديدة',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'CREATE',
+            entityName: 'Course',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'إنشاء دورة جديدة',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return course;
     }
@@ -2751,14 +2749,14 @@ class InstituteService {
         }
 
         await this.activateCourseAndNotifyStudents(courseId);
-        
-                auditService.logAction({
-                    action: 'UPDATE',
-                    entityName: 'Course',
-                    entityId: 'system_log', // Default if ID is complex to resolve
-                    description: 'تفعيل دورة كانت معلقة بانتظار الحد الأدنى',
-                    performedBy: userId
-                }).catch(e => console.error(e));
+
+        auditService.logAction({
+            action: 'UPDATE',
+            entityName: 'Course',
+            entityId: 'system_log', // Default if ID is complex to resolve
+            description: 'تفعيل دورة كانت معلقة بانتظار الحد الأدنى',
+            performedBy: userId
+        }).catch(e => console.error(e));
 
         return { courseId };
     }
@@ -2836,7 +2834,7 @@ class InstituteService {
                         id: true,
                         title: true,
                         enrollments: {
-                            where: { status: { in: ['ACTIVE', 'PRELIMINARY', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT'] } },
+                            where: { status: { in: ['ACTIVE', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT'] } },
                             select: { id: true }
                         }
                     }
@@ -3164,13 +3162,20 @@ class InstituteService {
             });
 
             // Notify student about rejection/cancellation
+            const isCancellation = enrollment.status === 'ACTIVE' || enrollment.status === 'COMPLETED';
+            const title = isCancellation ? 'تم إلغاء تسجيلك' : 'تم رفض طلب التسجيل';
+            const messageAction = isCancellation ? 'تم إلغاء تسجيلك في دورة' : 'تم رفض طلب تسجيلك في دورة';
+            const message = `${messageAction} "${enrollment.course.title}".${reason ? ` السبب: ${reason}` : ''}`;
+
             await notificationService.createNotification({
                 userId: enrollment.student.id,
                 type: 'ENROLLMENT_REJECTED',
-                title: 'تم رفض طلب التسجيل',
-                message: `تم رفض طلب تسجيلك في دورة "${enrollment.course.title}".${reason ? ` السبب: ${reason}` : ''}`,
+                title: title,
+                message: message,
                 actionUrl: `/student/courses/${enrollment.courseId}`,
                 relatedEntityId: enrollmentId,
+                emailFn: enrollment.student.email ? () => mailerService.sendEnrollmentRejected(enrollment.student.email!, enrollment.student.name, enrollment.course.title, reason, isCancellation) : undefined,
+                whaFn: enrollment.student.phone ? () => whatsAppService.notifyEnrollmentRejected(enrollment.student.phone!, enrollment.student.name, enrollment.course.title, reason, isCancellation) : undefined,
             });
 
             return { message: 'تم إلغاء التسجيل بنجاح' };
@@ -3287,14 +3292,14 @@ class InstituteService {
                 }
             });
 
-            
-                    auditService.logAction({
-                        action: 'UPDATE',
-                        entityName: 'Enrollment',
-                        entityId: 'system_log', // Default if ID is complex to resolve
-                        description: 'تحديث حالة تسجيل طالب',
-                        performedBy: userId
-                    }).catch(e => console.error(e));
+
+            auditService.logAction({
+                action: 'UPDATE',
+                entityName: 'Enrollment',
+                entityId: 'system_log', // Default if ID is complex to resolve
+                description: 'تحديث حالة تسجيل طالب',
+                performedBy: userId
+            }).catch(e => console.error(e));
 
             return updatedEnrollment;
         });

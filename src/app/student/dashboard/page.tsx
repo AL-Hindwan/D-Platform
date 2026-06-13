@@ -146,7 +146,7 @@ export default function StudentDashboard() {
                   استعراض الدورات
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="h-10 rounded-lg border-blue-300/70 bg-blue-700/25 text-white hover:bg-blue-700/45">
+              <Button asChild variant="outline" className="h-10 rounded-lg border-blue-300/70 bg-blue-700/25 text-white hover:bg-white hover:text-blue-700">
                 <Link href="/student/my-courses">
                   <BookOpen className="ml-2 h-4 w-4" />
                   دوراتي
@@ -341,6 +341,7 @@ export default function StudentDashboard() {
                   name: course.trainer || "غير محدد",
                   avatar: getCourseOwnerAvatar(course) || makeFallbackAvatarDataUri(course.trainer || "غير محدد"),
                 }}
+                instructors={course.trainers}
                 basePath="/student/courses"
                 imageVariant="browse"
                 hideStats={true}

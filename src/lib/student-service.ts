@@ -6,6 +6,7 @@ export interface StudentCourse {
     title: string;
     shortDescription: string;
     trainer: string;
+    trainers?: { name: string; avatar?: string | null; id?: string }[];
     image: string | null;
     category: string;
 }

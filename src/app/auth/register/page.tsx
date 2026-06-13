@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useRef, useState } from "react"
 import Link from "next/link"
@@ -29,7 +29,12 @@ const registerSchema = z
       .trim()
       .min(1, REQUIRED_MESSAGE)
       .email("البريد الإلكتروني غير صالح"),
-    phone: z.string().trim().min(1, REQUIRED_MESSAGE),
+    phone: z
+      .string()
+      .trim()
+      .min(8, "رقم الهاتف يجب أن يتكون من 8 أرقام على الأقل")
+      .max(15, "رقم الهاتف يجب أن لا يتجاوز 15 رقماً")
+      .regex(/^\+?[0-9]+$/, "يجب أن يحتوي رقم الهاتف على أرقام فقط"),
     role: z.string().min(1, REQUIRED_MESSAGE),
     license: z.string().trim().optional(),
     proof: z.string().optional(),
@@ -253,7 +258,18 @@ export default function RegisterPage() {
               <Label htmlFor="phone" className={`${normalLabelClass} ${requiredLabelClass} ${errors.phone ? invalidLabelClass : ""}`}>رقم الهاتف</Label>
               <div className="relative">
                 <Phone className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-                <Input id="phone" type="tel" placeholder="أدخل رقم هاتفك" className={`pr-10 ${curveClass} ${normalInputClass} ${errors.phone ? invalidFieldClass : ""}`} {...register("phone")} />
+                <Input 
+                  id="phone" 
+                  type="tel" 
+                  dir="ltr"
+                  placeholder="أدخل رقم هاتفك" 
+                  className={`pr-10 text-right ${curveClass} ${normalInputClass} ${errors.phone ? invalidFieldClass : ""}`} 
+                  {...register("phone", {
+                    onChange: (e) => {
+                      e.target.value = e.target.value.replace(/[^\d+]/g, '')
+                    }
+                  })} 
+                />
               </div>
               {errors.phone && <p className={errorTextClass}>{errors.phone.message}</p>}
             </div>
@@ -278,7 +294,7 @@ export default function RegisterPage() {
                 <SelectContent>
                   <SelectItem value="STUDENT">طالب</SelectItem>
                   <SelectItem value="TRAINER">مدرب</SelectItem>
-                  <SelectItem value="INSTITUTE_ADMIN">مسؤول معهد</SelectItem>
+                  <SelectItem value="INSTITUTE_ADMIN">معهد</SelectItem>
                 </SelectContent>
               </Select>
               {errors.role && <p className={errorTextClass}>{errors.role.message}</p>}

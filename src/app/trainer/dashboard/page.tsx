@@ -57,11 +57,7 @@ export default function TrainerDashboard() {
 
   const sessionsToday = useMemo(() => {
     if (!data) return 0
-    const today = new Date()
-    return data.upcomingSessions.filter((s) => {
-      const d = new Date(s.startTime)
-      return d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate()
-    }).length
+    return data.stats.sessionsToday || 0
   }, [data])
 
   if (loading) {
@@ -123,7 +119,7 @@ export default function TrainerDashboard() {
                   إنشاء دورة جديدة
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="h-10 rounded-lg border-blue-300/60 bg-blue-700/30 text-white hover:bg-blue-700/50">
+              <Button asChild variant="outline" className="h-10 rounded-lg border-blue-300/60 bg-blue-700/30 text-white hover:bg-white hover:text-blue-700">
                 <Link href="/trainer/schedule">
                   <CalendarDays className="ml-2 h-4 w-4" />
                   عرض الجدول

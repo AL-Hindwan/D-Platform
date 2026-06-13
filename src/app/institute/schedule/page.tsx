@@ -105,6 +105,8 @@ export default function InstituteSchedulePage() {
   const [availableSlots, setAvailableSlots] = useState<string[]>([])
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null)
   const [isSlotsLoading, setIsSlotsLoading] = useState(false)
+  const [blackoutPeriods, setBlackoutPeriods] = useState<any[]>([])
+  const [unavailableMessage, setUnavailableMessage] = useState("")
 
   const [newDate, setNewDate] = useState("")
   const [newStartTime, setNewStartTime] = useState("")
@@ -122,6 +124,31 @@ export default function InstituteSchedulePage() {
     const t = setInterval(() => setNow(new Date()), 10_000)
     return () => clearInterval(t)
   }, [])
+
+  useEffect(() => {
+    if (isManageOpen && selectedSession?.roomId) {
+      instituteService.getHallAvailability(selectedSession.roomId)
+        .then((data) => {
+          setBlackoutPeriods(data.availability?.blackoutPeriods || [])
+        })
+        .catch((e) => console.error("Failed to fetch hall availability", e))
+    } else {
+      setBlackoutPeriods([])
+      setUnavailableMessage("")
+    }
+  }, [isManageOpen, selectedSession?.roomId])
+
+  const getBlackoutPeriodForDate = useCallback((dateKey: string) => {
+    const dDate = new Date(dateKey)
+    dDate.setHours(12, 0, 0, 0)
+    return blackoutPeriods.find((bp: any) => {
+      const start = new Date(bp.startDate)
+      start.setHours(0, 0, 0, 0)
+      const end = new Date(bp.endDate)
+      end.setHours(23, 59, 59, 999)
+      return dDate >= start && dDate <= end
+    })
+  }, [blackoutPeriods])
 
   const todayKey = formatDateKey(now)
   const todayStart = new Date()
@@ -230,9 +257,20 @@ export default function InstituteSchedulePage() {
 
   const handleSelectDay = useCallback(
     async (dateKey: string) => {
+      const blackout = getBlackoutPeriodForDate(dateKey)
+      if (blackout) {
+        setSelectedDate(dateKey)
+        setSelectedSlot(null)
+        setAvailableSlots([])
+        setUnavailableMessage(`فترة غير متاحة: ${blackout.label || 'صيانة أو حجز مسبق'}`)
+        return
+      }
+
       setSelectedDate(dateKey)
       setSelectedSlot(null)
       setAvailableSlots([])
+      setUnavailableMessage("")
+
       if (!selectedSession?.roomId) return
       setIsSlotsLoading(true)
       try {
@@ -266,7 +304,7 @@ export default function InstituteSchedulePage() {
         setIsSlotsLoading(false)
       }
     },
-    [selectedSession],
+    [selectedSession, getBlackoutPeriodForDate],
   )
 
   const handleOpenManage = (session: ScheduleSession) => {
@@ -276,6 +314,7 @@ export default function InstituteSchedulePage() {
     setSelectedDate(null)
     setSelectedSlot(null)
     setAvailableSlots([])
+    setUnavailableMessage("")
     setCalendarOffset(0)
     setUpdateAll(false)
     const startDate = new Date(session.startTime)
@@ -675,6 +714,7 @@ export default function InstituteSchedulePage() {
                     {calendarDays.map((day, idx) => {
                       if (!day) return <div key={idx} />
                       const selected = selectedDate === day.dateKey
+                      const blackout = getBlackoutPeriodForDate(day.dateKey)
                       return (
                         <button
                           key={idx}
@@ -685,7 +725,9 @@ export default function InstituteSchedulePage() {
                               ? "bg-blue-600 text-white"
                               : day.isPast
                                 ? "bg-gray-100 text-gray-300"
-                                : "border bg-white hover:bg-blue-50"
+                                : blackout
+                                  ? "bg-red-50 text-red-500 border-red-200 border hover:bg-red-100"
+                                  : "border bg-white hover:bg-blue-50"
                             }`}
                         >
                           {day.day}
@@ -700,6 +742,8 @@ export default function InstituteSchedulePage() {
                         <div className="flex justify-center py-6">
                           <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
                         </div>
+                      ) : unavailableMessage ? (
+                        <p className="py-4 text-center text-sm font-medium text-red-500">{unavailableMessage}</p>
                       ) : availableSlots.length > 0 ? (
                         <div className="grid grid-cols-3 gap-2">
                           {availableSlots.map((slot) => (

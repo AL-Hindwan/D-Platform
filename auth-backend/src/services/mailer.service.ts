@@ -119,13 +119,17 @@ class MailerService {
         });
     }
 
-    async sendEnrollmentRejected(to: string, studentName: string, courseTitle: string, reason?: string) {
+    async sendEnrollmentRejected(to: string, studentName: string, courseTitle: string, reason?: string, isCancellation: boolean = false) {
+        const title = isCancellation ? 'إلغاء التسجيل' : 'رفض التسجيل';
+        const subjectAction = isCancellation ? 'تم إلغاء تسجيلك في' : 'تم رفض طلب تسجيلك في';
+        const bodyAction = isCancellation ? 'بأنه تم إلغاء تسجيلك في دورة' : 'بأنه تم رفض طلب تسجيلك في دورة';
+        
         await this.send({
             to,
-            subject: `❌ تم رفض طلب تسجيلك في دورة "${courseTitle}"`,
-            html: this.wrapHtml('رفض التسجيل', `
+            subject: `❌ ${subjectAction} "${courseTitle}"`,
+            html: this.wrapHtml(title, `
                 <p>مرحباً <strong>${studentName}</strong>،</p>
-                <p>نأسف لإعلامك بأنه تم رفض طلب تسجيلك في دورة <strong>${courseTitle}</strong>.</p>
+                <p>نأسف لإعلامك ${bodyAction} <strong>${courseTitle}</strong>.</p>
                 ${reason ? `<div class="card"><p><strong>السبب:</strong> ${reason}</p></div>` : ''}
                 <p>يمكنك التواصل مع الدعم إذا كان لديك أي استفسار، أو التقدم لدورات أخرى.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/courses">استعرض الدورات</a>
@@ -457,6 +461,32 @@ class MailerService {
                     ${reason ? `<p>📝 <strong>سبب التعديل:</strong> ${reason}</p>` : ''}
                 </div>
                 <p>يرجى تحديث جدولك الشخصي وفقاً للموعد الجديد.</p>
+                <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/student/courses">عرض جدول الدورة</a>
+            `),
+        });
+    }
+
+    /**
+     * Notify a student that a session has been cancelled
+     */
+    async sendSessionCancelled(
+        to: string,
+        studentName: string,
+        courseTitle: string,
+        topic: string | undefined,
+        reason?: string,
+    ) {
+        const topicLine = topic ? `<p><strong>موضوع الجلسة:</strong> ${topic}</p>` : '';
+
+        await this.send({
+            to,
+            subject: `❌ إلغاء جلسة في دورة "${courseTitle}"`,
+            html: this.wrapHtml('إلغاء جلسة', `
+                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>نودّ إعلامك بأنه تم إلغاء إحدى جلسات دورة <strong>${courseTitle}</strong>.</p>
+                ${topicLine}
+                ${reason ? `<div class="card"><p>📝 <strong>سبب الإلغاء:</strong> ${reason}</p></div>` : ''}
+                <p>يرجى تحديث جدولك الشخصي.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/student/courses">عرض جدول الدورة</a>
             `),
         });

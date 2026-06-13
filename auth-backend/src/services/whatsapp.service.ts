@@ -42,10 +42,11 @@ class WhatsAppService {
         await this.send(phone, `🎓 تهانينا ${studentName}!\n\nتم قبول تسجيلك نهائياً في دورة "${courseTitle}".\n\nيمكنك الآن الوصول إلى جميع محتويات الدورة.\n\n— منصة الدورات`);
     }
 
-    async notifyEnrollmentRejected(phone: string, studentName: string, courseTitle: string, reason?: string) {
+    async notifyEnrollmentRejected(phone: string, studentName: string, courseTitle: string, reason?: string, isCancellation: boolean = false) {
+        const actionText = isCancellation ? 'تم إلغاء تسجيلك في' : 'تم رفض تسجيلك في';
         const msg = reason
-            ? `❌ مرحباً ${studentName}،\n\nنأسف، تم رفض تسجيلك في دورة "${courseTitle}".\nالسبب: ${reason}\n\n— منصة الدورات`
-            : `❌ مرحباً ${studentName}،\n\nنأسف، تم رفض تسجيلك في دورة "${courseTitle}".\n\n— منصة الدورات`;
+            ? `مرحباً ${studentName}،\n\n${actionText} دورة "${courseTitle}".\nالسبب: ${reason}\n\n- فريق المنصة`
+            : `مرحباً ${studentName}،\n\n${actionText} دورة "${courseTitle}".\n\n- فريق المنصة`;
         await this.send(phone, msg);
     }
 
@@ -129,6 +130,21 @@ class WhatsAppService {
         const reasonPart = reason ? `\n📝 السبب: ${reason}` : '';
         await this.send(phone,
             `🗓️ تحديث الجدول الدراسي — ${studentName}\n\nتم تحديث جدول دورة "${courseTitle}" بالكامل.\nعدد الجلسات الجديدة: ${sessionsCount} جلسة${reasonPart}\n\nيرجى مراجعة الجدول الجديد في المنصة.\n\n— منصة الدورات`
+        );
+    }
+
+    async notifySessionCancelled(
+        phone: string,
+        studentName: string,
+        courseTitle: string,
+        topic: string | undefined,
+        reason?: string,
+    ) {
+        const topicPart = topic ? `\nالجلسة: "${topic}"` : '';
+        const reasonPart = reason ? `\n📝 السبب: ${reason}` : '';
+
+        await this.send(phone,
+            `❌ إلغاء جلسة — ${studentName}\n\nتم إلغاء إحدى جلسات دورة "${courseTitle}"${topicPart}${reasonPart}\n\nيرجى تحديث جدولك.\n\n— منصة الدورات`
         );
     }
 }

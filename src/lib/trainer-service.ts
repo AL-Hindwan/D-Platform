@@ -6,6 +6,7 @@ export interface TrainerDashboardData {
         activeCourses: number;
         totalStudents: number;
         totalSessions: number;
+        sessionsToday: number;
         totalEarnings: number;
         upcomingSessions: number;
         pendingRoomBookings: number;
@@ -59,6 +60,7 @@ export interface ExploreCourse {
     sessionsCount: number;
     duration: number | string;
     trainer: { name: string; avatar: string | null };
+    staffTrainers?: { id: string; name: string; avatar: string | null }[];
     price: number;
     minStudents: number;
     courseStatus: 'ACTIVE' | 'PENDING_MINIMUM';
@@ -165,6 +167,7 @@ export interface Session {
     location: string;
     enrolledStudents: number;
     roomId: string | null;
+    isDirectBooking?: boolean;
 }
 
 class TrainerService {

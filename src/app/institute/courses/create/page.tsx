@@ -553,8 +553,8 @@ function CreateCoursePageInner() {
         try {
             setIsSubmitting(true)
 
-            if (status === 'ACTIVE' && !isInfoValid) {
-                throw new Error("يرجى إكمال بيانات الدورة الأساسية والتأكد من الحد الأدنى والأقصى للطلاب")
+            if (!isInfoValid) {
+                throw new Error("يجب تعبئة كل الحقول المطلوبة")
             }
 
             // Calculate Dates
@@ -725,7 +725,7 @@ function CreateCoursePageInner() {
     }
 
     // --- Validation ---
-    const isInfoValid = courseData.title && courseData.categoryId && selectedTrainerIds.length > 0 && courseData.description && courseData.price && courseData.minStudents && courseData.maxStudents && Number(courseData.minStudents) <= Number(courseData.maxStudents) && (imageFile || imagePreview);
+    const isInfoValid = courseData.title && courseData.categoryId && courseData.description && courseData.price && courseData.minStudents && courseData.maxStudents && Number(courseData.minStudents) <= Number(courseData.maxStudents) && (imageFile || imagePreview);
     const isLocationValid = () => {
         if (courseData.deliveryType === 'in_person') return !!courseData.hallId && selectedSessions.length > 0;
         if (courseData.deliveryType === 'online') return onlineSessions.some(s => s.date && s.startTime);
@@ -875,7 +875,7 @@ function CreateCoursePageInner() {
                                                 )}
                                             </div>
                                             <div className="space-y-2.5 pr-2 sm:pr-3 lg:pr-4">
-                                                <Label className="font-semibold">المدربون <span className="text-red-500">*</span></Label>
+                                                <Label className="font-semibold">المدربون</Label>
                                                 <div className="relative">
                                                     <button
                                                         type="button"
@@ -932,9 +932,7 @@ function CreateCoursePageInner() {
                                                         })}
                                                     </div>
                                                 )}
-                                                {showInfoErrors && selectedTrainerIds.length === 0 && (
-                                                    <p className="text-xs text-red-500 text-right">يرجى اختيار مدرب واحد على الأقل.</p>
-                                                )}
+
                                             </div>
                                             <div className="space-y-2.5 pr-2 sm:pr-3 lg:pr-4">
                                                 <Label className="font-semibold">وصف مختصر <span className="text-red-500">*</span></Label>

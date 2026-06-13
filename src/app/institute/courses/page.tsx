@@ -103,8 +103,8 @@ export default function InstituteCourses() {
       if (sortBy === "price_desc") return Number(b.price || 0) - Number(a.price || 0)
       if (sortBy === "students_desc") return Number(b.enrolledStudents || 0) - Number(a.enrolledStudents || 0)
       if (sortBy === "name_asc") return normalizeText(a.title).localeCompare(normalizeText(b.title), "ar")
-      const aDate = new Date(a.startDate || a.createdAt || 0).getTime()
-      const bDate = new Date(b.startDate || b.createdAt || 0).getTime()
+      const aDate = new Date(a.createdAt || 0).getTime()
+      const bDate = new Date(b.createdAt || 0).getTime()
       return bDate - aDate
     })
   }, [courses, searchQuery, statusFilter, sortBy])
@@ -141,6 +141,8 @@ export default function InstituteCourses() {
         return <Badge className="rounded-[6.5px] bg-emerald-100 text-emerald-700 hover:bg-emerald-100">مستمر</Badge>
       case "completed":
         return <Badge className="rounded-[6.5px] bg-blue-100 text-blue-700 hover:bg-blue-100">مكتمل</Badge>
+      case "pending_minimum":
+        return <Badge className="rounded-[6.5px] bg-amber-100 text-amber-700 hover:bg-amber-100">بانتظار اكتمال الحد الأدنى</Badge>
       case "pending_payment":
       case "pending_approval":
       case "pending_review":
@@ -190,7 +192,7 @@ export default function InstituteCourses() {
                 options={[
                   { label: "كل الحالات", value: "all" },
                   { label: "مستمر", value: "active" },
-                  { label: "بانتظار الموافقة على الدفع", value: "pending_payment" },
+                  { label: "بانتظار اكتمال الحد الأدنى", value: "pending_minimum" },
                   { label: "مسودة", value: "draft" },
                   { label: "مكتمل", value: "completed" },
                 ]}

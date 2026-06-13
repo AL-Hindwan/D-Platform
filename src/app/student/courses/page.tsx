@@ -283,25 +283,44 @@ function StudentCoursesPageContent(props: StudentCoursesPageProps) {
                       <CalendarDays className="h-3.5 w-3.5 text-slate-500" />
                       <span>{course.sessionsCount} جلسات</span>
                     </div>
-                    {course.deliveryType !== "in_person" && (
-                      <div className="inline-flex items-center gap-1">
-                        <Clock3 className="h-3.5 w-3.5 text-slate-500" />
-                        <span>{typeof course.duration === "number" ? course.duration : String(course.duration).replace(/[^\d]/g, "") || 0} ساعة</span>
-                      </div>
-                    )}
+
                   </div>
 
-                  <div className="mt-2 inline-flex items-center gap-2 text-[12px] text-slate-600">
-                    <div className="relative h-6 w-6 overflow-hidden rounded-full border border-slate-200 bg-blue-100">
-                      <Image
-                        src={creatorAvatar(course) || fallbackAvatarDataUri(creatorName(course))}
-                        alt={creatorName(course)}
-                        fill
-                        className="object-cover"
-                        unoptimized
-                      />
-                    </div>
-                    <span className="line-clamp-1">{creatorName(course)}</span>
+                  <div className="mt-2 flex items-center justify-start gap-2 text-[12px] text-slate-600">
+                    {course.staffTrainers && course.staffTrainers.length > 1 ? (
+                        <div className="flex flex-col gap-2 w-full pt-1">
+                            {course.staffTrainers.slice(0, 2).map((t, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                    <div className="relative w-6 h-6 rounded-full overflow-hidden border border-slate-200 shrink-0">
+                                        {t.avatar ? (
+                                            <Image src={resolveCourseImage(t.avatar)} alt={t.name} fill className="object-cover" unoptimized={true} />
+                                        ) : (
+                                            <div className="w-full h-full bg-blue-100 flex items-center justify-center text-[9px] font-bold text-blue-600">
+                                                {t.name.charAt(0)}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <span className="text-xs font-medium text-slate-600 truncate" title={t.name}>{t.name}</span>
+                                </div>
+                            ))}
+                            {course.staffTrainers.length > 2 && (
+                                <span className="text-[10px] font-medium text-slate-500 pr-1">+{course.staffTrainers.length - 2} مدربين آخرين</span>
+                            )}
+                        </div>
+                    ) : (
+                      <div className="inline-flex items-center gap-2">
+                        <div className="relative h-6 w-6 overflow-hidden rounded-full border border-slate-200 bg-blue-100">
+                          <Image
+                            src={creatorAvatar(course) || fallbackAvatarDataUri(creatorName(course))}
+                            alt={creatorName(course)}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        </div>
+                        <span className="line-clamp-1">{creatorName(course)}</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-auto pt-2.5">

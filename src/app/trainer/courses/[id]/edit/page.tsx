@@ -497,8 +497,8 @@ export default function EditCoursePage() {
         try {
             setIsSubmitting(true)
 
-            if (status === 'ACTIVE' && !isInfoValid) {
-                throw new Error("يرجى إكمال بيانات الدورة الأساسية والتأكد من الحد الأدنى والأقصى للطلاب")
+            if (!isInfoValid) {
+                throw new Error("يجب تعبئة كل الحقول المطلوبة")
             }
 
             // Calculate Dates

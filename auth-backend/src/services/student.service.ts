@@ -32,7 +32,7 @@ class StudentService {
                         shortDescription: true,
                         image: true,
                         category: { select: { name: true } },
-                        trainer: { select: { name: true } },
+                        trainer: { select: { id: true, name: true, avatar: true } },
                         staffTrainerIds: true
                     }
                 }
@@ -41,14 +41,47 @@ class StudentService {
             orderBy: { enrolledAt: 'desc' }
         });
 
-        const currentCourses = enrollments.map((e: any) => ({
-            id: e.course.id,
-            title: e.course.title,
-            shortDescription: e.course.shortDescription || '',
-            trainer: e.course.trainer?.name || ((e.course.staffTrainerIds as string[])?.length > 0 ? 'مدرب معهد' : 'مدرب'),
-            image: e.course.image,
-            category: e.course.category?.name || 'عام',
-        }));
+        const allStaffIds = Array.from(new Set(
+            enrollments.flatMap(e => (e.course.staffTrainerIds as string[]) || [])
+        ));
+
+        const staffDetailsMap = new Map<string, { name: string, avatar: string | null }>();
+        if (allStaffIds.length > 0) {
+            const staff = await prisma.instituteStaff.findMany({
+                where: { id: { in: allStaffIds } },
+                select: { id: true, name: true, avatar: true }
+            });
+            staff.forEach(s => staffDetailsMap.set(s.id, { name: s.name, avatar: s.avatar }));
+        }
+
+        const currentCourses = enrollments.map((e: any) => {
+            const staffIds = (e.course.staffTrainerIds as string[]) || [];
+
+            const trainersList = staffIds.length > 0
+                ? staffIds.map((id: string) => {
+                    const details = staffDetailsMap.get(id);
+                    return {
+                        id,
+                        name: details?.name || 'مدرب المعهد',
+                        avatar: details?.avatar || null
+                    }
+                })
+                : [{
+                    id: e.course.trainer?.id || 'unknown',
+                    name: e.course.trainer?.name || 'مدرب',
+                    avatar: e.course.trainer?.avatar || null
+                }];
+
+            return {
+                id: e.course.id,
+                title: e.course.title,
+                shortDescription: e.course.shortDescription || '',
+                trainer: trainersList.map(t => t.name).join('، '),
+                trainers: trainersList,
+                image: e.course.image,
+                category: e.course.category?.name || 'عام',
+            };
+        });
 
         // 3. Get recent notifications
         const recentNotificationsRaw = await prisma.notification.findMany({
@@ -608,10 +641,10 @@ class StudentService {
                         category: true,
                         sessions: {
                             orderBy: { startTime: 'asc' },
-                            include: { room: true }
+                            include: { room: { include: { institute: true } } }
                         },
                         roomBookings: {
-                            include: { room: true },
+                            include: { room: { include: { institute: true } } },
                             take: 1
                         },
                         // announcements are fetched separately below with proper OR filtering
@@ -693,6 +726,8 @@ class StudentService {
             orderBy: { createdAt: 'desc' }
         });
 
+        const resolvedInstitute = (course as any).institute || (course as any).roomBookings?.[0]?.room?.institute || primarySession?.room?.institute || null;
+
         return {
             id: course.id,
             title: course.title,
@@ -744,16 +779,16 @@ class StudentService {
                 specialties: (course.trainer as any)?.trainerProfile?.specialties || []
             },
             staffTrainers,
-            institute: (course as any).institute ? {
-                id: (course as any).institute.id,
-                name: (course as any).institute.name,
-                logo: (course as any).institute.logo,
-                email: (course as any).institute.email,
-                phone: (course as any).institute.phone,
-                address: (course as any).institute.address,
-                locationUrl: (course as any).institute.locationUrl,
-                description: (course as any).institute.description,
-                features: (course as any).institute.features ?? [],
+            institute: resolvedInstitute ? {
+                id: resolvedInstitute.id,
+                name: resolvedInstitute.name,
+                logo: resolvedInstitute.logo,
+                email: resolvedInstitute.email,
+                phone: resolvedInstitute.phone,
+                address: resolvedInstitute.address,
+                locationUrl: resolvedInstitute.locationUrl,
+                description: resolvedInstitute.description,
+                features: resolvedInstitute.features ?? [],
             } : null,
             sessions: course.sessions.map(s => ({
                 id: s.id,

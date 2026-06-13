@@ -233,12 +233,7 @@ function TrainerExplorePageContent() {
                     <CalendarDays className="h-3.5 w-3.5 text-slate-500" />
                     <span>{course.sessionsCount} جلسات</span>
                   </div>
-                  {course.deliveryType !== "in_person" && (
-                    <div className="inline-flex items-center gap-1">
-                      <Clock3 className="h-3.5 w-3.5 text-slate-500" />
-                      <span>{typeof course.duration === "number" ? course.duration : String(course.duration).replace(/[^\d]/g, "") || 0} ساعة</span>
-                    </div>
-                  )}
+
                 </div>
 
                 <div className="mt-2 inline-flex items-center gap-2 text-[12px] text-slate-600">

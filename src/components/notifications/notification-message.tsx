@@ -53,18 +53,22 @@ export function NotificationMessage({ message, isFull = false }: NotificationMes
     }
   })
 
+  // If the announcement is from an institute, we don't need to show the sender since they are the same
+  const hasInstitute = metadata.some(m => m.label === "المعهد");
+  const displayMetadata = hasInstitute ? metadata.filter(m => m.label !== "المرسل") : metadata;
+
   if (!isFull) {
     return (
       <div className="space-y-1">
         <p className="text-sm font-medium text-gray-800 line-clamp-1">{mainMessage}</p>
         <div className="flex flex-wrap gap-x-3 gap-y-1">
-          {metadata.slice(0, 2).map((item, idx) => (
+          {displayMetadata.slice(0, 2).map((item, idx) => (
             <div key={idx} className="flex items-center gap-1 text-[11px] text-gray-500">
               <span className={item.color}>{item.icon}</span>
               <span className="truncate max-w-[120px]">{item.value}</span>
             </div>
           ))}
-          {metadata.length > 2 && <span className="text-[10px] text-gray-400">...</span>}
+          {displayMetadata.length > 2 && <span className="text-[10px] text-gray-400">...</span>}
         </div>
       </div>
     )
@@ -79,9 +83,9 @@ export function NotificationMessage({ message, isFull = false }: NotificationMes
         </div>
       </div>
 
-      {metadata.length > 0 && (
+      {displayMetadata.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-          {metadata.map((item, idx) => (
+          {displayMetadata.map((item, idx) => (
             <div 
               key={idx} 
               className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 bg-white hover:border-gray-200 transition-colors"

@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
@@ -838,7 +838,7 @@ function InstituteStudentsRegistrationsPageContent() {
                             <DropdownMenuItem onClick={() => openStudentCourses(row)}>عرض الدورات</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => openStudentRequests(row)}>عرض الدفع</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => openMessageModal(row.latestEnrollment)}>إرسال رسالة</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => openReasonByStudent(row, "stop")} className="text-amber-700">إيقاف من دورة</DropdownMenuItem>
+
                             <DropdownMenuItem onClick={() => openReasonByStudent(row, "cancel")} className="text-rose-700">إلغاء تسجيل من دورة</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -886,7 +886,7 @@ function InstituteStudentsRegistrationsPageContent() {
                           <DropdownMenuItem onClick={() => openStudentCourses(row)}>عرض الدورات</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => openStudentRequests(row)}>عرض الدفع</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => openMessageModal(row.latestEnrollment)}>إرسال رسالة</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => openReasonByStudent(row, "stop")} className="text-amber-700">إيقاف من دورة</DropdownMenuItem>
+
                           <DropdownMenuItem onClick={() => openReasonByStudent(row, "cancel")} className="text-rose-700">إلغاء تسجيل من دورة</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

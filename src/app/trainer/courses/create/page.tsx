@@ -442,8 +442,8 @@ export default function CreateCoursePage() {
         try {
             setIsSubmitting(true)
 
-            if (status === 'ACTIVE' && !isInfoValid) {
-                throw new Error("يرجى إكمال بيانات الدورة الأساسية والتأكد من الحد الأدنى والأقصى للطلاب")
+            if (!isInfoValid) {
+                throw new Error("يجب تعبئة كل الحقول المطلوبة")
             }
 
             // Calculate Dates
@@ -1303,8 +1303,8 @@ export default function CreateCoursePage() {
                                                                 type="button"
                                                                 onClick={() => setLabelingMode('individual')}
                                                                 className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${labelingMode === 'individual'
-                                                                        ? 'border-blue-600 bg-blue-600 text-white'
-                                                                        : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                                                                    ? 'border-blue-600 bg-blue-600 text-white'
+                                                                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                                                                     }`}
                                                             >
                                                                 <CheckCircle className="h-4 w-4" />
@@ -1314,8 +1314,8 @@ export default function CreateCoursePage() {
                                                                 type="button"
                                                                 onClick={() => setLabelingMode('grouped')}
                                                                 className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${labelingMode === 'grouped'
-                                                                        ? 'border-blue-600 bg-blue-600 text-white'
-                                                                        : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                                                                    ? 'border-blue-600 bg-blue-600 text-white'
+                                                                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                                                                     }`}
                                                             >
                                                                 <ListChecks className="h-4 w-4" />
@@ -1436,8 +1436,8 @@ export default function CreateCoursePage() {
                                                                                         </td>
                                                                                         <td className="px-3 py-1.5">
                                                                                             <span className={`text-xs font-medium ${getEffectiveTopic(idx + 1) === 'جلسة حضورية'
-                                                                                                    ? 'text-slate-400 italic'
-                                                                                                    : 'text-blue-700'
+                                                                                                ? 'text-slate-400 italic'
+                                                                                                : 'text-blue-700'
                                                                                                 }`}>
                                                                                                 {getEffectiveTopic(idx + 1)}
                                                                                             </span>

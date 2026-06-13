@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState, type MouseEvent, type ReactNode } from "react"
-import { Users, Clock, ArrowRight, Heart, MapPin } from "lucide-react"
+import { Users, Clock, CalendarDays, ArrowRight, Heart, MapPin } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -161,9 +161,6 @@ export function CourseCard({
                 )}
 
                 {/* Course Status Badge */}
-                <div className="absolute top-10 right-3 z-50 bg-black text-white text-[10px] px-1 rounded">
-                    DEBUG: {String(courseStatus)}
-                </div>
                 {courseStatus === "PENDING_MINIMUM" ? (
                     <div className="absolute top-3 right-3 z-10">
                         <Badge className="bg-amber-500/95 text-white hover:bg-amber-600 backdrop-blur-sm shadow-sm border border-amber-300/30">
@@ -203,7 +200,7 @@ export function CourseCard({
                 {!hideStats && (
                     <div className="flex items-center justify-start gap-2 text-xs text-muted-foreground mb-1">
                         <div className="flex items-center gap-1 bg-secondary/50 px-2 py-1 rounded-md">
-                            <Clock className="w-3 h-3" />
+                            <CalendarDays className="w-3 h-3" />
                             <span>{duration}</span>
                         </div>
                         <div className="flex items-center gap-1 bg-secondary/50 px-2 py-1 rounded-md">
@@ -247,10 +244,10 @@ export function CourseCard({
                 {!hideInstructorSection && (
                     <div className="flex items-center justify-start gap-2 mt-auto pt-3 border-t border-border/50">
                         {instructors && instructors.length > 1 ? (
-                            <div className="flex flex-col gap-1 w-full">
-                                <div className="flex items-center gap-1">
-                                    {instructors.slice(0, 3).map((t, i) => (
-                                        <div key={i} className="relative w-6 h-6 rounded-full overflow-hidden border-2 border-white -ml-2 first:ml-0 shadow-sm" style={{ zIndex: 10 - i }}>
+                            <div className="flex flex-col gap-2 w-full pt-1">
+                                {instructors.slice(0, 2).map((t, i) => (
+                                    <div key={i} className="flex items-center gap-2">
+                                        <div className="relative w-6 h-6 rounded-full overflow-hidden border border-slate-200 shrink-0">
                                             {t.avatar ? (
                                                 <Image src={t.avatar} alt={t.name} fill className="object-cover" unoptimized={true} />
                                             ) : (
@@ -259,14 +256,12 @@ export function CourseCard({
                                                 </div>
                                             )}
                                         </div>
-                                    ))}
-                                    {instructors.length > 3 && (
-                                        <span className="text-xs text-muted-foreground mr-1">+{instructors.length - 3}</span>
-                                    )}
-                                </div>
-                                <span className="text-xs font-medium text-muted-foreground truncate">
-                                    {instructors.map(t => t.name).join("، ")}
-                                </span>
+                                        <span className="text-xs font-medium text-muted-foreground truncate" title={t.name}>{t.name}</span>
+                                    </div>
+                                ))}
+                                {instructors.length > 2 && (
+                                    <span className="text-[10px] font-medium text-slate-500 pr-1">+{instructors.length - 2} مدربين آخرين</span>
+                                )}
                             </div>
                         ) : (
                             <>
