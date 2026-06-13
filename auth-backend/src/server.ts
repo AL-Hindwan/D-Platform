@@ -80,8 +80,10 @@ app.get('/health', (_req: Request, res: Response) => {
 
 import notificationRoutes from './routes/notification.routes';
 import publicRoutes from './routes/public.routes';
+import { maintenanceMiddleware } from './middleware/maintenance.middleware';
 
 // Routes
+app.use(maintenanceMiddleware);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/institute', instituteRoutes);

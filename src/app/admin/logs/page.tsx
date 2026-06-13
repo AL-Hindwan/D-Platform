@@ -27,6 +27,33 @@ interface Log {
   rawAction?: string
 }
 
+// Helper component to format JSON in log details
+const LogDetailsFormatter = ({ text }: { text: string }) => {
+  if (!text) return null;
+
+  // If it's pure JSON
+  try {
+    if (text.trim().startsWith('{') || text.trim().startsWith('[')) {
+      return <span className="text-sm text-gray-400 italic">تفاصيل تقنية إضافية</span>;
+    }
+  } catch (e) {
+    // Ignore
+  }
+
+  let displayText = text;
+  
+  if (displayText.includes('القيم القديمة:')) {
+    displayText = displayText.split('القيم القديمة:')[0];
+  } else if (displayText.includes('القيم الجديدة:')) {
+    displayText = displayText.split('القيم الجديدة:')[0];
+  }
+
+  // Clean up trailing punctuation or spaces
+  displayText = displayText.replace(/[\.\-\s]+$/, '');
+
+  return <span className="text-sm">{displayText}</span>;
+};
+
 export default function AdminLogs() {
   const [logs, setLogs] = useState<Log[]>([])
   const [loading, setLoading] = useState(true)
@@ -223,10 +250,10 @@ export default function AdminLogs() {
                   <TableCell className="font-medium">{log.action}</TableCell>
                   <TableCell>{log.user}</TableCell>
                   <TableCell>
-                    <div className="text-sm text-gray-600">
-                      {log.details}
-                      {log.amount && ` (${formatNumber(log.amount)} ريال)`}
-                      {log.ip && ` - IP: ${log.ip}`}
+                    <div className="text-gray-600">
+                      <LogDetailsFormatter text={log.details} />
+                      {log.amount && <div className="text-sm mt-1">({formatNumber(log.amount)} ريال)</div>}
+                      {log.ip && <div className="text-sm mt-1 text-gray-400">IP: {log.ip}</div>}
                     </div>
                   </TableCell>
                   <TableCell>{getStatusBadge(log.status)}</TableCell>

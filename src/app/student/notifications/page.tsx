@@ -15,6 +15,7 @@ import { NotificationMessage } from "@/components/notifications/notification-mes
 import { toast } from "sonner"
 import Link from "next/link"
 import { downloadRegistrationCertificate } from "@/lib/certificate-generator"
+import { usePlatform } from "@/contexts/platform-context"
 
 export default function StudentNotificationsPage() {
   const radiusClass = "rounded-[6.5px]"
@@ -27,6 +28,7 @@ export default function StudentNotificationsPage() {
   const [entityToCourseId, setEntityToCourseId] = useState<Map<string, string>>(new Map())
   const [isDownloadingCert, setIsDownloadingCert] = useState(false)
   const { refreshUnreadCount, clearUnread } = useNotifications()
+  const { settings } = usePlatform()
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -235,7 +237,11 @@ export default function StudentNotificationsPage() {
     
     try {
       setIsDownloadingCert(true)
-      await downloadRegistrationCertificate(enrollmentId, "منصة دال")
+      await downloadRegistrationCertificate(
+        enrollmentId, 
+        settings?.general?.siteName || "منصة دال",
+        settings?.general?.siteLogo
+      )
     } catch (error) {
       // Error is handled in the utility
     } finally {

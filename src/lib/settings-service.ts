@@ -4,9 +4,12 @@ export interface SystemSettings {
   general: {
     siteName: string;
     siteDescription: string;
+    siteLogo: string;
     contactEmail: string;
     supportPhone: string;
     maintenanceMode: string;
+    maintenanceMessage: string;
+    maintenanceEndTime: string;
     registrationEnabled: string;
   };
   email: {
@@ -57,6 +60,38 @@ class SettingsService {
     }));
     await apiClient.put('/api/admin/settings', entries);
   }
+
+  /**
+   * POST /api/admin/settings/maintenance — تفعيل وضع الصيانة
+   */
+  async updateMaintenanceMode(data: {
+    maintenanceMode: boolean | string;
+    maintenanceMessage?: string;
+    maintenanceEndTime?: string;
+    hardMode?: boolean;
+  }): Promise<void> {
+    await apiClient.post('/api/admin/settings/maintenance', data);
+  }
+
+  /**
+   * POST /api/admin/settings/logo — رفع شعار جديد للمنصة
+   */
+  async uploadSiteLogo(file: File): Promise<{ logoUrl: string }> {
+    const formData = new FormData();
+    formData.append('logo', file);
+
+    const response = await apiClient.post<{
+      success: boolean;
+      message: string;
+      data: { logoUrl: string };
+    }>('/api/admin/settings/logo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data.data;
+  }
 }
 
 export const settingsService = new SettingsService();
@@ -65,8 +100,12 @@ export interface PublicSettings {
   general: {
     siteName: string;
     siteDescription: string;
+    siteLogo?: string;
     contactEmail: string;
     supportPhone: string;
+    maintenanceMode?: boolean;
+    maintenanceMessage?: string;
+    maintenanceEndTime?: string;
   };
   legal: {
     terms: {
@@ -92,6 +131,7 @@ export async function fetchPublicSettings(): Promise<PublicSettings> {
   const defaultGeneral = {
     siteName: "منصة دال",
     siteDescription: "منصة شاملة لحجز وإدارة الدورات التدريبية",
+    siteLogo: "",
     contactEmail: "support@platform.com",
     supportPhone: "",
   };

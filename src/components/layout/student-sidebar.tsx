@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Book, BookOpen, Home, Calendar } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, getFileUrl } from "@/lib/utils"
 import { PLATFORM_NAME } from "@/lib/brand"
 import { usePlatform } from "@/contexts/platform-context"
 
@@ -26,7 +26,7 @@ export function StudentSidebar() {
       <div className="p-6 h-16 flex items-center gap-3 border-b border-gray-100 dark:border-slate-800">
         <Link href="/student/dashboard" className="flex items-center gap-3">
           <div className="relative w-8 h-8">
-            <Image src="/images/logo.png" alt={siteName} fill className="object-contain" />
+            <Image src={getFileUrl(settings?.general?.siteLogo) || "/images/logo.png"} alt={siteName} fill className="object-contain" unoptimized />
           </div>
           <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-indigo-600">
             {siteName}

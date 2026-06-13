@@ -2,6 +2,7 @@ import { Router } from 'express';
 import adminController from '../controllers/admin.controller';
 import settingsController from '../controllers/settings.controller';
 import { authenticate } from '../middleware/authenticate';
+import { upload } from '../middleware/upload';
 
 const router = Router();
 
@@ -65,6 +66,8 @@ router.post('/announcements/:id/send', adminController.sendAnnouncement.bind(adm
 // System settings
 router.get('/settings', settingsController.getSettings);
 router.put('/settings', settingsController.updateSettings);
+router.post('/settings/maintenance', settingsController.updateMaintenanceMode);
+router.post('/settings/logo', upload.single('logo'), settingsController.uploadLogo);
 
 // Halls (all institutes) - admin view
 router.get('/halls', adminController.getAllHalls.bind(adminController));

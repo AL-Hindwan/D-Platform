@@ -10,6 +10,8 @@ import { PLATFORM_NAME } from "@/lib/brand";
 
 import { fetchPublicSettings } from "@/lib/settings-service";
 
+import { MaintenanceGuard } from "@/components/layout/maintenance-guard";
+
 export async function generateMetadata(): Promise<Metadata> {
   const { general } = await fetchPublicSettings();
   return {
@@ -38,8 +40,10 @@ export default function RootLayout({
                 enableSystem={false}
                 disableTransitionOnChange
               >
-                <NavbarWrapper />
-                {children}
+                <MaintenanceGuard>
+                  <NavbarWrapper />
+                  {children}
+                </MaintenanceGuard>
                 <Toaster richColors position="bottom-right" />
               </ThemeProvider>
             </PlatformProvider>

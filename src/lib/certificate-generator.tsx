@@ -6,13 +6,13 @@ import { CertificateData, RegistrationCertificate } from "@/components/certifica
 import { toast } from "sonner"
 import apiClient from "./api-client"
 
-export async function downloadRegistrationCertificate(enrollmentId: string, siteName: string = "Daal Platform") {
+export async function downloadRegistrationCertificate(enrollmentId: string, siteName: string = "Daal Platform", siteLogo?: string) {
   let container: HTMLDivElement | null = null;
   let root: ReturnType<typeof createRoot> | null = null;
   
   try {
     // 1. Fetch certificate data from backend
-    const response = await apiClient.get<{ success: boolean, message: string, data: Omit<CertificateData, "siteName"> }>(
+    const response = await apiClient.get<{ success: boolean, message: string, data: Omit<CertificateData, "siteName" | "siteLogo"> }>(
       `/api/student/enrollments/${enrollmentId}/certificate`
     );
     
@@ -23,6 +23,7 @@ export async function downloadRegistrationCertificate(enrollmentId: string, site
     const certificateData: CertificateData = {
       ...response.data.data,
       siteName,
+      siteLogo,
     };
 
     // 2. Create a hidden container in the DOM

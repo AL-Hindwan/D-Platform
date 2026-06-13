@@ -1,5 +1,6 @@
 import React from "react"
 import { Calendar, CheckCircle, GraduationCap, MapPin, ShieldCheck, User, Award, BookOpen } from "lucide-react"
+import { getFileUrl } from "@/lib/utils"
 
 export interface CertificateData {
   studentName: string
@@ -12,6 +13,7 @@ export interface CertificateData {
   enrolledAt: string
   issueDate: string
   siteName: string
+  siteLogo?: string
 }
 
 export function RegistrationCertificate({ data }: { data: CertificateData }) {
@@ -68,7 +70,7 @@ export function RegistrationCertificate({ data }: { data: CertificateData }) {
               <p style={{ margin: 0, fontSize: "12px", color: "#64748B", fontWeight: "500" }}>بوابة التعليم الرائدة</p>
             </div>
             <div style={{ width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <img src="/images/logo.png" alt={data.siteName} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+              <img src={getFileUrl(data.siteLogo) || "/images/logo.png"} alt={data.siteName} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
             </div>
           </div>
         </div>

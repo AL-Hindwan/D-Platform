@@ -83,6 +83,15 @@ apiClient.interceptors.response.use(
         return response;
     },
     async (error: AxiosError) => {
+        // Intercept 503 Maintenance Mode
+        if (error.response?.status === 503 && (error.response?.data as any)?.code === 'MAINTENANCE_MODE_ACTIVE') {
+            if (typeof window !== 'undefined') {
+                // Dispatch a custom event so the MaintenanceGuard can catch it
+                window.dispatchEvent(new Event('maintenance-mode-active'));
+            }
+            return Promise.reject(error);
+        }
+
         const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
         // If error is not 401 or no config, reject immediately

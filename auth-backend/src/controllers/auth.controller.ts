@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import authService from '../services/auth.service';
 import { sendSuccess, sendError } from '../utils/response';
 import { AuthRequest } from '../middleware/authenticate';
+import prisma from '../config/database';
 import {
     RegisterInput,
     LoginInput,
@@ -68,6 +69,15 @@ export class AuthController {
         try {
             const data: LoginInput = req.body;
             const result = await authService.login(data);
+
+            // Check maintenance mode
+            const maintenanceSetting = await prisma.systemSetting.findUnique({
+                where: { key: 'general.maintenanceMode' }
+            });
+
+            if (maintenanceSetting?.value === 'true' && result.user.role !== 'PLATFORM_ADMIN') {
+                return sendError(res, 'المنصة تحت الصيانة حالياً. يرجى المحاولة لاحقاً.', 503);
+            }
 
             // Set refresh token in HTTP-only cookie
             res.cookie('refreshToken', result.refreshToken, {

@@ -26,6 +26,7 @@ import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { PublicService, type CategoryData, type FeaturedCourse, type PlatformStats } from "@/lib/public-service"
 import { getFileUrl } from "@/lib/utils"
+import { Footer } from "@/components/layout/footer"
 import { PLATFORM_NAME } from "@/lib/brand"
 import { usePlatform } from "@/contexts/platform-context"
 
@@ -92,7 +93,7 @@ function LandingHeader() {
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2">
             <span className="relative h-9 w-9">
-              <Image src="/images/logo.png" alt={siteName} fill className="object-contain" />
+              <Image src={getFileUrl(settings?.general?.siteLogo) || "/images/logo.png"} alt={siteName} fill className="object-contain" unoptimized />
             </span>
             <span className="text-xl font-extrabold text-[#2563EB]">{siteName}</span>
           </Link>
@@ -512,37 +513,7 @@ function FinalCTASection() {
   )
 }
 
-function LandingFooter() {
-  const { settings } = usePlatform()
-  const siteName = settings?.general.siteName || PLATFORM_NAME
-  const siteDesc = settings?.general.siteDescription || "منصة تعليمية عربية لإدارة الدورات والتسجيل والمتابعة بكل سهولة."
-  const contactEmail = settings?.general.contactEmail || "info@coursebooking.com"
-  const supportPhone = settings?.general.supportPhone || "+966 50 000 0000"
 
-  return (
-    <footer className="border-t border-slate-200 bg-slate-900 py-10 text-slate-300" dir="rtl">
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 md:grid-cols-2">
-        <div>
-          <div className="mb-3 flex items-center gap-2">
-            <span className="relative h-8 w-8"><Image src="/images/logo.png" alt={siteName} fill className="object-contain" /></span>
-            <span className="text-xl font-extrabold text-white">{siteName}</span>
-          </div>
-          <p className="text-sm leading-7 text-slate-400">{siteDesc}</p>
-        </div>
-        <div>
-          <h4 className="mb-3 font-bold text-white">تواصل معنا</h4>
-          <div className="space-y-3 text-sm">
-            <a href={`mailto:${contactEmail}`} className="block hover:text-white transition-colors">{contactEmail}</a>
-            <a href={`https://wa.me/${supportPhone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="block hover:text-white transition-colors" dir="ltr">{supportPhone}</a>
-          </div>
-        </div>
-      </div>
-      <div className="mx-auto mt-8 w-full max-w-7xl border-t border-slate-800 px-4 pt-5 text-sm text-slate-400 sm:px-6">
-        © {new Date().getFullYear()} {siteName}. جميع الحقوق محفوظة.
-      </div>
-    </footer>
-  )
-}
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true)
@@ -584,7 +555,7 @@ export default function HomePage() {
       <HowItWorksSection />
       <PartnerCTASection />
       <FinalCTASection />
-      <LandingFooter />
+      <Footer />
     </main>
   )
 }

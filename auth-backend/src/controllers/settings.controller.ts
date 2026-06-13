@@ -13,6 +13,9 @@ const DEFAULTS: Record<string, string> = {
     'general.contactEmail': 'support@platform.com',
     'general.supportPhone': '',
     'general.maintenanceMode': 'false',
+    'general.maintenanceMessage': 'المنصة تحت الصيانة حالياً، يرجى المحاولة لاحقاً.',
+    'general.maintenanceEndTime': '',
+    'general.siteLogo': '',
     'general.registrationEnabled': 'true',
     'email.fromName': process.env.SMTP_FROM?.split('<')[0]?.trim() || 'منصة دال',
     'email.fromEmail': process.env.SMTP_FROM?.match(/<(.*)>/)?.[1] || process.env.SMTP_FROM || '',
@@ -131,6 +134,10 @@ export const settingsController = {
                             'general.siteDescription',
                             'general.contactEmail',
                             'general.supportPhone',
+                            'general.maintenanceMode',
+                            'general.maintenanceMessage',
+                            'general.maintenanceEndTime',
+                            'general.siteLogo',
                             'legal.termsContent',
                             'legal.termsUpdatedAt',
                             'legal.privacyContent',
@@ -155,6 +162,10 @@ export const settingsController = {
                         siteDescription: map['general.siteDescription'],
                         contactEmail: map['general.contactEmail'],
                         supportPhone: map['general.supportPhone'],
+                        maintenanceMode: map['general.maintenanceMode'] === 'true',
+                        maintenanceMessage: map['general.maintenanceMessage'],
+                        maintenanceEndTime: map['general.maintenanceEndTime'],
+                        siteLogo: map['general.siteLogo'],
                     },
                     legal: {
                         terms: {
@@ -170,6 +181,81 @@ export const settingsController = {
             });
         } catch (error: any) {
             return res.status(500).json({ success: false, message: 'فشل في جلب الإعدادات العامة' });
+        }
+    },
+
+    /**
+     * POST /api/admin/settings/maintenance
+     * Activates or deactivates maintenance mode, with optional Hard Mode (logout all users)
+     */
+    updateMaintenanceMode: async (req: AuthRequest, res: Response, _next: NextFunction) => {
+        try {
+            if (req.user?.role !== 'PLATFORM_ADMIN') {
+                return sendError(res, 'غير مصرح لك بالوصول', 403);
+            }
+
+            const { maintenanceMode, maintenanceMessage, maintenanceEndTime, hardMode } = req.body;
+
+            const entries = [
+                { key: 'general.maintenanceMode', value: String(maintenanceMode === true || maintenanceMode === 'true') },
+                { key: 'general.maintenanceMessage', value: maintenanceMessage || 'المنصة تحت الصيانة حالياً، يرجى المحاولة لاحقاً.' },
+                { key: 'general.maintenanceEndTime', value: maintenanceEndTime || '' }
+            ];
+
+            await prisma.$transaction(
+                entries.map((entry) =>
+                    prisma.systemSetting.upsert({
+                        where: { key: entry.key },
+                        create: { key: entry.key, value: entry.value },
+                        update: { value: entry.value },
+                    })
+                )
+            );
+
+            // If Hard Mode is requested and maintenance is being enabled, delete non-admin tokens
+            if ((maintenanceMode === true || maintenanceMode === 'true') && (hardMode === true || hardMode === 'true')) {
+                await prisma.token.deleteMany({
+                    where: {
+                        user: {
+                            role: {
+                                not: 'PLATFORM_ADMIN'
+                            }
+                        }
+                    }
+                });
+            }
+
+            return sendSuccess(res, 'تم تحديث وضع الصيانة بنجاح');
+        } catch (error: any) {
+            return sendError(res, error.message, 500);
+        }
+    },
+
+    /**
+     * POST /api/admin/settings/logo
+     * Uploads a new site logo and updates the setting.
+     */
+    uploadLogo: async (req: AuthRequest, res: Response, _next: NextFunction) => {
+        try {
+            if (req.user?.role !== 'PLATFORM_ADMIN') {
+                return sendError(res, 'غير مصرح لك بالوصول', 403);
+            }
+
+            if (!req.file) {
+                return sendError(res, 'لم يتم إرفاق أي ملف', 400);
+            }
+
+            const logoUrl = `/uploads/${req.file.filename}`;
+
+            await prisma.systemSetting.upsert({
+                where: { key: 'general.siteLogo' },
+                create: { key: 'general.siteLogo', value: logoUrl },
+                update: { value: logoUrl },
+            });
+
+            return sendSuccess(res, 'تم تحديث الشعار بنجاح', { logoUrl });
+        } catch (error: any) {
+            return sendError(res, error.message, 500);
         }
     },
 };

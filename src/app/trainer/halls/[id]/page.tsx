@@ -14,6 +14,7 @@ import { cn, formatDate, formatNumber, getFileUrl } from "@/lib/utils"
 import { HallImage } from "@/components/halls/HallImage"
 import { trainerService } from "@/lib/trainer-service"
 import { useEffect } from "react"
+import { usePlatform } from "@/contexts/platform-context"
 import { toast } from "sonner"
 
 // Local HallImage component removed in favor of shared component
@@ -137,6 +138,7 @@ interface Hall {
 export default function HallDetailsPage() {
   const params = useParams()
   const hallId = typeof params.id === "string" ? params.id : ""
+  const { settings } = usePlatform()
 
   const [hall, setHall] = useState<Hall | null>(null)
   const [loading, setLoading] = useState(true)
@@ -159,7 +161,7 @@ export default function HallDetailsPage() {
           institute: {
             name: data.institute?.name || "معهد غير مسمى",
             description: data.instituteDescription || data.institute?.description || "لا يوجد وصف متاح لهذا المعهد حالياً.",
-            logo: getFileUrl(data.instituteLogo) || "/images/logo.png",
+            logo: getFileUrl(data.instituteLogo) || getFileUrl(settings?.general?.siteLogo) || "/images/logo.png",
             phone: data.institute?.phone || "",
             email: data.institute?.email || "",
             address: data.institute?.address || "",
@@ -177,7 +179,7 @@ export default function HallDetailsPage() {
     }
 
     if (hallId) fetchHall()
-  }, [hallId])
+  }, [hallId, settings?.general?.siteLogo])
 
   const locationText = hall?.location?.trim() ?? ""
   const locationUrl = hall?.locationUrl?.trim() ?? ""

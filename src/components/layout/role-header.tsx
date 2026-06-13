@@ -123,7 +123,7 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
 
           <Link href={dashboardUrl} className="flex items-center gap-2">
             <div className="relative h-9 w-9 rounded-md bg-white">
-              <Image src="/images/logo.png" alt={siteName} fill className="object-contain p-0.5" />
+              <Image src={getFileUrl(settings?.general?.siteLogo) || "/images/logo.png"} alt={siteName} fill className="object-contain p-0.5" unoptimized />
             </div>
             <div className="hidden lg:block">
               <p className="text-xl font-extrabold leading-none text-[#2563EB]">{siteName}</p>
