@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -239,7 +239,11 @@ export default function InstituteRoomBookings() {
                   </TableCell>
                 </TableRow>
               ) : (
-                bookings.map((booking) => {
+                [...bookings].sort((a, b) => {
+                  const ad = a.createdAt ? new Date(a.createdAt).getTime() : 0
+                  const bd = b.createdAt ? new Date(b.createdAt).getTime() : 0
+                  return bd - ad
+                }).map((booking) => {
                   const { date, time } = formatArabicDateTime(booking.createdAt)
                   return (
                     <TableRow key={booking.id}>

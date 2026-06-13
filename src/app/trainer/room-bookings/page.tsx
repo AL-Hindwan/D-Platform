@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
@@ -69,6 +69,10 @@ export default function TrainerRoomBookingsPage() {
     if (filter === "rejected") return booking.status === "REJECTED"
     if (filter === "cancelled") return booking.status === "CANCELLED"
     return true
+  }).sort((a, b) => {
+    const ad = a.createdAt ? new Date(a.createdAt).getTime() : 0
+    const bd = b.createdAt ? new Date(b.createdAt).getTime() : 0
+    return bd - ad
   })
 
   const getStatusLabel = (status: string) => {

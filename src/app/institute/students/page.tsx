@@ -430,6 +430,10 @@ function InstituteStudentsRegistrationsPageContent() {
         if (!needsAction) return false
       }
       return true
+    }).sort((a, b) => {
+      const ad = a.enrolledAt ? new Date(a.enrolledAt).getTime() : 0
+      const bd = b.enrolledAt ? new Date(b.enrolledAt).getTime() : 0
+      return bd - ad
     })
   }, [requestRows, requestsSearch, requestStudentFilter, requestCourseFilter, requestsCourseFilter, requestStatusFilter, requestPaymentFilter, requestsDateFilter, requestsNeedsActionOnly])
 

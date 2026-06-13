@@ -341,7 +341,7 @@ export default function StudentDashboard() {
                   name: course.trainer || "غير محدد",
                   avatar: getCourseOwnerAvatar(course) || makeFallbackAvatarDataUri(course.trainer || "غير محدد"),
                 }}
-                instructors={course.trainers}
+                instructors={course.trainers?.map((t: any) => ({ name: t.name, avatar: t.avatar || undefined }))}
                 basePath="/student/courses"
                 imageVariant="browse"
                 hideStats={true}
