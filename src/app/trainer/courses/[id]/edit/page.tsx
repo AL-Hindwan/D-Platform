@@ -1198,7 +1198,7 @@ export default function EditCoursePage() {
                     <Card>
                         <CardHeader><CardTitle>طريقة الانعقاد</CardTitle></CardHeader>
                         <CardContent>
-                            <RadioGroup disabled={isFieldLocked('deliveryType')} value={courseData.deliveryType} onValueChange={v => setCourseData({ ...courseData, deliveryType: v })} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <RadioGroup disabled={isFieldLocked('deliveryType')} value={courseData.deliveryType} onValueChange={v => setCourseData({ ...courseData, deliveryType: v })} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <label className={`border rounded-lg p-4 cursor-pointer flex flex-col items-center gap-2 ${courseData.deliveryType === 'online' ? 'border-blue-600 bg-blue-50' : ''}`}>
                                     <RadioGroupItem value="online" className="sr-only" />
                                     <Globe className="h-6 w-6 text-blue-600" />
@@ -1208,11 +1208,6 @@ export default function EditCoursePage() {
                                     <RadioGroupItem value="in_person" className="sr-only" />
                                     <Building className="h-6 w-6 text-green-600" />
                                     <span className="font-bold">حضوري</span>
-                                </label>
-                                <label className={`border rounded-lg p-4 cursor-pointer flex flex-col items-center gap-2 ${courseData.deliveryType === 'flexible' ? 'border-purple-600 bg-purple-50' : ''}`}>
-                                    <RadioGroupItem value="flexible" className="sr-only" />
-                                    <Users className="h-6 w-6 text-purple-600" />
-                                    <span className="font-bold">حجز مرن</span>
                                 </label>
                             </RadioGroup>
                         </CardContent>
