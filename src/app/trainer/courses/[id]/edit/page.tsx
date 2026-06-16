@@ -539,23 +539,32 @@ export default function EditCoursePage() {
 
             } else if (courseData.deliveryType === 'online') {
                 const validSessions = onlineSessions.filter(s => s.date && s.startTime)
-                if (validSessions.length === 0) throw new Error("يجب إضافة جلسة واحدة على الأقل مع تحديد التاريخ والوقت");
-                const sortedDates = [...validSessions].sort((a, b) => a.date.localeCompare(b.date));
-                startDate = sortedDates[0].date;
-                endDate = sortedDates[sortedDates.length - 1].date;
+                if (status === 'ACTIVE' && validSessions.length === 0) {
+                    throw new Error("يجب إضافة جلسة واحدة على الأقل مع تحديد التاريخ والوقت");
+                }
+                
+                if (validSessions.length > 0) {
+                    const sortedDates = [...validSessions].sort((a, b) => a.date.localeCompare(b.date));
+                    startDate = sortedDates[0].date;
+                    endDate = sortedDates[sortedDates.length - 1].date;
 
-                sessionsPayload = validSessions.map(s => {
-                    const start = new Date(`${s.date}T${s.startTime}`);
-                    const end = new Date(start.getTime() + Number(s.duration || 60) * 60000);
-                    return {
-                        date: s.date,
-                        startTime: s.startTime,
-                        endTime: end.toTimeString().substring(0, 5),
-                        location: onlineSchedule.platform || 'Online',
-                        meetingLink: onlineSchedule.meetingLink || undefined,
-                        topic: s.topic || 'جلسة أونلاين'
-                    };
-                });
+                    sessionsPayload = validSessions.map(s => {
+                        const start = new Date(`${s.date}T${s.startTime}`);
+                        const end = new Date(start.getTime() + Number(s.duration || 60) * 60000);
+                        return {
+                            date: s.date,
+                            startTime: s.startTime,
+                            endTime: end.toTimeString().substring(0, 5),
+                            location: onlineSchedule.platform || 'Online',
+                            meetingLink: onlineSchedule.meetingLink || undefined,
+                            topic: s.topic || 'جلسة أونلاين'
+                        };
+                    });
+                } else {
+                    startDate = '';
+                    endDate = '';
+                    sessionsPayload = [];
+                }
             } else {
                 // flexible أو غير محدد — لا تواريخ
                 startDate = '';
