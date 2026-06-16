@@ -443,12 +443,6 @@ export default function TrainerExploreCourseDetailsPage() {
       toast.error(msg)
       return
     }
-    if (!availableBankAccounts.length) {
-      const msg = "لا توجد حسابات بنكية متاحة حاليًا"
-      setPaymentError(msg)
-      toast.error(msg)
-      return
-    }
 
     setSubmittingPayment(true)
     try {
@@ -594,6 +588,7 @@ export default function TrainerExploreCourseDetailsPage() {
       },
       courseStatus,
       minStudents: Number(course.minStudents || 0),
+      maxStudents: Number(course.maxStudents || 0),
     }
   }, [course])
 
@@ -609,7 +604,19 @@ export default function TrainerExploreCourseDetailsPage() {
     }
   }, [availableBankAccounts, selectedBankAccountId])
 
-  const registrationUI = useMemo(() => mapEnrollmentStatusToUI(enrollmentStatus), [enrollmentStatus])
+  const registrationUI = useMemo(() => {
+    const ui = mapEnrollmentStatusToUI(enrollmentStatus)
+    const isFull = view?.maxStudents && view.maxStudents > 0 && view.seats === 0
+    if (isFull && ui.action === "register") {
+      return {
+        ...ui,
+        buttonLabel: "المقاعد ممتلئة",
+        buttonDisabled: true,
+        statusLabel: "عذراً، اكتمل العدد الأقصى للمسجلين في هذه الدورة",
+      }
+    }
+    return ui
+  }, [enrollmentStatus, view?.maxStudents, view?.seats])
   const enrollmentStatusKey = enrollmentStatus.toUpperCase()
   const isEnrollmentRejected = ["REJECTED", "ENROLLMENT_REJECTED", "REJECT_PAYMENT", "PROOF_REJECTED", "PAYMENT_REJECTED"].includes(enrollmentStatusKey)
   const isEnrollmentCancelled = enrollmentStatusKey === "CANCELLED"

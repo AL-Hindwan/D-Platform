@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { Save, Send, Trash2, ArrowLeft, X, MapPin, Users, Building, Globe, Plus, Calendar, Clock, CheckCircle, AlertCircle, AlertTriangle, Banknote, Lock, Loader2, Landmark, Heart, BookOpen, Target, ListChecks, Tags, Lightbulb, Bell } from "lucide-react"
 import { toast } from "sonner"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
@@ -61,6 +62,7 @@ function CreateCoursePageInner() {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [activeTab, setActiveTab] = useState("info")
     const [lastDraftSavedAt, setLastDraftSavedAt] = useState<Date | null>(null)
+    const [hasBankAccounts, setHasBankAccounts] = useState<boolean | null>(null)
     const [instituteIds, setInstituteIds] = useState<string[]>([])
     const [instituteName, setInstituteName] = useState<string>("")
 
@@ -207,12 +209,13 @@ function CreateCoursePageInner() {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const [profile, cats, trns, hls, tags] = await Promise.all([
+                const [profile, cats, trns, hls, tags, banks] = await Promise.all([
                     instituteService.getProfile(),
                     instituteService.getCategories(),
                     instituteService.getTrainers(),
                     instituteService.getHalls(),
-                    PublicService.getTags()
+                    PublicService.getTags(),
+                    instituteService.getBankAccounts()
                 ])
                 const ids = [
                     profile?.id,
@@ -225,6 +228,7 @@ function CreateCoursePageInner() {
                 setTrainers(trns)
                 setHalls(hls)
                 setAvailableTags(tags)
+                setHasBankAccounts(banks.some((b: any) => b.isActive !== false))
 
                 if (isEditMode && editCourseId) {
                     const existing = await instituteService.getCourseById(editCourseId)
@@ -562,12 +566,7 @@ function CreateCoursePageInner() {
             let endDate: string = '';
             let sessionsPayload: any[] = [];
 
-            if (status === 'DRAFT' || status === 'PENDING_MINIMUM') {
-                // المسودة ودورات انتظار اكتمال العدد لا تحتاج مواعيد (إلا الحجز المرن قد يحتوي على تاريخ بداية)
-                startDate = courseData.deliveryType === 'flexible' ? courseData.startDate : '';
-                endDate = '';
-                sessionsPayload = [];
-            } else if (courseData.deliveryType === 'in_person') {
+            if (courseData.deliveryType === 'in_person') {
                 if (status === 'ACTIVE') {
                     if (selectedSessions.length === 0) throw new Error("يجب اختيار جلسة واحدة على الأقل");
                     if (!isOwnInstituteHall && !paymentFile) throw new Error("يجب إرفاق سند الدفع لحجز القاعة");
@@ -769,6 +768,16 @@ function CreateCoursePageInner() {
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{isEditMode ? "تعديل الدورة التدريبية" : "إنشاء دورة تدريبية جديدة"}</h1>
                 <p className="text-gray-600">{isEditMode ? "اتبع الخطوات التالية لتحديث بيانات الدورة ونشر التغييرات" : "اتبع الخطوات التالية لإنشاء ونشر دورتك التدريبية"}</p>
             </div>
+
+            {hasBankAccounts === false && (
+                <Alert variant="destructive" className="mb-6">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertTitle>تنبيه</AlertTitle>
+                    <AlertDescription>
+                        يرجى تعبئة معلومات الحساب البنكية في <Link href="/institute/profile?tab=banks" className="font-bold underline underline-offset-4">الملف الشخصي</Link> لتسهيل مسألة التسجيل بالنسبة للطلاب
+                    </AlertDescription>
+                </Alert>
+            )}
 
             {/* شريط حالة الدورة */}
             {isEditMode && (

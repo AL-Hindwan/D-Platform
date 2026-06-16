@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { Save, Send, Trash2, ArrowLeft, X, MapPin, Users, Building, Globe, Plus, Calendar, Clock, CheckCircle, AlertCircle, AlertTriangle, Banknote, Lock, Loader2, Landmark, Heart, BookOpen, Target, ListChecks, Tags, Lightbulb, Bell } from "lucide-react"
 import { toast } from "sonner"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
@@ -60,6 +61,7 @@ export default function EditCoursePage() {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [activeTab, setActiveTab] = useState("info")
     const [lastDraftSavedAt, setLastDraftSavedAt] = useState<Date | null>(null)
+    const [hasBankAccounts, setHasBankAccounts] = useState<boolean | null>(null)
 
     // Course Lifecycle State
     const [courseStatus, setCourseStatus] = useState<string>('DRAFT')
@@ -200,15 +202,17 @@ export default function EditCoursePage() {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const [cats, hls, tags, course] = await Promise.all([
+                const [cats, hls, tags, course, banks] = await Promise.all([
                     trainerService.getCategories(),
                     trainerService.getHalls(),
                     PublicService.getTags(),
                     trainerService.getTrainerCourseById(courseId),
+                    trainerService.getBankAccounts()
                 ])
                 setCategories(cats)
                 setHalls(hls)
                 setAvailableTags(tags)
+                setHasBankAccounts(banks.some((b: any) => b.isActive !== false))
 
                 setCourseData({
                     title: course.title || "",
@@ -506,12 +510,7 @@ export default function EditCoursePage() {
             let endDate: string = '';
             let sessionsPayload: any[] = [];
 
-            if (status === 'DRAFT' || status === 'PENDING_MINIMUM') {
-                // المسودة ودورات انتظار اكتمال العدد لا تحتاج مواعيد — ترسل فارغة
-                startDate = '';
-                endDate = '';
-                sessionsPayload = [];
-            } else if (courseData.deliveryType === 'in_person') {
+            if (courseData.deliveryType === 'in_person') {
                 if (status === 'ACTIVE') {
                     if (selectedSessions.length === 0) throw new Error("يجب اختيار جلسة واحدة على الأقل");
                     if (!paymentFile) throw new Error("يجب إرفاق سند الدفع لحجز القاعة");
@@ -778,6 +777,16 @@ export default function EditCoursePage() {
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">تعديل الدورة التدريبية</h1>
                 <p className="text-gray-600">حدّث بيانات الدورة وجدولها ثم احفظ التغييرات</p>
             </div>
+
+            {hasBankAccounts === false && (
+                <Alert variant="destructive" className="mb-6">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertTitle>تنبيه</AlertTitle>
+                    <AlertDescription>
+                        يرجى تعبئة معلومات الحساب البنكية في <Link href="/trainer/profile?tab=banks" className="font-bold underline underline-offset-4">الملف الشخصي</Link> لتسهيل مسألة التسجيل بالنسبة للطلاب
+                    </AlertDescription>
+                </Alert>
+            )}
 
             {/* شريط حالة الدورة */}
             <CourseStatusBanner
