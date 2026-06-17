@@ -38,6 +38,7 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
   const searchParams = useSearchParams()
   const siteName = settings?.general.siteName || PLATFORM_NAME
   const searchInputRef = useRef<HTMLInputElement | null>(null)
+  const mobileSearchInputRef = useRef<HTMLInputElement | null>(null)
   const config = ROLE_LAYOUT_CONFIG[role]
   const NotificationIcon = notificationIcon
   const isHallsPage = pathname?.startsWith("/trainer/halls") || pathname?.startsWith("/institute/halls")
@@ -46,8 +47,8 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
   const [profileAvatarSrc, setProfileAvatarSrc] = useState<string | undefined>(undefined)
   const dashboardUrl = config.navItems[0]?.href || "/"
 
-  const submitSearch = () => {
-    const value = (searchInputRef.current?.value || "").trim()
+  const submitSearch = (isMobile = false) => {
+    const value = ((isMobile ? mobileSearchInputRef.current?.value : searchInputRef.current?.value) || "").trim()
     const params = new URLSearchParams(searchParams.toString())
     if (value) params.set("q", value)
     else params.delete("q")
@@ -107,8 +108,8 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
   }, [role])
 
   return (
-    <header className="sticky top-0 z-[60] h-[72px] border-b border-slate-200/70 bg-white px-4 md:px-6" dir="rtl">
-      <div className="grid h-full grid-cols-[auto_minmax(0,560px)_auto] items-center gap-3">
+    <header className="sticky top-0 z-[60] h-auto min-h-[72px] border-b border-slate-200/70 bg-white px-4 md:px-6" dir="rtl">
+      <div className="grid h-[72px] grid-cols-[auto_minmax(0,560px)_auto] items-center gap-3">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -143,18 +144,18 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault()
-                  submitSearch()
+                  submitSearch(false)
                 }
               }}
               placeholder={config.searchPlaceholder}
               className="h-11 w-full rounded-full border border-[#E5E7EB] bg-slate-50/70 pr-12 pl-4 text-sm text-slate-800 outline-none placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
             />
-            <button type="button" onClick={submitSearch} className="absolute right-0 top-0 h-11 w-11 rounded-full" aria-label="بحث" />
+            <button type="button" onClick={() => submitSearch(false)} className="absolute right-0 top-0 h-11 w-11 rounded-full" aria-label="بحث" />
           </div>
         </div>
 
         <div className="mr-auto flex items-center gap-1 sm:gap-2">
-          <Button variant="ghost" size="icon" className="rounded-full text-slate-500 hover:bg-blue-50 hover:text-[#2563EB] lg:hidden" onClick={submitSearch}>
+          <Button variant="ghost" size="icon" className="rounded-full text-slate-500 hover:bg-blue-50 hover:text-[#2563EB] lg:hidden" onClick={() => submitSearch(true)}>
             <Search className="h-5 w-5" />
           </Button>
 
@@ -221,6 +222,29 @@ export function RoleHeader({ role, isSidebarOpen, onMenuClick }: RoleHeaderProps
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-1 pb-3 lg:hidden">
+        <div className="relative">
+          <input
+            key={`mobile-${pathname || "root"}-${currentQuery}`}
+            ref={mobileSearchInputRef}
+            type="text"
+            dir="rtl"
+            defaultValue={currentQuery}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault()
+                submitSearch(true)
+              }
+            }}
+            placeholder={config.searchPlaceholder}
+            className="h-10 w-full rounded-full border border-[#E5E7EB] bg-slate-50/70 pr-11 pl-4 text-sm text-slate-800 outline-none placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+          />
+          <button onClick={() => submitSearch(true)} className="absolute right-3 top-1/2 -translate-y-1/2">
+            <Search className="h-4 w-4 text-slate-400" />
+          </button>
         </div>
       </div>
     </header>

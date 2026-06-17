@@ -19,7 +19,8 @@ import { useAuth } from "@/contexts/auth-context"
 import { useNotifications } from "@/contexts/notification-context"
 import { PLATFORM_NAME } from "@/lib/brand"
 import { usePlatform } from "@/contexts/platform-context"
-
+import { useRouter, useSearchParams } from "next/navigation"
+import { useRef } from "react"
 interface NavbarProps {
   onMenuClick?: () => void
 }
@@ -29,6 +30,26 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   const { unreadCount } = useNotifications()
   const { settings } = usePlatform()
   const siteName = settings?.general.siteName || PLATFORM_NAME
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const currentQuery = searchParams?.get("q") || ""
+  const desktopSearchRef = useRef<HTMLInputElement>(null)
+  const mobileSearchRef = useRef<HTMLInputElement>(null)
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>, isMobile = false) => {
+    if (e.key === "Enter") {
+      submitSearch(isMobile)
+    }
+  }
+
+  const submitSearch = (isMobile = false) => {
+    const value = isMobile ? mobileSearchRef.current?.value : desktopSearchRef.current?.value
+    if (value && value.trim()) {
+      router.push(`/courses?q=${encodeURIComponent(value.trim())}`)
+    } else {
+      router.push(`/courses`)
+    }
+  }
 
   const getRoleLabel = (role: UserRole) => {
     switch (role) {
@@ -76,8 +97,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   }
 
   return (
-    <nav className="sticky top-0 z-50 h-[72px] border-b border-slate-200/70 bg-white px-4 shadow-sm" dir="rtl">
-      <div className="mx-auto grid h-full max-w-7xl grid-cols-[auto_minmax(0,520px)_auto] items-center gap-3">
+    <nav className="sticky top-0 z-50 h-auto min-h-[72px] border-b border-slate-200/70 bg-white px-4 shadow-sm" dir="rtl">
+      <div className="mx-auto grid h-[72px] max-w-7xl grid-cols-[auto_minmax(0,520px)_auto] items-center gap-3">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
             <div className="relative h-9 w-9 rounded-md">
@@ -131,12 +152,17 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         <div className="hidden w-full max-w-[520px] justify-self-center md:block">
           <div className="relative w-full">
             <input
+              ref={desktopSearchRef}
               type="text"
               dir="rtl"
+              defaultValue={currentQuery}
+              onKeyDown={(e) => handleSearch(e, false)}
               placeholder="ابحث عن دورة..."
               className="h-11 w-full rounded-full border border-[#E5E7EB] bg-slate-50/70 pr-12 pl-4 text-sm text-slate-800 outline-none placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
             />
-            <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <button onClick={() => submitSearch(false)} className="absolute right-3 top-1/2 -translate-y-1/2">
+              <Search className="h-4 w-4 text-slate-400" />
+            </button>
           </div>
         </div>
 
@@ -220,12 +246,17 @@ export function Navbar({ onMenuClick }: NavbarProps) {
       <div className="mx-auto max-w-7xl px-1 pb-3 md:hidden">
         <div className="relative">
           <input
+            ref={mobileSearchRef}
             type="text"
             dir="rtl"
+            defaultValue={currentQuery}
+            onKeyDown={(e) => handleSearch(e, true)}
             placeholder="ابحث عن دورة..."
             className="h-10 w-full rounded-full border border-[#E5E7EB] bg-slate-50/70 pr-11 pl-4 text-sm text-slate-800 outline-none placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
           />
-          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <button onClick={() => submitSearch(true)} className="absolute right-3 top-1/2 -translate-y-1/2">
+            <Search className="h-4 w-4 text-slate-400" />
+          </button>
         </div>
       </div>
     </nav>
