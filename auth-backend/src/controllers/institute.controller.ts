@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/authenticate';
 import { sendSuccess, sendError } from '../utils/response';
 import instituteService from '../services/institute.service';
+import supabaseStorageService from '../services/supabaseStorageService';
 
 class InstituteController {
     async getDashboard(req: AuthRequest, res: Response, _next: NextFunction) {
@@ -42,16 +43,16 @@ class InstituteController {
             if (req.files) {
                 const files = req.files as { [fieldname: string]: Express.Multer.File[] };
                 if (files['avatar'] && files['avatar'][0]) {
-                    payload.avatar = `/uploads/${files['avatar'][0].filename}`;
+                    payload.avatar = await supabaseStorageService.uploadImage(files['avatar'][0], 'avatars');
                 }
                 if (files['logo'] && files['logo'][0]) {
-                    payload.logo = `/uploads/${files['logo'][0].filename}`;
+                    payload.logo = await supabaseStorageService.uploadImage(files['logo'][0], 'logos');
                 }
                 if (files['licenseDocument'] && files['licenseDocument'][0]) {
-                    payload.licenseDocumentUrl = `/uploads/${files['licenseDocument'][0].filename}`;
+                    payload.licenseDocumentUrl = await supabaseStorageService.uploadFile(files['licenseDocument'][0], 'license-documents');
                 }
             } else if (req.file) {
-                payload.avatar = `/uploads/${req.file.filename}`;
+                payload.avatar = await supabaseStorageService.uploadImage(req.file, 'avatars');
             }
 
 
@@ -272,12 +273,12 @@ class InstituteController {
 
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
             if (files?.image?.[0]) {
-                payload.image = `/uploads/${files.image[0].filename}`;
+                payload.image = await supabaseStorageService.uploadImage(files.image[0], 'courses');
             } else if (req.file) {
-                payload.image = `/uploads/${req.file.filename}`;
+                payload.image = await supabaseStorageService.uploadImage(req.file, 'courses');
             }
             if (files?.paymentReceipt?.[0]) {
-                payload.paymentReceiptPath = `/uploads/${files.paymentReceipt[0].filename}`;
+                payload.paymentReceiptPath = await supabaseStorageService.uploadFile(files.paymentReceipt[0], 'payment-receipts');
             }
 
             const updatedCourse = await instituteService.updateCourse(req.user.userId, id, payload);
@@ -380,9 +381,9 @@ class InstituteController {
                 try { payload.availability = JSON.parse(payload.availability); } catch { /* ignore */ }
             }
 
-            // Handle file upload
+            // Handle file upload — upload to Supabase Storage
             if (req.file) {
-                payload.image = `/uploads/${req.file.filename}`;
+                payload.image = await supabaseStorageService.uploadImage(req.file, 'halls');
             }
 
             const data = await instituteService.addInstituteHall(req.user.userId, payload);
@@ -416,9 +417,9 @@ class InstituteController {
                 try { payload.availability = JSON.parse(payload.availability); } catch { /* ignore */ }
             }
 
-            // Handle file upload
+            // Handle file upload — upload to Supabase Storage
             if (req.file) {
-                payload.image = `/uploads/${req.file.filename}`;
+                payload.image = await supabaseStorageService.uploadImage(req.file, 'halls');
             }
 
             const data = await instituteService.updateInstituteHall(req.user.userId, req.params.hallId, payload);
@@ -514,30 +515,22 @@ class InstituteController {
             if (payload.isFree === 'true') payload.isFree = true;
             if (payload.isFree === 'false') payload.isFree = false;
 
-            // Handle file uploads (multer .fields() sets req.files)
+            // Handle file uploads — upload to Supabase Storage
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
             if (files?.image?.[0]) {
-                payload.image = `/uploads/${files.image[0].filename}`;
+                payload.image = await supabaseStorageService.uploadImage(files.image[0], 'courses');
             }
 
             let paymentReceiptPath: string | undefined;
             if (files?.paymentReceipt?.[0]) {
-                paymentReceiptPath = `/uploads/${files.paymentReceipt[0].filename}`;
+                paymentReceiptPath = await supabaseStorageService.uploadFile(files.paymentReceipt[0], 'payment-receipts');
             }
 
             const course = await instituteService.createCourse(req.user.userId, payload, paymentReceiptPath);
             return sendSuccess(res, 'تم إنشاء الدورة بنجاح', course);
         } catch (error: any) {
             console.error('Course Creation Error:', error);
-            try {
-                // eslint-disable-next-line @typescript-eslint/no-require-imports
-                require('fs').writeFileSync('debug_course.json', JSON.stringify({
-                    message: error.message,
-                    stack: error.stack,
-                    payload: req.body
-                }, null, 2));
-            } catch (e) { }
             return sendError(res, error.message, 400);
         }
     }
@@ -628,7 +621,7 @@ class InstituteController {
             if (req.user?.role !== 'INSTITUTE_ADMIN') return sendError(res, 'غير مصرح لك بالوصول', 403);
             const payload = { ...req.body };
             if (req.file) {
-                payload.avatar = `/uploads/${req.file.filename}`;
+                payload.avatar = await supabaseStorageService.uploadImage(req.file, 'avatars');
             }
             const data = await instituteService.addInstituteStaff(req.user.userId, payload);
             return sendSuccess(res, 'تمت إضافة عضو الطاقم بنجاح', data, 201);
@@ -656,7 +649,7 @@ class InstituteController {
             if (req.user?.role !== 'INSTITUTE_ADMIN') return sendError(res, 'غير مصرح لك بالوصول', 403);
             const payload = { ...req.body };
             if (req.file) {
-                payload.avatar = `/uploads/${req.file.filename}`;
+                payload.avatar = await supabaseStorageService.uploadImage(req.file, 'avatars');
             }
             const data = await instituteService.updateInstituteStaff(req.user.userId, req.params.staffId, payload);
             return sendSuccess(res, 'تم تحديث بيانات المدرب', data);

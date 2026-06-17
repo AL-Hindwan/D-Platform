@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/authenticate';
 import studentService from '../services/student.service';
 import { sendError, sendSuccess } from '../utils/response';
+import supabaseStorageService from '../services/supabaseStorageService';
 
 const canUseLearnerEnrollment = (role?: string) => role === 'STUDENT' || role === 'TRAINER';
 
@@ -120,8 +121,8 @@ class StudentController {
                 return sendError(res, 'يرجى إرفاق صورة السند', 400);
             }
 
-            // Convert local file path to URL accessible path
-            const imagePath = `/uploads/${file.filename}`;
+            // Upload payment proof to Supabase Storage
+            const imagePath = await supabaseStorageService.uploadFile(file, 'payment-receipts');
 
             const data = await studentService.submitPaymentProof(req.user.userId, courseId, imagePath);
             return sendSuccess(res, 'تم رفع سند الدفع بنجاح', data);

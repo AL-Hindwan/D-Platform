@@ -189,35 +189,17 @@ export default function RegisterPage() {
         if (data.address) submitData.append("address", data.address)
       }
 
-      const success = await registerUser(submitData)
-      if (success) {
-        router.push("/auth/login?registered=true")
+      await registerUser(submitData)
+      router.push("/auth/login?registered=true")
+    } catch (err: any) {
+      const errorMessage = err?.message || "حدث خطأ أثناء التسجيل"
+      
+      // Translate the English error to Arabic
+      if (errorMessage.toLowerCase().includes("email already registered") || errorMessage.toLowerCase().includes("already exists")) {
+        setError("هذا الحساب موجود مسبقاً. يرجى تسجيل الدخول أو استخدام بريد إلكتروني آخر.")
       } else {
-        setError("فشل إنشاء الحساب. الرجاء المحاولة مرة أخرى")
+        setError(errorMessage)
       }
-    } catch (err: unknown) {
-      let serverMessage = undefined
-      if (err instanceof Error) {
-        serverMessage = err.message
-      } else if (
-        typeof err === "object" &&
-        err !== null &&
-        "response" in err &&
-        typeof (err as { response?: { data?: { message?: string } } }).response?.data?.message === "string"
-      ) {
-        serverMessage = (err as { response?: { data?: { message?: string } } }).response?.data?.message
-      }
-
-      let displayMessage = serverMessage || "حدث خطأ أثناء التسجيل"
-      if (
-        displayMessage === "Email already registered" ||
-        displayMessage.toLowerCase().includes("already exist") ||
-        displayMessage.includes("البريد الإلكتروني موجود")
-      ) {
-        displayMessage = "هذا البريد الإلكتروني مستخدم مسبقاً"
-      }
-
-      setError(displayMessage)
     }
   }
 

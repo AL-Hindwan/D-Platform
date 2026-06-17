@@ -3,6 +3,7 @@ import authService from '../services/auth.service';
 import { sendSuccess, sendError } from '../utils/response';
 import { AuthRequest } from '../middleware/authenticate';
 import prisma from '../config/database';
+import supabaseStorageService from '../services/supabaseStorageService';
 import {
     RegisterInput,
     LoginInput,
@@ -188,7 +189,8 @@ export class AuthController {
 
             let avatar = undefined;
             if (req.file) {
-                avatar = `/uploads/${req.file.filename}`;
+                // Upload avatar to Supabase Storage (images bucket / avatars folder)
+                avatar = await supabaseStorageService.uploadImage(req.file, 'avatars');
             }
 
             const user = await authService.updateProfile(userId, { name, phone, avatar, email });

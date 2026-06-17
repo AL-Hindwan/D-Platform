@@ -165,7 +165,9 @@ function RequestTimeline({ enrollment }: { enrollment: Enrollment }) {
   )
 }
 
-export default function TrainerStudentsRegistrationsPage() {
+import { Suspense } from "react"
+
+function TrainerStudentsContent() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -1388,3 +1390,10 @@ export default function TrainerStudentsRegistrationsPage() {
   )
 }
 
+export default function TrainerStudentsRegistrationsPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-[300px] items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-blue-600" /></div>}>
+      <TrainerStudentsContent />
+    </Suspense>
+  )
+}
