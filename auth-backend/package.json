@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "description": "Production-ready enterprise authentication backend",
     "main": "dist/server.js",
+    "engines": {
+        "node": "20.x"
+    },
     "scripts": {
         "dev": "nodemon --exec \"ts-node --transpile-only\" src/server.ts",
         "build": "tsc",
@@ -58,6 +61,6 @@
         "nodemon": "^3.0.3",
         "prisma": "^5.9.1",
         "ts-node": "^10.9.2",
-        "typescript": "^5.3.3"
+        "typescript": "5.3.3"
     }
 }
