@@ -136,11 +136,11 @@ export class AuthService {
                         relatedEntityId: user.id
                     });
 
-                    // Send email
+                    // Send email in background without awaiting to prevent blocking
                     if (role === 'TRAINER') {
-                        await mailerService.sendNewTrainerApplication(admin.email, admin.name, name);
+                        mailerService.sendNewTrainerApplication(admin.email, admin.name, name).catch(e => console.error(e));
                     } else if (role === 'INSTITUTE_ADMIN') {
-                        await mailerService.sendNewInstituteApplication(admin.email, admin.name, name);
+                        mailerService.sendNewInstituteApplication(admin.email, admin.name, name).catch(e => console.error(e));
                     }
                 }));
             }
