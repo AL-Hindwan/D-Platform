@@ -185,6 +185,8 @@ export default function RegisterPage() {
         certificatesFiles.forEach((file) => submitData.append("certificates", file))
       } else if (data.role === "INSTITUTE_ADMIN") {
         if (licenseDocumentFile) submitData.append("licenseDocument", licenseDocumentFile)
+        if (data.license) submitData.append("licenseNumber", data.license)
+        if (data.address) submitData.append("address", data.address)
       }
 
       const success = await registerUser(submitData)
