@@ -250,7 +250,7 @@ class TrainerService {
                         : { createdAt: 'desc' as const };
 
         const courses = await prisma.course.findMany({
-            where: where.AND.length ? where : { status: { in: ['ACTIVE', 'PENDING_MINIMUM'] } },
+            where: where.AND.length ? where : { status: { in: ['ACTIVE', 'PENDING_MINIMUM'] }, deletedAt: null },
             orderBy,
             include: {
                 trainer: { select: { name: true, avatar: true } },
