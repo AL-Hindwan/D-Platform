@@ -91,9 +91,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             // Don't auto-login - redirect to login page instead
             return true
-        } catch (error) {
-            console.error('Register error:', (error as Error)?.message || 'Registration failed')
-            return false
+        } catch (error: any) {
+            console.error('Register error:', error?.message || 'Registration failed')
+            
+            // Re-throw error with proper message for UI display
+            const errorMessage = error?.response?.data?.message || error?.message || 'Registration failed'
+            throw new Error(errorMessage)
         } finally {
             setIsLoading(false)
         }
