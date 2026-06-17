@@ -296,7 +296,7 @@ function AdminInstitutesContent() {
                     <TableCell className="text-sm text-gray-600">{institute.phone || '-'}</TableCell>
                     <TableCell className="text-sm text-gray-600">{institute.address || '-'}</TableCell>
                     <TableCell className="text-sm text-gray-600">{formatDate(institute.createdAt)}</TableCell>
-                    <TableCell>{getStatusBadge(institute.verificationStatus || institute.status)}</TableCell>
+                    <TableCell>{getStatusBadge(institute.status || institute.verificationStatus)}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         {/* View */}
@@ -307,14 +307,14 @@ function AdminInstitutesContent() {
                         <Button variant="outline" size="sm" title="تعديل بيانات الدخول" onClick={() => openDialog(institute, 'editCredentials')}>
                           <KeyRound className="h-4 w-4" />
                         </Button>
-                        {/* Approve if pending */}
-                        {(institute.status === 'pending' || institute.verificationStatus === 'pending') && (
+                        {/* Approve if pending or rejected */}
+                        {(institute.status === 'pending' || institute.verificationStatus === 'pending' || institute.status === 'rejected' || institute.verificationStatus === 'rejected') && (
                           <Button size="sm" onClick={() => openDialog(institute, 'approve')} className="bg-green-600 hover:bg-green-700 h-8">
                             <CheckCircle className="h-4 w-4 mr-1" />اعتماد
                           </Button>
                         )}
                         {/* Suspend if approved */}
-                        {(institute.status === 'approved' || institute.verificationStatus === 'approved') && (
+                        {(institute.status === 'approved' || institute.verificationStatus === 'approved') && institute.status !== 'suspended' && (
                           <Button variant="outline" size="sm" title="تعليق المعهد" onClick={() => openDialog(institute, 'suspend')} className="border-orange-300 text-orange-600 hover:bg-orange-50">
                             <UserX className="h-4 w-4" />
                           </Button>
@@ -352,7 +352,7 @@ function AdminInstitutesContent() {
                 <div>
                   <h3 className="text-xl font-bold">{selectedInstitute.name}</h3>
                   <div className="flex items-center gap-2 mt-1">
-                    {getStatusBadge(selectedInstitute.verificationStatus || selectedInstitute.status)}
+                    {getStatusBadge(selectedInstitute.status || selectedInstitute.verificationStatus)}
                     <span className="text-sm text-gray-500">منذ {formatDate(selectedInstitute.createdAt)}</span>
                   </div>
                 </div>

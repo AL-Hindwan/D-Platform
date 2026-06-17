@@ -567,6 +567,8 @@ export class AdminService {
             if (data.status === 'approved') {
                 userStatus = 'ACTIVE';
                 verificationStatus = 'APPROVED';
+            } else if (data.status === 'active') {
+                userStatus = 'ACTIVE';
             } else if (data.status === 'pending') {
                 userStatus = 'PENDING_VERIFICATION';
                 verificationStatus = 'PENDING';
@@ -654,6 +656,8 @@ export class AdminService {
             if (data.status === 'approved') {
                 userStatus = 'ACTIVE';
                 verificationStatus = 'APPROVED';
+            } else if (data.status === 'active') {
+                userStatus = 'ACTIVE';
             } else if (data.status === 'pending') {
                 userStatus = 'PENDING_VERIFICATION';
                 verificationStatus = 'PENDING';

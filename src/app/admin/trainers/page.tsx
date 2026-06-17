@@ -342,7 +342,7 @@ function AdminTrainersContent() {
                       {formatDate(new Date(trainer.createdAt || trainer.user?.createdAt))}
                     </TableCell>
                     <TableCell>
-                      {getStatusBadge(trainer.verificationStatus || trainer.status)}
+                      {getStatusBadge(trainer.status || trainer.verificationStatus)}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -354,19 +354,21 @@ function AdminTrainersContent() {
                         <Button variant="outline" size="sm" title="تعديل بيانات الدخول" onClick={() => openDialog(trainer, 'editCredentials')}>
                           <KeyRound className="h-4 w-4" />
                         </Button>
-                        {/* Approve/Reject for pending */}
-                        {trainer.verificationStatus === 'pending' && (
+                        {/* Approve/Reject for pending or rejected */}
+                        {(trainer.verificationStatus === 'pending' || trainer.status === 'rejected' || trainer.verificationStatus === 'rejected') && (
                           <>
                             <Button size="sm" onClick={() => openDialog(trainer, 'approve')} className="bg-green-600 hover:bg-green-700 h-8">
                               <CheckCircle className="h-4 w-4 mr-1" />اعتماد
                             </Button>
-                            <Button size="sm" variant="destructive" onClick={() => openDialog(trainer, 'reject')} className="h-8">
-                              <XCircle className="h-4 w-4 mr-1" />رفض
-                            </Button>
+                            {trainer.verificationStatus === 'pending' && (
+                              <Button size="sm" variant="destructive" onClick={() => openDialog(trainer, 'reject')} className="h-8">
+                                <XCircle className="h-4 w-4 mr-1" />رفض
+                              </Button>
+                            )}
                           </>
                         )}
                         {/* Suspend / Reactivate */}
-                        {(trainer.status === 'approved' || trainer.verificationStatus === 'approved') && (
+                        {(trainer.status === 'approved' || trainer.verificationStatus === 'approved') && trainer.status !== 'suspended' && (
                           <Button variant="outline" size="sm" title="تعليق الحساب" onClick={() => openDialog(trainer, 'suspend')} className="border-orange-300 text-orange-600 hover:bg-orange-50">
                             <UserX className="h-4 w-4" />
                           </Button>
@@ -405,7 +407,7 @@ function AdminTrainersContent() {
                   <p className="text-gray-600">{selectedTrainer.email}</p>
                   <p className="text-sm text-gray-500">{selectedTrainer.phone || selectedTrainer.user?.phone || 'لا يوجد رقم هاتف'}</p>
                   <p className="text-sm text-gray-500">انضم في {formatDate(new Date(selectedTrainer.createdAt || selectedTrainer.user?.createdAt))}</p>
-                  <div className="flex gap-2 mt-2">{getStatusBadge(selectedTrainer.verificationStatus || selectedTrainer.status)}</div>
+                  <div className="flex gap-2 mt-2">{getStatusBadge(selectedTrainer.status || selectedTrainer.verificationStatus)}</div>
                 </div>
               </div>
 
