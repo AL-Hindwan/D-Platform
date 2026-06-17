@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/authenticate';
 import trainerService from '../services/trainer.service';
 import { sendError, sendSuccess } from '../utils/response';
+import supabaseStorageService from '../services/supabaseStorageService';
 
 class TrainerController {
     /**
@@ -202,10 +203,10 @@ class TrainerController {
             const { hallId } = req.params;
             const { sessions, notes } = req.body;
 
-            // Handle file upload
+            // Handle file upload — upload receipt to Supabase Storage
             let receiptFile = undefined;
             if (req.file) {
-                receiptFile = `/uploads/${req.file.filename}`;
+                receiptFile = await supabaseStorageService.uploadFile(req.file, 'payment-receipts');
             }
 
             const parsedSessions = typeof sessions === 'string' ? JSON.parse(sessions) : sessions;
@@ -294,16 +295,15 @@ class TrainerController {
                 hallId: body.hallId || undefined,
             };
 
-            // Handle file uploads (both image and paymentReceipt via upload.fields)
+            // Handle file uploads — upload to Supabase Storage
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
             if (files?.image?.[0]) {
-                payload.image = `/uploads/${files.image[0].filename}`;
+                payload.image = await supabaseStorageService.uploadImage(files.image[0], 'courses');
             } else if (req.file) {
-                // fallback for single upload
-                payload.image = `/uploads/${req.file.filename}`;
+                payload.image = await supabaseStorageService.uploadImage(req.file, 'courses');
             }
             if (files?.paymentReceipt?.[0]) {
-                payload.paymentReceiptPath = `/uploads/${files.paymentReceipt[0].filename}`;
+                payload.paymentReceiptPath = await supabaseStorageService.uploadFile(files.paymentReceipt[0], 'payment-receipts');
             }
 
             const updated = await trainerService.updateTrainerCourse(req.user.userId, courseId, payload);
@@ -397,16 +397,16 @@ class TrainerController {
                 tags: safeParseJSON(body.tags, []),
             };
 
-            // Handle file uploads (multer .fields() sets req.files)
+            // Handle file uploads — upload to Supabase Storage
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
             if (files?.image && files.image[0]) {
-                payload.image = `/uploads/${files.image[0].filename}`;
+                payload.image = await supabaseStorageService.uploadImage(files.image[0], 'courses');
             }
 
             let paymentReceiptPath: string | undefined;
             if (files?.paymentReceipt && files.paymentReceipt[0]) {
-                paymentReceiptPath = `/uploads/${files.paymentReceipt[0].filename}`;
+                paymentReceiptPath = await supabaseStorageService.uploadFile(files.paymentReceipt[0], 'payment-receipts');
             }
 
             const course = await trainerService.createCourse(req.user.userId, payload, paymentReceiptPath);
@@ -443,7 +443,8 @@ class TrainerController {
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
             let avatarPath: string | undefined;
             if (files?.avatar?.[0]) {
-                avatarPath = `/uploads/${files.avatar[0].filename}`;
+                // Upload avatar to Supabase images bucket
+                avatarPath = await supabaseStorageService.uploadImage(files.avatar[0], 'avatars');
             }
 
             const safeSpecialties = (() => {
@@ -618,7 +619,11 @@ class TrainerController {
                 return sendError(res, 'يرجى إرفاق إيصال الدفع الجديد', 400);
             }
 
-            const paymentReceiptPath = `/uploads/${files.paymentReceipt[0].filename}`;
+            // Upload payment receipt to Supabase Storage
+            const paymentReceiptPath = await supabaseStorageService.uploadFile(
+                files.paymentReceipt[0],
+                'payment-receipts'
+            );
 
             const updated = await trainerService.resubmitBookingPayment(
                 req.user.userId,

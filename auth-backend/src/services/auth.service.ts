@@ -13,6 +13,7 @@ import { config } from '../config';
 import { mailerService } from './mailer.service';
 import { auditService } from './audit.service';
 import notificationService from './notification.service';
+import supabaseStorageService from './supabaseStorageService';
 import {
     RegisterInput,
     LoginInput,
@@ -60,8 +61,17 @@ export class AuthService {
 
         // Create role-specific profiles with uploaded files
         if (role === 'TRAINER' && files) {
-            const cvUrl = files.cv?.[0] ? `/uploads/${files.cv[0].filename}` : undefined;
-            const certificatesUrls = files.certificates?.map(file => `/uploads/${file.filename}`) || [];
+            // Upload CV to Supabase files bucket
+            const cvUrl = files.cv?.[0]
+                ? await supabaseStorageService.uploadFile(files.cv[0], 'cv')
+                : undefined;
+
+            // Upload certificates to Supabase files bucket
+            const certificatesUrls = files.certificates
+                ? await Promise.all(
+                    files.certificates.map(f => supabaseStorageService.uploadFile(f, 'certificates'))
+                )
+                : [];
 
             await prisma.trainerProfile.create({
                 data: {
@@ -73,12 +83,15 @@ export class AuthService {
                 },
             });
         } else if (role === 'INSTITUTE_ADMIN' && files) {
-            const licenseDocumentUrl = files.licenseDocument?.[0] ? `/uploads/${files.licenseDocument[0].filename}` : undefined;
+            // Upload license document to Supabase files bucket
+            const licenseDocumentUrl = files.licenseDocument?.[0]
+                ? await supabaseStorageService.uploadFile(files.licenseDocument[0], 'license-documents')
+                : undefined;
 
             await prisma.institute.create({
                 data: {
                     userId: user.id,
-                    name: name, // Use user name as institute name initially
+                    name: name,
                     email: email,
                     phone: phone,
                     address: address,

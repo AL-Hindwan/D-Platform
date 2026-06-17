@@ -33,17 +33,22 @@ app.use(helmet({
 app.use(
     cors({
         origin: (origin, callback) => {
-            // Allow non-browser requests (e.g. curl/postman) and local browser origins in dev.
+            // Allow non-browser requests (e.g. curl/postman)
             if (!origin) return callback(null, true);
 
             const allowedOrigins = new Set<string>([
+                // Production frontend (Vercel)
+                ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+                // Legacy config-based origins
                 ...(Array.isArray(config.cors.origin) ? config.cors.origin : [config.cors.origin]),
+                // Local development
                 'http://localhost:3000',
                 'http://127.0.0.1:3000',
                 'http://localhost:3001',
                 'http://127.0.0.1:3001',
             ]);
 
+            // Allow local network IPs (for mobile/device testing on the same network)
             const isAllowedNetworkOrigin =
                 /^http:\/\/192\.168\.\d{1,3}\.\d{1,3}:\d+$/.test(origin) ||
                 /^http:\/\/10\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+$/.test(origin) ||
@@ -68,10 +73,6 @@ app.use(cookieParser());
 
 // General rate limiting
 app.use(generalLimiter);
-
-// Serve uploaded files
-import path from 'path';
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Health check
 app.get('/health', (_req: Request, res: Response) => {

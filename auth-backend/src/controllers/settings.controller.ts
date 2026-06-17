@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { sendSuccess, sendError } from '../utils/response';
 import { AuthRequest } from '../middleware/authenticate';
 import { encrypt, decrypt } from '../utils/crypto';
+import supabaseStorageService from '../services/supabaseStorageService';
 
 const prisma = new PrismaClient();
 
@@ -245,7 +246,8 @@ export const settingsController = {
                 return sendError(res, 'لم يتم إرفاق أي ملف', 400);
             }
 
-            const logoUrl = `/uploads/${req.file.filename}`;
+            // Upload logo to Supabase Storage (images bucket / logos folder)
+            const logoUrl = await supabaseStorageService.uploadImage(req.file, 'logos');
 
             await prisma.systemSetting.upsert({
                 where: { key: 'general.siteLogo' },

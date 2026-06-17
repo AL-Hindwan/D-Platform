@@ -1,51 +1,51 @@
 import multer from 'multer';
-import path from 'path';
 import { Request } from 'express';
 
-// Configure storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        // Generate unique filename: timestamp-randomstring-originalname
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const ext = path.extname(file.originalname);
-        const nameWithoutExt = path.basename(file.originalname, ext);
-        cb(null, `${nameWithoutExt}-${uniqueSuffix}${ext}`);
-    },
-});
+// ─────────────────────────────────────────────
+// Use memoryStorage instead of diskStorage.
+// Files are held in RAM (file.buffer) and uploaded directly
+// to Supabase Storage — nothing is written to the local filesystem.
+// ─────────────────────────────────────────────
+const storage = multer.memoryStorage();
 
-// File filter for allowed file types
+// File filter — allowed MIME types
 const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    // Allow PDFs and images
     const allowedMimes = [
-        'application/pdf',
+        // Images
         'image/jpeg',
         'image/jpg',
         'image/png',
         'image/gif',
+        'image/webp',
+        // Documents
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',       // .xlsx
+        'application/zip',
+        'application/x-zip-compressed',
     ];
 
     if (allowedMimes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error('Invalid file type. Only PDF and image files are allowed.'));
+        cb(new Error('نوع الملف غير مسموح به. الأنواع المسموحة: صور، PDF، DOCX، XLSX، ZIP.'));
     }
 };
 
-// Create multer upload instance
+// Create multer upload instance (in-memory, max 10 MB per file)
 export const upload = multer({
     storage,
     fileFilter,
     limits: {
-        fileSize: 7 * 1024 * 1024, // 7MB limit per file
+        fileSize: 10 * 1024 * 1024, // 10 MB
     },
 });
 
-// Multer field configurations for different roles
+// Pre-configured field sets for convenience (used by auth.routes.ts)
 export const trainerUploadFields = upload.fields([
-    { name: 'cv', maxCount: 1 },
+    { name: 'cv',           maxCount: 1 },
     { name: 'certificates', maxCount: 5 },
 ]);
 
