@@ -35,3 +35,25 @@ export const authenticate = async (
         return sendError(res, 'Authentication failed', 401);
     }
 };
+
+export const optionalAuthenticate = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            const token = authHeader.substring(7);
+            try {
+                const decoded = verifyAccessToken(token);
+                req.user = decoded;
+            } catch (error) {
+                // Ignore invalid tokens for optional auth
+            }
+        }
+    } catch (error) {
+        // Ignore errors
+    }
+    next();
+};

@@ -2131,6 +2131,10 @@ class InstituteService {
                 _count: {
                     select: { enrollments: true },
                 },
+                enrollments: {
+                    where: { status: { in: ['ACTIVE', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT'] } },
+                    select: { id: true }
+                },
                 roomBookings: {
                     include: { payments: { orderBy: { createdAt: 'desc' }, take: 1 } },
                     orderBy: { createdAt: 'desc' },
@@ -2167,7 +2171,8 @@ class InstituteService {
         return {
             ...course,
             price: Number(course.price),
-            enrolledStudents: course._count.enrollments,
+            enrolledStudents: course._count?.enrollments || 0,
+            enrolledCount: (course as any).enrollments?.length || 0,
             trainer: course.trainer ? {
                 id: course.trainer.id,
                 name: course.trainer.name,
@@ -2263,7 +2268,7 @@ class InstituteService {
             ...(data.categoryId !== undefined && { categoryId: data.categoryId || null }),
             ...(data.status && { status: data.status.toUpperCase() }),
             ...((parsedTrainerIds.length > 0 || data.trainerIds !== undefined || data.trainerId !== undefined) && { staffTrainerIds: parsedTrainerIds, trainerId: null }),
-            ...(data.bookingTrigger !== undefined && { bookingTrigger: data.bookingTrigger }),
+            ...(data.deliveryType === 'flexible' ? { bookingTrigger: 'FLEXIBLE' } : (data.deliveryType ? { bookingTrigger: data.bookingTrigger || 'IMMEDIATE' } : (data.bookingTrigger !== undefined && { bookingTrigger: data.bookingTrigger }))),
             ...(data.objectives !== undefined && { objectives: data.objectives ?? [] }),
             ...(data.prerequisites !== undefined && { prerequisites: data.prerequisites?.length ? data.prerequisites.join('\n') : null }),
             ...(data.tags !== undefined && { tags: data.tags ?? [] }),
@@ -2285,8 +2290,8 @@ class InstituteService {
             );
         }
 
-        // If publishing (ACTIVE) with sessions payload, create sessions
-        if (data.status?.toUpperCase() === 'ACTIVE' && Array.isArray(data.sessions) && data.sessions.length > 0) {
+        // Create/update sessions whenever sessions payload is provided (regardless of status, just like Trainer)
+        if (Array.isArray(data.sessions) && data.sessions.length > 0) {
             const isFlexible = data.deliveryType === 'flexible';
             const sessionType = data.deliveryType === 'online' ? 'ONLINE' : 'IN_PERSON';
             const mappedSessions = data.sessions.map((s: any) => ({
@@ -2747,6 +2752,12 @@ class InstituteService {
         if (acceptedCount < course.minStudents) {
             throw new Error(`لم يكتمل الحد الأدنى بعد (${acceptedCount}/${course.minStudents})`);
         }
+
+        // Update the course status to ACTIVE
+        await prisma.course.update({
+            where: { id: courseId },
+            data: { status: 'ACTIVE' }
+        });
 
         await this.activateCourseAndNotifyStudents(courseId);
 

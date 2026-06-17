@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { authenticate } from '../middleware/authenticate';
+import { authenticate, optionalAuthenticate } from '../middleware/authenticate';
 import { upload } from '../middleware/upload';
 import trainerController from '../controllers/trainer.controller';
 import multer from 'multer';
@@ -7,8 +7,8 @@ import multer from 'multer';
 const router = Router();
 
 // Explore (public course catalog)
-router.get('/explore', trainerController.getExploreCourses);
-router.get('/explore/:courseId', trainerController.getPublicCourseById);
+router.get('/explore', optionalAuthenticate, trainerController.getExploreCourses);
+router.get('/explore/:courseId', optionalAuthenticate, trainerController.getPublicCourseById);
 
 // All trainer routes require authentication
 router.use(authenticate);

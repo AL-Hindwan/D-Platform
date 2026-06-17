@@ -243,8 +243,15 @@ export default function EditCoursePage() {
                 if (Array.isArray(course.sessions) && course.sessions.length > 0) {
                     if ((course.deliveryType || "").toLowerCase() === "in_person") {
                         const mappedSessions = course.sessions
-                            .filter((s: any) => s.date && s.startTime && s.endTime)
-                            .map((s: any) => ({ date: s.date, slot: `${s.startTime} - ${s.endTime}`, topic: s.topic || '' }))
+                            .filter((s: any) => s.startTime && s.endTime)
+                            .map((s: any) => {
+                                const dStart = new Date(s.startTime);
+                                const dEnd = new Date(s.endTime);
+                                const datePart = dStart.toISOString().slice(0, 10);
+                                const startTimePart = `${String(dStart.getHours()).padStart(2, '0')}:${String(dStart.getMinutes()).padStart(2, '0')}`;
+                                const endTimePart = `${String(dEnd.getHours()).padStart(2, '0')}:${String(dEnd.getMinutes()).padStart(2, '0')}`;
+                                return { date: datePart, slot: `${startTimePart} - ${endTimePart}`, topic: s.topic || '' };
+                            })
                         setSelectedSessions(mappedSessions)
                     } else if ((course.deliveryType || "").toLowerCase() === "online") {
                         const toDateOnly = (session: any) => {
@@ -497,7 +504,7 @@ export default function EditCoursePage() {
     }
 
     // --- Submission Logic ---
-    const handleSubmit = async (status: 'DRAFT' | 'ACTIVE' | 'PENDING_MINIMUM') => {
+    const handleSubmit = async (status: 'DRAFT' | 'ACTIVE' | 'PENDING_MINIMUM', silent = false) => {
         try {
             setIsSubmitting(true)
 
@@ -605,17 +612,20 @@ export default function EditCoursePage() {
                 setLastDraftSavedAt(new Date())
             }
 
-            toast.success(
-                status === 'DRAFT' ? 'تم حفظ المسودة بنجاح' :
-                    status === 'PENDING_MINIMUM' ? 'تم نشر الدورة! ستُفعّل عند اكتمال الحد الأدنى وإكمال الإعداد' :
-                        'تم تحديث الدورة بنجاح'
-            );
-            router.push('/trainer/courses');
+            if (!silent) {
+                toast.success(
+                    status === 'DRAFT' ? 'تم حفظ المسودة بنجاح' :
+                        status === 'PENDING_MINIMUM' ? 'تم نشر الدورة! ستُفعّل عند اكتمال الحد الأدنى وإكمال الإعداد' :
+                            'تم تحديث الدورة بنجاح'
+                );
+                router.push('/trainer/courses');
+            }
 
         } catch (err: any) {
             const backendMessage = err?.response?.data?.message
             toast.error(backendMessage || err?.message || 'حدث خطأ أثناء تحديث الدورة');
             console.error(err);
+            throw err;
         } finally {
             setIsSubmitting(false);
         }
@@ -1807,16 +1817,16 @@ export default function EditCoursePage() {
                             {/* زر نشر وإعلام الطلاب (pending_min_ready → active) */}
                             {permissions.showPublishAndNotify && (
                                 <Button
-                                    onClick={handleActivateCourse}
-                                    disabled={isSubmitting}
+                                    onClick={courseData.deliveryType === 'in_person' ? () => handleSubmit('ACTIVE') : handleActivateCourse}
+                                    disabled={isSubmitting || (courseData.deliveryType === 'in_person' && (!isInfoValid || !isLocationValid()))}
                                     className="bg-emerald-600 hover:bg-emerald-700 text-white"
                                     id="btn-publish-notify"
                                 >
                                     {isSubmitting
                                         ? <Loader2 className="h-4 w-4 animate-spin" />
-                                        : <Bell className="mr-2 h-4 w-4" />
+                                        : (courseData.deliveryType === 'in_person' ? <Send className="mr-2 h-4 w-4" /> : <Bell className="mr-2 h-4 w-4" />)
                                     }
-                                    نشر وإعلام الطلاب
+                                    {courseData.deliveryType === 'in_person' ? 'إرسال للمراجعة' : 'نشر وإعلام الطلاب'}
                                 </Button>
                             )}
                         </div>

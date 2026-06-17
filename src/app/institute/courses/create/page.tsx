@@ -281,8 +281,15 @@ function CreateCoursePageInner() {
                         if (loadedOnline.length > 0) setOnlineSessions(loadedOnline)
                     } else if (existing.deliveryType === "in_person" && existing.sessions?.length > 0) {
                         const mappedInPerson = existing.sessions
-                            .filter((s: any) => s.date && s.startTime && s.endTime)
-                            .map((s: any) => ({ date: s.date, slot: `${s.startTime} - ${s.endTime}`, topic: s.topic || '' }))
+                            .filter((s: any) => s.startTime && s.endTime)
+                            .map((s: any) => {
+                                const dStart = new Date(s.startTime);
+                                const dEnd = new Date(s.endTime);
+                                const datePart = dStart.toISOString().slice(0, 10);
+                                const startTimePart = `${String(dStart.getHours()).padStart(2, '0')}:${String(dStart.getMinutes()).padStart(2, '0')}`;
+                                const endTimePart = `${String(dEnd.getHours()).padStart(2, '0')}:${String(dEnd.getMinutes()).padStart(2, '0')}`;
+                                return { date: datePart, slot: `${startTimePart} - ${endTimePart}`, topic: s.topic || '' };
+                            })
                         if (mappedInPerson.length > 0) setSelectedSessions(mappedInPerson)
                     }
                 }
@@ -536,8 +543,8 @@ function CreateCoursePageInner() {
                 return
             }
 
-            // 1. Save changes (without changing status yet)
-            await handleSubmit('PENDING_MINIMUM')
+            // 1. Save changes (without changing status yet, and silently)
+            await handleSubmit('PENDING_MINIMUM', true)
 
             // 2. Call /activate to trigger transaction (move students, send notifications, status=ACTIVE)
             await instituteService.activateCourse(editCourseId)
@@ -553,7 +560,7 @@ function CreateCoursePageInner() {
     }
 
     // --- Submission Logic ---
-    const handleSubmit = async (status: 'DRAFT' | 'ACTIVE' | 'PENDING_MINIMUM') => {
+    const handleSubmit = async (status: 'DRAFT' | 'ACTIVE' | 'PENDING_MINIMUM', silent = false) => {
         try {
             setIsSubmitting(true)
 
@@ -674,14 +681,16 @@ function CreateCoursePageInner() {
                 setLastDraftSavedAt(new Date())
             }
 
-            toast.success(
-                status === 'DRAFT'
-                    ? (isEditMode ? 'تم حفظ تعديلات المسودة بنجاح' : 'تم حفظ المسودة بنجاح')
-                    : status === 'PENDING_MINIMUM'
-                        ? (isEditMode ? 'تم تحديث الدورة! ستُفعّل عند اكتمال الحد الأدنى وإكمال الإعداد' : 'تم نشر الدورة! ستُفعّل عند اكتمال الحد الأدنى وإكمال الإعداد')
-                        : (isEditMode ? 'تم تحديث الدورة بنجاح' : 'تم إنشاء الدورة بنجاح')
-            );
-            router.push('/institute/courses');
+            if (!silent) {
+                toast.success(
+                    status === 'DRAFT'
+                        ? (isEditMode ? 'تم حفظ تعديلات المسودة بنجاح' : 'تم حفظ المسودة بنجاح')
+                        : status === 'PENDING_MINIMUM'
+                            ? (isEditMode ? 'تم تحديث الدورة! ستُفعّل عند اكتمال الحد الأدنى وإكمال الإعداد' : 'تم نشر الدورة! ستُفعّل عند اكتمال الحد الأدنى وإكمال الإعداد')
+                            : (isEditMode ? 'تم تحديث الدورة بنجاح' : 'تم إنشاء الدورة بنجاح')
+                );
+                router.push('/institute/courses');
+            }
 
         } catch (err: any) {
             const backendMessage = err?.response?.data?.message

@@ -540,6 +540,10 @@ class TrainerService {
             include: {
                 category: { select: { id: true, name: true } },
                 _count: { select: { enrollments: true } },
+                enrollments: {
+                    where: { status: { in: ['ACTIVE', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT'] } },
+                    select: { id: true }
+                },
                 roomBookings: {
                     include: { payments: { orderBy: { createdAt: 'desc' }, take: 1 } },
                     orderBy: { createdAt: 'desc' },
@@ -576,7 +580,8 @@ class TrainerService {
             maxStudents: course.maxStudents,
             minStudents: course.minStudents,
             status: course.status.toLowerCase(),
-            enrolledStudents: course._count.enrollments,
+            enrolledStudents: course._count?.enrollments || 0,
+            enrolledCount: (course as any).enrollments?.length || 0,
             category: course.category?.name || "-",
             categoryId: course.categoryId ?? '',
             deliveryType: (course as any).bookingTrigger === 'FLEXIBLE' ? 'flexible'
@@ -638,6 +643,8 @@ class TrainerService {
                     ? 'PENDING_REVIEW'
                     : data.status.toUpperCase()
             }),
+            ...(data.deliveryType === 'flexible' ? { bookingTrigger: 'FLEXIBLE' } : (data.deliveryType ? { bookingTrigger: data.bookingTrigger || 'IMMEDIATE' } : (data.bookingTrigger !== undefined && { bookingTrigger: data.bookingTrigger }))),
+            ...(data.minStudents !== undefined && data.minStudents !== '' && { minStudents: Number(data.minStudents) }),
             ...(data.objectives !== undefined && { objectives: data.objectives ?? [] }),
             ...(data.prerequisites !== undefined && { prerequisites: data.prerequisites?.length ? data.prerequisites.join('\n') : null }),
             ...(data.tags !== undefined && { tags: data.tags ?? [] }),
