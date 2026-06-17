@@ -47,7 +47,8 @@ export interface DashboardStats {
         totalUsers: number;
         totalInstitutes: number;
         totalCourses: number;
-        totalRevenue: number;
+        totalTrainers: number;
+        totalStudents: number;
         pendingApprovals: number;
     };
     pendingItems: {

@@ -131,20 +131,8 @@ export default function AdminSystem() {
   const handleRemoveLogo = async () => {
     setUploadingLogo(true)
     try {
-      // First save the general settings without the logo
-      const updatedSettings = { ...generalSettings, siteLogo: "" }
-      const dataToSave = {
-        'general.siteName': updatedSettings.siteName,
-        'general.siteDescription': updatedSettings.siteDescription,
-        'general.contactEmail': updatedSettings.contactEmail,
-        'general.supportPhone': updatedSettings.supportPhone,
-        'general.maintenanceMode': updatedSettings.maintenanceMode,
-        'general.maintenanceMessage': updatedSettings.maintenanceMessage,
-        'general.maintenanceEndTime': updatedSettings.maintenanceEndTime,
-        'general.siteLogo': updatedSettings.siteLogo,
-      }
-      await settingsService.saveSection('general', dataToSave)
-      setGeneralSettings(updatedSettings)
+      await settingsService.saveSection('general', { siteLogo: "" })
+      setGeneralSettings(prev => ({ ...prev, siteLogo: "" }))
       toast.success("تمت إزالة الشعار واستعادة الشعار الافتراضي")
     } catch (err: any) {
       toast.error("فشل إزالة الشعار")

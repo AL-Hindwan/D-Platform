@@ -121,12 +121,16 @@ export default function AdminDashboard() {
               <div className="text-[10px] font-medium text-gray-400 uppercase">مستخدم</div>
             </div>
             <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 min-w-[100px]">
-              <div className="text-2xl font-bold mb-0.5">{stats.stats.totalInstitutes}</div>
+              <div className="text-2xl font-bold mb-0.5">{stats.stats.totalInstitutes.toLocaleString('en-US')}</div>
               <div className="text-[10px] font-medium text-gray-400 uppercase">معهد</div>
             </div>
+            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 min-w-[100px]">
+              <div className="text-2xl font-bold mb-0.5">{stats.stats.totalStudents.toLocaleString('en-US')}</div>
+              <div className="text-[10px] font-medium text-gray-400 uppercase">طالب</div>
+            </div>
             <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 min-w-[140px]">
-              <div className="text-2xl font-bold mb-0.5">{stats.stats.totalRevenue.toLocaleString('en-US')}</div>
-              <div className="text-[10px] font-medium text-gray-400 uppercase">ريال يمني</div>
+              <div className="text-2xl font-bold mb-0.5">{stats.stats.totalTrainers.toLocaleString('en-US')}</div>
+              <div className="text-[10px] font-medium text-gray-400 uppercase">مدرب</div>
             </div>
           </div>
         </div>

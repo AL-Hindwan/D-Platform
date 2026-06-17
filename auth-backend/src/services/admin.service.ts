@@ -270,13 +270,8 @@ export class AdminService {
         const totalUsers = await prisma.user.count();
         const totalInstitutes = await prisma.institute.count();
         const totalCourses = await prisma.course.count();
-
-        // 2. Revenue (Mock for now or sum verified payments)
-        // const totalRevenue = await prisma.payment.aggregate({
-        //    _sum: { amount: true },
-        //    where: { status: 'APPROVED' }
-        // });
-        const totalRevenue = 450000; // Placeholder matching mock data
+        const totalTrainers = await prisma.trainerProfile.count();
+        const totalStudents = await prisma.user.count({ where: { role: 'STUDENT' } });
 
         // 3. Pending Approvals (Count)
         const pendingTrainersCount = await prisma.trainerProfile.count({ where: { verificationStatus: 'PENDING' } });
@@ -337,7 +332,8 @@ export class AdminService {
                 totalUsers,
                 totalInstitutes,
                 totalCourses,
-                totalRevenue,
+                totalTrainers,
+                totalStudents,
                 pendingApprovals
             },
             pendingItems,
