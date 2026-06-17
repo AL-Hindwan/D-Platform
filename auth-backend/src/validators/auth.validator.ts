@@ -14,6 +14,8 @@ export const registerSchema = z.object({
         role: z.enum(['STUDENT', 'TRAINER', 'INSTITUTE_ADMIN']).optional(),
         licenseNumber: z.string().optional(),
         address: z.string().optional(),
+        bio: z.string().optional(),
+        specialties: z.any().optional(),
     }),
 });
 

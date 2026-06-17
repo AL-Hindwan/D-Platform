@@ -76,9 +76,10 @@ export class AuthService {
             await prisma.trainerProfile.create({
                 data: {
                     userId: user.id,
+                    bio: data.bio || null,
                     cvUrl,
                     certificatesUrls,
-                    specialties: [],
+                    specialties: Array.isArray(data.specialties) ? data.specialties : [],
                     verificationStatus: 'PENDING',
                 },
             });

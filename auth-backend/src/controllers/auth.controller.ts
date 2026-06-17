@@ -36,6 +36,19 @@ export class AuthController {
             console.log('Register controller called');
             const data: RegisterInput = req.body;
 
+            // Safe parsing for specialties
+            if (data.specialties) {
+                if (typeof data.specialties === 'string') {
+                    try {
+                        data.specialties = JSON.parse(data.specialties);
+                    } catch {
+                        data.specialties = [data.specialties];
+                    }
+                }
+            } else {
+                data.specialties = [];
+            }
+
             // Extract uploaded files from multer
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 

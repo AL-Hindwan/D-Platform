@@ -45,6 +45,8 @@ const registerSchema = z
       .refine((v) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(v), PASSWORD_MESSAGE),
     confirmPassword: z.string().min(1, REQUIRED_MESSAGE),
     acceptTerms: z.boolean().refine((v) => v === true, REQUIRED_MESSAGE),
+    specialization: z.string().optional(),
+    bio: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.password && data.confirmPassword && data.password !== data.confirmPassword) {
@@ -112,6 +114,8 @@ export default function RegisterPage() {
       password: "",
       confirmPassword: "",
       acceptTerms: false,
+      specialization: "",
+      bio: "",
     },
     shouldFocusError: true,
   })
@@ -181,6 +185,11 @@ export default function RegisterPage() {
       submitData.append("role", data.role)
 
       if (data.role === "TRAINER") {
+        if (data.bio) submitData.append("bio", data.bio)
+        if (data.specialization) {
+            const specs = data.specialization.split(',').map(s => s.trim()).filter(s => s)
+            submitData.append("specialties", JSON.stringify(specs))
+        }
         if (cvFile) submitData.append("cv", cvFile)
         certificatesFiles.forEach((file) => submitData.append("certificates", file))
       } else if (data.role === "INSTITUTE_ADMIN") {
@@ -301,16 +310,18 @@ export default function RegisterPage() {
             {role === "TRAINER" && (
               <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500 border-r-2 border-primary/20 pr-4 my-4">
                 <div className="space-y-2">
-                  <Label htmlFor="specialization">التخصص</Label>
+                  <Label htmlFor="specialization" className={`${normalLabelClass} ${errors.specialization ? invalidLabelClass : ""}`}>التخصص</Label>
                   <div className="relative">
                     <Briefcase className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input id="specialization" placeholder="مثال: تطوير الويب، إدارة أعمال..." className={`pr-10 ${curveClass}`} />
+                    <Input id="specialization" placeholder="مثال: تطوير الويب، إدارة أعمال..." className={`pr-10 ${curveClass} ${normalInputClass} ${errors.specialization ? invalidFieldClass : ""}`} {...register("specialization")} />
                   </div>
+                  {errors.specialization && <p className={errorTextClass}>{errors.specialization.message}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="bio">نبذة عن المدرب</Label>
-                  <Textarea id="bio" placeholder="تحدث باختصار عن خبراتك ومهاراتك..." className={`min-h-[100px] ${curveClass}`} />
+                  <Label htmlFor="bio" className={`${normalLabelClass} ${errors.bio ? invalidLabelClass : ""}`}>نبذة عن المدرب</Label>
+                  <Textarea id="bio" placeholder="تحدث باختصار عن خبراتك ومهاراتك..." className={`min-h-[100px] ${curveClass} ${normalInputClass} ${errors.bio ? invalidFieldClass : ""}`} {...register("bio")} />
+                  {errors.bio && <p className={errorTextClass}>{errors.bio.message}</p>}
                 </div>
 
                 <div className="space-y-2">
