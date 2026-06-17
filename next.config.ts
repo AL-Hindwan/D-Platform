@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
       },
       {
+        protocol: 'https',
+        hostname: 'ulybtefinunjcenteegh.supabase.co',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
         port: '5000',
