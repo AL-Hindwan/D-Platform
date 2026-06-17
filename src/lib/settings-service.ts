@@ -139,7 +139,7 @@ export async function fetchPublicSettings(): Promise<PublicSettings> {
   try {
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
     const res = await fetch(`${apiBase}/api/public/settings`, {
-      cache: 'no-store', // always fetch fresh — reflects admin changes immediately
+      next: { revalidate: 60 }, // ISR: refresh every minute instead of no-store to allow SSG
     });
     if (!res.ok) {
       return { general: defaultGeneral, legal: { terms: defaultLegal, privacy: defaultLegal } };

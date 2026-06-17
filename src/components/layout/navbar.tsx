@@ -21,11 +21,12 @@ import { PLATFORM_NAME } from "@/lib/brand"
 import { usePlatform } from "@/contexts/platform-context"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useRef } from "react"
+import { Suspense } from "react"
 interface NavbarProps {
   onMenuClick?: () => void
 }
 
-export function Navbar({ onMenuClick }: NavbarProps) {
+function NavbarContent({ onMenuClick }: NavbarProps) {
   const { user, logout } = useAuth()
   const { unreadCount } = useNotifications()
   const { settings } = usePlatform()
@@ -260,6 +261,14 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         </div>
       </div>
     </nav>
+  )
+}
+
+export function Navbar(props: NavbarProps) {
+  return (
+    <Suspense fallback={<div className="h-[72px] w-full bg-white border-b border-slate-200/70 shadow-sm" />}>
+      <NavbarContent {...props} />
+    </Suspense>
   )
 }
 
