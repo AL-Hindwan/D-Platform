@@ -209,52 +209,17 @@ function HeroSection() {
           </div>
         </div>
 
-        <div className="relative mx-auto h-[410px] w-full max-w-[590px] sm:h-[470px] lg:h-[520px] dal-hero-animate [animation:dal-hero-rise_750ms_120ms_ease-out_both]">
+        <div className="relative mx-auto flex h-[410px] w-full max-w-[590px] items-center justify-center sm:h-[470px] lg:h-[520px] dal-hero-animate [animation:dal-hero-rise_750ms_120ms_ease-out_both]">
           <div className="absolute inset-x-8 top-14 h-72 rounded-full bg-[#2563EB]/20 blur-3xl sm:inset-x-12 sm:top-20" />
-
-          <div className="absolute left-1/2 top-1/2 w-[min(92vw,410px)] -translate-x-1/2 -translate-y-1/2 rounded-[6.5px] border border-slate-200 bg-white p-4 text-right shadow-2xl shadow-blue-950/10 sm:w-[430px]">
-            <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-3">
-              <div>
-                <p className="text-xs font-semibold text-slate-500">لوحة الطالب</p>
-                <h2 className="mt-1 text-lg font-extrabold text-slate-950">دورة تصميم واجهات المستخدم</h2>
-              </div>
-              <div className="flex h-11 w-11 items-center justify-center rounded-[6.5px] bg-blue-50 text-[#2563EB]">
-                <BookOpen className="h-5 w-5" />
-              </div>
-            </div>
-
-            <div className="mt-4 grid grid-cols-[1fr_auto] items-center gap-4">
-              <div>
-                <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-500">
-                  <span>تقدم الدورة</span>
-                  <span className="text-[#2563EB]">68%</span>
-                </div>
-                <div className="h-2 rounded-full bg-slate-100">
-                  <div className="h-2 w-[68%] rounded-full bg-gradient-to-l from-[#2563EB] to-[#38BDF8]" />
-                </div>
-              </div>
-              <Badge className="rounded-[6.5px] bg-emerald-50 px-3 py-1.5 text-emerald-700 hover:bg-emerald-50">
-                تسجيل مؤكد
-              </Badge>
-            </div>
-
-            <div className="mt-5 grid grid-cols-3 gap-2">
-              <div className="rounded-[6.5px] border border-slate-100 bg-slate-50 p-3">
-                <CalendarClock className="mb-2 h-4 w-4 text-[#2563EB]" />
-                <p className="text-xs font-semibold text-slate-500">الجلسة</p>
-                <p className="mt-1 text-sm font-bold text-slate-900">7:00 م</p>
-              </div>
-              <div className="rounded-[6.5px] border border-slate-100 bg-slate-50 p-3">
-                <Users className="mb-2 h-4 w-4 text-[#2563EB]" />
-                <p className="text-xs font-semibold text-slate-500">الطلاب</p>
-                <p className="mt-1 text-sm font-bold text-slate-900">24</p>
-              </div>
-              <div className="rounded-[6.5px] border border-slate-100 bg-slate-50 p-3">
-                <Building2 className="mb-2 h-4 w-4 text-[#2563EB]" />
-                <p className="text-xs font-semibold text-slate-500">القاعة</p>
-                <p className="mt-1 text-sm font-bold text-slate-900">B-12</p>
-              </div>
-            </div>
+          
+          <div className="relative h-[250px] w-[250px] opacity-20 sm:h-[350px] sm:w-[350px]">
+            <Image 
+              src={getFileUrl(settings?.general?.siteLogo) || "/images/logo.png"} 
+              alt={siteName} 
+              fill 
+              className="object-contain" 
+              unoptimized 
+            />
           </div>
 
           <div className="dal-hero-float absolute right-2 top-8 rounded-[6.5px] border border-emerald-100 bg-white px-4 py-3 text-right shadow-xl shadow-blue-950/10 [animation:dal-hero-float_5s_ease-in-out_infinite] sm:right-8">
