@@ -2,17 +2,20 @@ import { createClient } from '@supabase/supabase-js';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
+import ws from 'ws';
+
 // ─────────────────────────────────────────────
 // Supabase client (server-side with service role)
 // ─────────────────────────────────────────────
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseKey) {
-    console.warn('⚠️  SUPABASE_URL أو SUPABASE_SERVICE_ROLE_KEY غير موجودة في متغيرات البيئة');
-}
+// Polyfill WebSocket for Node 20 (Required by Supabase Realtime)
+(globalThis as any).WebSocket = ws;
 
-const supabase = createClient(supabaseUrl || '', supabaseKey || '');
+const supabase = createClient(supabaseUrl || '', supabaseKey || '', {
+    auth: { persistSession: false },
+});
 
 // ─────────────────────────────────────────────
 // Bucket names (configurable via env vars)
