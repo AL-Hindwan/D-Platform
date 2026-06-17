@@ -25,6 +25,7 @@ import {
   FileClock,
   BookOpen,
   Info,
+  ExternalLink,
 } from "lucide-react"
 import { trainerService } from "@/lib/trainer-service"
 import { toast } from "sonner"
@@ -569,15 +570,39 @@ export default function TrainerRoomBookingsPage() {
                   ) : null}
                   {payment.depositSlipImage ? (
                     <div className="mt-2 border-t pt-2">
-                      <span className="mb-2 block font-medium text-gray-700">صورة الإيصال:</span>
-                      <img
-                        src={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}${payment.depositSlipImage}`}
-                        alt="Deposit Slip"
-                        className={`h-auto max-w-full border ${radiusClass}`}
-                        onError={(e) => {
-                          ;(e.target as HTMLImageElement).style.display = "none"
-                        }}
-                      />
+                      <span className="mb-2 block font-medium text-gray-700">الإيصال المرفق:</span>
+                      {payment.depositSlipImage.toLowerCase().endsWith(".pdf") ? (
+                        <div className="flex flex-col gap-2">
+                          <iframe
+                            src={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}${payment.depositSlipImage}`}
+                            className={`h-64 w-full border ${radiusClass}`}
+                            title="Deposit Slip PDF"
+                          />
+                          <a
+                            href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}${payment.depositSlipImage}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800"
+                          >
+                            <ExternalLink className="h-4 w-4" /> فتح في نافذة جديدة
+                          </a>
+                        </div>
+                      ) : (
+                        <a
+                          href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}${payment.depositSlipImage}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <img
+                            src={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}${payment.depositSlipImage}`}
+                            alt="Deposit Slip"
+                            className={`h-auto max-w-full border ${radiusClass}`}
+                            onError={(e) => {
+                              ;(e.target as HTMLImageElement).style.display = "none"
+                            }}
+                          />
+                        </a>
+                      )}
                     </div>
                   ) : null}
                   {payment.rejectionReason || selectedBooking.rejectionReason ? (

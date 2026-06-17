@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, X, Loader2, ChevronLeft, ChevronRight, Building2, ClipboardList, Clock3, CheckCircle2 } from "lucide-react"
+import { Plus, X, Loader2, ChevronLeft, ChevronRight, Building2, ClipboardList, Clock3, CheckCircle2, AlertTriangle } from "lucide-react"
 import { toast } from "sonner"
+import Link from "next/link"
 
 import InstituteRoomBookings from "@/app/institute/room-bookings/page"
 import { instituteService } from "@/lib/institute-service"
@@ -320,6 +321,7 @@ function HallBlackoutCalendar({
 export default function InstituteHallsPage() {
   const [halls, setHalls] = useState<Hall[]>([])
   const [loading, setLoading] = useState(true)
+  const [hasBankAccounts, setHasBankAccounts] = useState(true)
 
   const [editingHall, setEditingHall] = useState<Hall | null>(null)
   const [isEditOpen, setIsEditOpen] = useState(false)
@@ -338,7 +340,12 @@ export default function InstituteHallsPage() {
   const loadHalls = async () => {
     setLoading(true)
     try {
-      const data = await instituteService.getHalls()
+      const [data, accounts] = await Promise.all([
+        instituteService.getHalls(),
+        instituteService.getBankAccounts().catch(() => [])
+      ])
+      setHasBankAccounts(accounts.length > 0)
+      
       // Map backend fields to frontend interface
       const mappedHalls = data.map((room: any) => {
         const rawAvail = room.availability
@@ -562,6 +569,23 @@ export default function InstituteHallsPage() {
 
   return (
     <div className="space-y-6" dir="rtl">
+      {!hasBankAccounts && (
+        <div className="flex items-start gap-3 rounded-[6.5px] border border-rose-200 bg-rose-50 p-4 text-rose-800 shadow-sm">
+          <AlertTriangle className="h-5 w-5 shrink-0 text-rose-600 mt-0.5" />
+          <div className="flex-1 space-y-1">
+            <h3 className="font-semibold text-rose-800">إعداد الحساب البنكي</h3>
+            <p className="text-sm text-rose-700/90 leading-relaxed">
+              يرجى تعبئة معلومات الحساب البنكي لتسهيل عملية الدفع من قبل المدربين لحجز القاعات.
+            </p>
+          </div>
+          <Link href="/institute/profile">
+            <Button variant="outline" className="shrink-0 bg-white hover:bg-rose-50 text-rose-700 border-rose-200 text-xs h-8 rounded-[6.5px]">
+              تحديث الإعدادات
+            </Button>
+          </Link>
+        </div>
+      )}
+
       <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="text-right">

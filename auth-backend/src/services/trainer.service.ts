@@ -263,7 +263,7 @@ class TrainerService {
                 },
                 category: { select: { name: true } },
                 enrollments: {
-                    where: { status: { in: ['ACTIVE', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT'] } },
+                    where: { status: { in: ['ACTIVE', 'COMPLETED'] } },
                     select: { id: true },
                 },
                 sessions: { select: { id: true, type: true, room: { select: { id: true, name: true } } } },
@@ -1274,7 +1274,7 @@ class TrainerService {
                     take: 1,
                 },
                 enrollments: {
-                    where: { status: { in: ['ACTIVE', 'PRELIMINARY_APPROVED', 'PENDING_PAYMENT'] } },
+                    where: { status: { in: ['ACTIVE', 'COMPLETED'] } },
                     select: { id: true },
                 },
                 institute: {
@@ -2157,7 +2157,8 @@ class TrainerService {
                     select: {
                         id: true,
                         title: true,
-                        price: true
+                        price: true,
+                        maxStudents: true
                     }
                 },
                 payments: {

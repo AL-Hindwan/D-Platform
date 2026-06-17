@@ -132,7 +132,15 @@ export default function InstituteRoomBookings() {
       const response = await fetch(slipUrl, { credentials: "include" })
       if (!response.ok) throw new Error("OPEN_FAILED")
       const blob = await response.blob()
-      const imageUrl = URL.createObjectURL(blob)
+      
+      const objectUrl = URL.createObjectURL(blob)
+      if (blob.type === "application/pdf" || slipUrl.toLowerCase().endsWith(".pdf")) {
+        window.open(objectUrl, "_blank", "noopener,noreferrer")
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000)
+        return
+      }
+
+      const imageUrl = objectUrl
       const safeName = (payerName || "بدون اسم").replace(/[\\/:*?\"<>|]/g, "_").trim()
       const pageTitle = `رسوم دفع - ${safeName}`
       const html = `<!doctype html>
@@ -171,7 +179,7 @@ export default function InstituteRoomBookings() {
       const blob = await response.blob()
       const objectUrl = URL.createObjectURL(blob)
       const safeName = (payerName || "بدون اسم").replace(/[\\/:*?\"<>|]/g, "_").trim()
-      const ext = blob.type.includes("png") ? "png" : blob.type.includes("jpeg") ? "jpg" : "jpg"
+      const ext = blob.type.includes("pdf") || slipUrl.toLowerCase().endsWith(".pdf") ? "pdf" : blob.type.includes("png") ? "png" : "jpg"
       const fileName = `رسوم دفع - ${safeName}.${ext}`
 
       const link = document.createElement("a")
@@ -454,20 +462,29 @@ export default function InstituteRoomBookings() {
                         {(() => {
                           const slipUrl = getFileUrl(payment.depositSlipImage)
                           if (!slipUrl) return null
+                          const isPdf = payment.depositSlipImage.toLowerCase().endsWith(".pdf")
                           return (
                             <>
-                              <img
-                                src={slipUrl}
-                                alt="Deposit Slip"
-                                className="max-w-full h-auto rounded-[6.5px] border"
-                                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                              />
+                              {isPdf ? (
+                                <iframe
+                                  src={slipUrl}
+                                  title="Deposit Slip PDF"
+                                  className="w-full h-48 rounded-[6.5px] border mb-2"
+                                />
+                              ) : (
+                                <img
+                                  src={slipUrl}
+                                  alt="Deposit Slip"
+                                  className="max-w-full h-auto rounded-[6.5px] border"
+                                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                                />
+                              )}
                               <div className="mt-3 flex gap-2">
                                 <Button
                                   size="sm"
                                   variant="outline"
                                   className="rounded-[6.5px] text-blue-700 border-blue-300 hover:bg-blue-50"
-                                  onClick={() => handleOpenSlipInNewTab(slipUrl)}
+                                  onClick={() => handleOpenSlipInNewTab(slipUrl, paymentDialog.booking?.requestedBy?.name)}
                                 >
                                   <ExternalLink className="h-4 w-4 ml-1" />
                                   فتح

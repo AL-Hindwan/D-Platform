@@ -3057,7 +3057,8 @@ class InstituteService {
                     select: {
                         id: true,
                         title: true,
-                        price: true
+                        price: true,
+                        maxStudents: true
                     }
                 },
                 payments: {

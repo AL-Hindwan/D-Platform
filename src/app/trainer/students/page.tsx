@@ -26,7 +26,7 @@ type Enrollment = {
   rejectionReason?: string
   cancellationReason?: string
   student?: { id?: string; name?: string; email?: string; phone?: string; avatar?: string }
-  course?: { id?: string; title?: string; price?: number }
+  course?: { id?: string; title?: string; price?: number; maxStudents?: number }
   payments?: Array<{ status?: string; amount?: number; createdAt?: string; depositSlipImage?: string; rejectionReason?: string }>
 }
 
@@ -195,6 +195,8 @@ export default function TrainerStudentsRegistrationsPage() {
   const [rejectTarget, setRejectTarget] = useState<Enrollment | null>(null)
   const [studentsFiltersOpen, setStudentsFiltersOpen] = useState(false)
   const [requestsFiltersOpen, setRequestsFiltersOpen] = useState(false)
+  const [limitConfirmOpen, setLimitConfirmOpen] = useState(false)
+  const [limitConfirmTarget, setLimitConfirmTarget] = useState<Enrollment | null>(null)
 
   const [studentsCourseFilter, setStudentsCourseFilter] = useState("all")
   const [studentStatusFilter, setStudentStatusFilter] = useState("all")
@@ -490,10 +492,36 @@ export default function TrainerStudentsRegistrationsPage() {
     }
   }
 
-  const approvePreliminary = async (e: Enrollment) => withAction(e.id, async () => {
-    await trainerService.updateEnrollmentStatus(e.id, "ACTIVE")
-    toast.success("تم قبول الطلب")
-  })
+  const approvePreliminary = async (e: Enrollment) => {
+    const courseMax = Number(e.course?.maxStudents || 0)
+    if (courseMax > 0) {
+      const approvedCount = enrollments.filter(
+        (x) =>
+          x.course?.id === e.course?.id &&
+          ["ACTIVE", "COMPLETED", "PENDING_PAYMENT", "PRELIMINARY_APPROVED"].includes(getStatus(x))
+      ).length
+      
+      if (approvedCount >= courseMax) {
+        setLimitConfirmTarget(e)
+        setLimitConfirmOpen(true)
+        return
+      }
+    }
+    
+    withAction(e.id, async () => {
+      await trainerService.updateEnrollmentStatus(e.id, "ACTIVE")
+      toast.success("تم قبول الطلب")
+    })
+  }
+
+  const confirmExceedLimit = async () => {
+    if (!limitConfirmTarget) return
+    setLimitConfirmOpen(false)
+    withAction(limitConfirmTarget.id, async () => {
+      await trainerService.updateEnrollmentStatus(limitConfirmTarget.id, "ACTIVE")
+      toast.success("تم قبول الطلب")
+    })
+  }
 
   const confirmPayment = async (e: Enrollment) => withAction(e.id, async () => {
     await trainerService.updateEnrollmentStatus(e.id, "ACTIVE")
@@ -1249,6 +1277,25 @@ export default function TrainerStudentsRegistrationsPage() {
               </div>
             ))}
             {!selectedStudentSummary?.enrollments?.length ? <div className="rounded-[6.5px] border border-slate-200 bg-white px-3 py-8 text-center text-sm text-slate-500">لا توجد دورات مسجل بها هذا الطالب حاليًا.</div> : null}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={limitConfirmOpen} onOpenChange={setLimitConfirmOpen}>
+        <DialogContent className="sm:max-w-[425px] rounded-[6.5px]" dir="rtl">
+          <DialogHeader className="text-right">
+            <DialogTitle className="text-rose-600">تنبيه تجاوز الحد الأقصى</DialogTitle>
+            <DialogDescription className="mt-2 text-base text-slate-700">
+              هذا الطالب يتجاوز الحد الأقصى المسموح به لسعة الدورة، هل تريد تأكيد قبوله أم لا؟
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 flex flex-row-reverse justify-end gap-3">
+            <Button variant="outline" className="rounded-[6.5px]" onClick={() => setLimitConfirmOpen(false)}>
+              إلغاء
+            </Button>
+            <Button className="rounded-[6.5px] bg-rose-600 text-white hover:bg-rose-700" onClick={confirmExceedLimit}>
+              تأكيد القبول
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
