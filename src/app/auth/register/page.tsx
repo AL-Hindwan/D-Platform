@@ -196,14 +196,28 @@ export default function RegisterPage() {
         setError("فشل إنشاء الحساب. الرجاء المحاولة مرة أخرى")
       }
     } catch (err: unknown) {
-      const serverMessage =
+      let serverMessage = undefined
+      if (err instanceof Error) {
+        serverMessage = err.message
+      } else if (
         typeof err === "object" &&
         err !== null &&
         "response" in err &&
         typeof (err as { response?: { data?: { message?: string } } }).response?.data?.message === "string"
-          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
-          : undefined
-      setError(serverMessage || "حدث خطأ أثناء التسجيل")
+      ) {
+        serverMessage = (err as { response?: { data?: { message?: string } } }).response?.data?.message
+      }
+
+      let displayMessage = serverMessage || "حدث خطأ أثناء التسجيل"
+      if (
+        displayMessage === "Email already registered" ||
+        displayMessage.toLowerCase().includes("already exist") ||
+        displayMessage.includes("البريد الإلكتروني موجود")
+      ) {
+        displayMessage = "هذا البريد الإلكتروني مستخدم مسبقاً"
+      }
+
+      setError(displayMessage)
     }
   }
 
