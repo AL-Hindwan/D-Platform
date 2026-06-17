@@ -26,7 +26,7 @@ type Enrollment = {
   rejectionReason?: string
   cancellationReason?: string
   student?: { id?: string; name?: string; email?: string; phone?: string; avatar?: string }
-  course?: { id?: string; title?: string }
+  course?: { id?: string; title?: string; price?: number }
   payments?: Array<{ status?: string; amount?: number; createdAt?: string; depositSlipImage?: string; rejectionReason?: string }>
 }
 
@@ -284,7 +284,7 @@ export default function TrainerStudentsRegistrationsPage() {
     }).length
   }, [enrollments])
 
-  const activeStudentsRows = useMemo(() => enrollments.filter((e) => ["ACTIVE", "COMPLETED"].includes(getStatus(e))), [enrollments])
+  const activeStudentsRows = useMemo(() => enrollments.filter((e) => ["ACTIVE", "COMPLETED", "PRELIMINARY_APPROVED", "PENDING_PAYMENT"].includes(getStatus(e))), [enrollments])
   const requestRows = useMemo(() => enrollments, [enrollments])
 
   const matchesDateFilter = (rawDate?: string, filter?: string) => {
@@ -1223,7 +1223,7 @@ export default function TrainerStudentsRegistrationsPage() {
             <p><span className="text-slate-500">الطالب:</span> <span className="font-semibold text-slate-900">{selectedStudentSummary?.student?.name || "-"}</span></p>
             <p><span className="text-slate-500">عدد الدورات:</span> <span className="font-semibold text-slate-900">{selectedStudentSummary?.enrollments?.length || 0}</span></p>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
             {selectedStudentSummary?.enrollments?.map((en) => (
               <div key={`student-course-${en.id}`} className="space-y-3 rounded-[6.5px] border border-slate-200 bg-white p-4 text-sm">
                 <div className="flex items-start justify-between gap-3">
@@ -1243,23 +1243,8 @@ export default function TrainerStudentsRegistrationsPage() {
                   </div>
                   <div className="rounded-[6.5px] bg-slate-50 px-3 py-2">
                     <span className="text-slate-500">المبلغ:</span>{" "}
-                    <span className="font-medium text-slate-800">{en.payments?.[0]?.amount ? `${formatNumber(Number(en.payments[0].amount))} ر.ي` : "-"}</span>
+                    <span className="font-medium text-slate-800">{en.payments?.[0]?.amount ? `${formatNumber(Number(en.payments[0].amount))} ر.ي` : en.course?.price ? `${formatNumber(Number(en.course.price))} ر.ي` : "-"}</span>
                   </div>
-                </div>
-                <div className="flex flex-wrap items-center justify-end gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-9 rounded-[6.5px] border-blue-200 px-4 text-[13px] font-semibold text-blue-700 hover:bg-blue-50"
-                    onClick={() => {
-                      setCoursesOpen(false)
-                      openStudentRequests(selectedStudentSummary!, en.course)
-                    }}
-                  >
-                    عرض الدفع
-                  </Button>
-                  <Button size="sm" variant="outline" className="h-9 rounded-[6.5px] px-4 text-[13px] font-semibold text-slate-700" onClick={() => openCourseInExplore(en)}>عرض الدورة</Button>
-                  <Button size="sm" variant="outline" className="h-9 rounded-[6.5px] border-amber-200 px-4 text-[13px] font-semibold text-amber-700 hover:bg-amber-50" onClick={() => openReasonModal(en, "stop")}>إيقاف من هذه الدورة</Button>
                 </div>
               </div>
             ))}

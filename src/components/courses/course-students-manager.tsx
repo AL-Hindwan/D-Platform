@@ -86,6 +86,7 @@ export default function CourseStudentsManager({ courseId, backLink, backText, fe
   }, [courseId])
 
   const activeEnrollments = enrollments.filter(e => e.status === 'active')
+  const selectableEnrollments = enrollments.filter(e => ['active', 'preliminary_approved', 'pending_payment'].includes(e.status?.toLowerCase() || ''))
 
   const getStatusLabel = (status: string) => {
     switch (status.toLowerCase()) {
@@ -173,10 +174,10 @@ export default function CourseStudentsManager({ courseId, backLink, backText, fe
   }
 
   const handleSelectAll = () => {
-    if (selectedStudents.length === activeEnrollments.length) {
+    if (selectedStudents.length === selectableEnrollments.length) {
       setSelectedStudents([])
     } else {
-      setSelectedStudents(activeEnrollments.map(e => e.studentId))
+      setSelectedStudents(selectableEnrollments.map(e => e.studentId))
     }
   }
 
@@ -474,7 +475,7 @@ export default function CourseStudentsManager({ courseId, backLink, backText, fe
                 <TableHead className="w-12">
                   <input
                     type="checkbox"
-                    checked={selectedStudents.length === activeEnrollments.length && activeEnrollments.length > 0}
+                    checked={selectedStudents.length === selectableEnrollments.length && selectableEnrollments.length > 0}
                     onChange={handleSelectAll}
                     className="rounded"
                     aria-label="تحديد جميع الطلاب"
@@ -490,7 +491,7 @@ export default function CourseStudentsManager({ courseId, backLink, backText, fe
               {enrollments.map((enrollment) => (
                 <TableRow key={enrollment.id}>
                   <TableCell>
-                    {enrollment.status === 'active' && (
+                    {['active', 'preliminary_approved', 'pending_payment'].includes(enrollment.status.toLowerCase()) && (
                       <input
                         type="checkbox"
                         checked={selectedStudents.includes(enrollment.studentId)}
@@ -526,7 +527,7 @@ export default function CourseStudentsManager({ courseId, backLink, backText, fe
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      {enrollment.status === 'active' && (
+                      {['active', 'preliminary_approved', 'pending_payment'].includes(enrollment.status.toLowerCase()) && (
                         <Button
                           variant="outline"
                           size="sm"
@@ -536,7 +537,7 @@ export default function CourseStudentsManager({ courseId, backLink, backText, fe
                         </Button>
                       )}
 
-                      {enrollment.status === 'active' && (
+                      {['active', 'preliminary_approved', 'pending_payment'].includes(enrollment.status.toLowerCase()) && (
                         <Button
                           variant="outline"
                           size="sm"
